@@ -23,9 +23,9 @@ mkdir -p "$OUT"
 run_tests() {
   local mode="$1"
   if [[ "$mode" == "skip-build" ]]; then
-    swift test -c release --skip-build --filter "$FILTER" --skip KasetUITests
+    swift test -c release --skip-build --filter "$FILTER" --skip MeldUITests
   else
-    swift test -c release --filter "$FILTER" --skip KasetUITests
+    swift test -c release --filter "$FILTER" --skip MeldUITests
   fi
 }
 
@@ -43,7 +43,7 @@ copy_sparkle_into_xctest_bundle() {
     "$PWD/.build/arm64-apple-macosx/release" \
     "$PWD/.build/x86_64-apple-macosx/release"
   do
-    if [[ -n "$candidate" && -d "$candidate/KasetTests.xctest" && -d "$candidate/Sparkle.framework" ]]; then
+    if [[ -n "$candidate" && -d "$candidate/MeldTests.xctest" && -d "$candidate/Sparkle.framework" ]]; then
       products_dir="$candidate"
       break
     fi
@@ -54,7 +54,7 @@ copy_sparkle_into_xctest_bundle() {
     return 0
   fi
 
-  local xctest_bundle="$products_dir/KasetTests.xctest"
+  local xctest_bundle="$products_dir/MeldTests.xctest"
   local sparkle_framework="$products_dir/Sparkle.framework"
 
   if [[ -d "$xctest_bundle" && -d "$sparkle_framework" ]]; then

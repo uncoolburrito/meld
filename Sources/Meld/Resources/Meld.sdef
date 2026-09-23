@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dictionary SYSTEM "file://localhost/System/Library/DTDs/sdef.dtd">
+<dictionary title="Meld Terminology">
+
+    <!-- Standard Suite -->
+    <suite name="Standard Suite" code="????" description="Common classes and commands for all applications.">
+
+        <command name="quit" code="aevtquit" description="Quit the application.">
+            <cocoa class="NSQuitCommand"/>
+        </command>
+
+        <class name="application" code="capp" description="Meld's top-level scripting object.">
+            <cocoa class="NSApplication"/>
+            <responds-to command="quit">
+                <cocoa method="terminate:"/>
+            </responds-to>
+        </class>
+
+    </suite>
+
+    <!-- Meld Suite -->
+    <suite name="Meld Suite" code="Meld" description="Commands and classes for controlling Meld.">
+
+        <!-- Playback Commands -->
+        <command name="play" code="Meldplay" description="Start or resume playback.">
+            <cocoa class="MeldPlayCommand"/>
+        </command>
+
+        <command name="play video" code="Meldpvid" description="Play a video by its YouTube video ID.">
+            <cocoa class="MeldPlayVideoCommand"/>
+            <direct-parameter type="text" description="The YouTube video ID to play."/>
+        </command>
+
+        <command name="pause" code="Meldpaus" description="Pause playback.">
+            <cocoa class="MeldPauseCommand"/>
+        </command>
+
+        <command name="playpause" code="Meldtogg" description="Toggle play/pause state.">
+            <cocoa class="MeldPlayPauseCommand"/>
+        </command>
+
+        <command name="next track" code="Meldnext" description="Skip to the next track.">
+            <cocoa class="MeldNextTrackCommand"/>
+        </command>
+
+        <command name="previous track" code="Meldprev" description="Go to the previous track.">
+            <cocoa class="MeldPreviousTrackCommand"/>
+        </command>
+
+        <command name="set volume" code="Meldvolu" description="Set the playback volume.">
+            <cocoa class="MeldSetVolumeCommand"/>
+            <direct-parameter type="integer" description="Volume level (0-100)."/>
+        </command>
+
+        <command name="toggle shuffle" code="Meldshuf" description="Toggle shuffle on or off (binary; does not enable Smart Shuffle).">
+            <cocoa class="MeldToggleShuffleCommand"/>
+        </command>
+
+        <command name="cycle repeat" code="Meldrepe" description="Cycle through repeat modes (off, all, one).">
+            <cocoa class="MeldCycleRepeatCommand"/>
+        </command>
+
+        <command name="toggle mute" code="Meldmute" description="Toggle mute state.">
+            <cocoa class="MeldToggleMuteCommand"/>
+        </command>
+
+        <command name="get player info" code="Meldinfo" description="Get current player state as JSON.">
+            <cocoa class="MeldGetPlayerInfoCommand"/>
+            <result type="text" description="JSON string with player state."/>
+        </command>
+
+        <command name="like track" code="Meldlike" description="Like or unlike the current track.">
+            <cocoa class="MeldLikeTrackCommand"/>
+        </command>
+
+        <command name="dislike track" code="Melddslk" description="Dislike or undislike the current track.">
+            <cocoa class="MeldDislikeTrackCommand"/>
+        </command>
+
+        <command name="get play queue" code="Meldgque" description="Get the current playing queue as JSON.">
+            <cocoa class="MeldGetPlayQueueCommand"/>
+            <result type="text" description="JSON string with the current playing queue."/>
+        </command>
+
+        <command name="play track at index" code="Meldplix" description="Play a specific track from the queue by its index.">
+            <cocoa class="MeldPlayTrackAtIndexCommand"/>
+            <direct-parameter type="integer" description="The 1-based index of the track in the queue to play."/>
+        </command>
+
+    </suite>
+
+</dictionary>

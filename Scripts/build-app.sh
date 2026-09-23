@@ -11,10 +11,10 @@ source "$ROOT/version.env"
 
 # Configuration
 CONF=${1:-release}
-SIGNING_MODE=${KASET_SIGNING:-dev}
-SKIP_MAIN_ASSETS=${KASET_SKIP_MAIN_ASSETS:-0}
-APP_NAME="Kaset"
-BUNDLE_ID="com.sertacozercan.Kaset"
+SIGNING_MODE=${MELD_SIGNING:-dev}
+SKIP_MAIN_ASSETS=${MELD_SKIP_MAIN_ASSETS:-0}
+APP_NAME="Meld"
+BUNDLE_ID="com.uncoolburrito.meld"
 DEVELOPMENT_LOCALIZATION="en"
 BUILD_DIR="$ROOT/.build/app"
 APP_BUNDLE="$BUILD_DIR/$APP_NAME.app"
@@ -255,10 +255,10 @@ echo -n "APPL????" > "$APP_BUNDLE/Contents/PkgInfo"
 
 # ── AppleScript definition ───────────────────────────────────────────────────
 
-SDEF_PATH="$ROOT/Sources/Kaset/Resources/Kaset.sdef"
+SDEF_PATH="$ROOT/Sources/Meld/Resources/Meld.sdef"
 if [[ -f "$SDEF_PATH" ]]; then
   echo "📜 Copying AppleScript definition..."
-  cp "$SDEF_PATH" "$APP_BUNDLE/Contents/Resources/Kaset.sdef"
+  cp "$SDEF_PATH" "$APP_BUNDLE/Contents/Resources/Meld.sdef"
 fi
 
 # ── App icon and main asset catalog ──────────────────────────────────────────
@@ -267,8 +267,8 @@ fi
 # The top-level Assets.car also needs AccentColor because Info.plist references
 # NSAccentColorName from the main bundle.
 
-ICON_SOURCE="$ROOT/Sources/Kaset/Resources/AppIcon.icon"
-APP_ASSET_CATALOG="$ROOT/Sources/Kaset/Resources/Assets.xcassets"
+ICON_SOURCE="$ROOT/Sources/Meld/Resources/AppIcon.icon"
+APP_ASSET_CATALOG="$ROOT/Sources/Meld/Resources/Assets.xcassets"
 
 # Copy the .icon bundle into the app for Liquid Glass dark/light switching
 if [[ -d "$ICON_SOURCE" ]]; then
@@ -279,10 +279,10 @@ fi
 # Compile AppIcon.icon and AccentColor into Contents/Resources/Assets.car.
 # Xcode 26's actool currently fails on macOS 15 runners while processing
 # Icon Composer assets because it loads newer AVFCore/CoreMedia symbols.
-# UI-test CI can opt out via KASET_SKIP_MAIN_ASSETS=1; release builds should
+# UI-test CI can opt out via MELD_SKIP_MAIN_ASSETS=1; release builds should
 # keep compiling these assets so AppIcon/AccentColor remain complete.
 if [[ "$SKIP_MAIN_ASSETS" == "1" ]]; then
-  echo "⚠️  Skipping main asset catalog compilation (KASET_SKIP_MAIN_ASSETS=1)."
+  echo "⚠️  Skipping main asset catalog compilation (MELD_SKIP_MAIN_ASSETS=1)."
 elif [[ -d "$ICON_SOURCE" ]] && [[ -d "$APP_ASSET_CATALOG" ]] && command -v xcrun &>/dev/null; then
   echo "🎨 Compiling main asset catalog..."
   ICON_PARTIAL_PLIST="$BUILD_DIR/AppIconPartialInfo.plist"
@@ -334,7 +334,7 @@ else
 fi
 
 # ── SwiftPM resource bundles ──────────────────────────────────────────────────
-# Kaset_Kaset.bundle contains Assets.xcassets compiled for Bundle.module.
+# Meld_Meld.bundle contains Assets.xcassets compiled for Bundle.module.
 # It is kept separate from the top-level Assets.car produced above.
 
 FIRST_ARCH="${ARCH_LIST[0]}"
@@ -362,7 +362,7 @@ if [[ ${#SWIFTPM_BUNDLES[@]} -gt 0 ]]; then
     fi
   done
 
-  SOURCE_LOCALIZATION_CATALOG="$ROOT/Sources/Kaset/Resources/Localizable.xcstrings"
+  SOURCE_LOCALIZATION_CATALOG="$ROOT/Sources/Meld/Resources/Localizable.xcstrings"
   if [[ -f "$SOURCE_LOCALIZATION_CATALOG" ]]; then
     echo "  → Compiling app localization catalog: $(basename "$SOURCE_LOCALIZATION_CATALOG")"
     xcrun xcstringstool compile "$SOURCE_LOCALIZATION_CATALOG" \
@@ -479,18 +479,18 @@ ${APP_LOCALIZATIONS_PLIST}
     <key>NSAppleScriptEnabled</key>
     <true/>
     <key>OSAScriptingDefinition</key>
-    <string>Kaset.sdef</string>
+    <string>Meld.sdef</string>
 
     <!-- Core Audio process tap (Equalizer) - macOS 14.2+ TCC requires these -->
     <key>NSAudioCaptureUsageDescription</key>
-    <string>Kaset processes its own music output through a built-in equalizer. This permission only covers Kaset's own playback — no other app's audio is captured.</string>
+    <string>Meld processes its own music output through a built-in equalizer. This permission only covers Kaset's own playback — no other app's audio is captured.</string>
     <key>NSScreenCaptureUsageDescription</key>
-    <string>Kaset taps its own audio output (not the screen) so the built-in equalizer can apply effects to your music. No screen content is recorded.</string>
+    <string>Meld taps its own audio output (not the screen) so the built-in equalizer can apply effects to your music. No screen content is recorded.</string>
 
     <!-- Build Metadata -->
-    <key>KasetBuildTimestamp</key>
+    <key>MeldBuildTimestamp</key>
     <string>${BUILD_TIMESTAMP}</string>
-    <key>KasetGitCommit</key>
+    <key>MeldGitCommit</key>
     <string>${GIT_COMMIT}</string>
 </dict>
 </plist>
@@ -549,7 +549,7 @@ case "$SIGNING_MODE" in
     CODESIGN_ARGS=(--force --timestamp --options runtime --sign "$CODESIGN_ID")
     ;;
   *)
-    echo "ERROR: Unknown KASET_SIGNING mode: $SIGNING_MODE" >&2
+    echo "ERROR: Unknown MELD_SIGNING mode: $SIGNING_MODE" >&2
     echo "Expected one of: adhoc, dev, developer-id, unsigned" >&2
     exit 1
     ;;
@@ -579,8 +579,8 @@ if [[ -d "$SPARKLE" ]]; then
   resign "$SPARKLE"
 fi
 
-if [[ -f "$ROOT/Kaset.entitlements" ]]; then
-  codesign "${CODESIGN_ARGS[@]}" --entitlements "$ROOT/Kaset.entitlements" "$APP_BUNDLE"
+if [[ -f "$ROOT/Meld.entitlements" ]]; then
+  codesign "${CODESIGN_ARGS[@]}" --entitlements "$ROOT/Meld.entitlements" "$APP_BUNDLE"
 else
   codesign "${CODESIGN_ARGS[@]}" "$APP_BUNDLE"
 fi
