@@ -6,6 +6,14 @@ set -euo pipefail
 ROOT=$(cd "$(dirname "$0")/.." && pwd)
 cd "$ROOT"
 
+# Ensure DEVELOPER_DIR points to Xcode.app if available, unless DEVELOPER_DIR or xcode-select already points to Xcode
+if [[ -z "${DEVELOPER_DIR:-}" ]]; then
+  CURRENT_XCODE=$(xcode-select -p 2>/dev/null || true)
+  if [[ "$CURRENT_XCODE" == *"/CommandLineTools"* && -d "/Applications/Xcode.app/Contents/Developer" ]]; then
+    export DEVELOPER_DIR="/Applications/Xcode.app/Contents/Developer"
+  fi
+fi
+
 # Load version info
 source "$ROOT/version.env"
 
@@ -262,31 +270,17 @@ if [[ -f "$SDEF_PATH" ]]; then
 fi
 
 # ── App icon and main asset catalog ──────────────────────────────────────────
-# AppIcon.icon is an Icon Composer package (macOS 26+). actool consumes it
-# directly and produces Assets.car with full dark/light appearance layers.
-# The top-level Assets.car also needs AccentColor because Info.plist references
-# NSAccentColorName from the main bundle.
+# AppIcon is compiled from Assets.xcassets (AppIcon.appiconset).
+# The top-level Assets.car also includes AccentColor from Assets.xcassets.
 
-ICON_SOURCE="$ROOT/Sources/Meld/Resources/AppIcon.icon"
 APP_ASSET_CATALOG="$ROOT/Sources/Meld/Resources/Assets.xcassets"
 
-# Copy the .icon bundle into the app for Liquid Glass dark/light switching
-if [[ -d "$ICON_SOURCE" ]]; then
-  echo "🎨 Copying AppIcon.icon bundle..."
-  cp -R "$ICON_SOURCE" "$APP_BUNDLE/Contents/Resources/AppIcon.icon"
-fi
-
-# Compile AppIcon.icon and AccentColor into Contents/Resources/Assets.car.
-# Xcode 26's actool currently fails on macOS 15 runners while processing
-# Icon Composer assets because it loads newer AVFCore/CoreMedia symbols.
-# UI-test CI can opt out via MELD_SKIP_MAIN_ASSETS=1; release builds should
-# keep compiling these assets so AppIcon/AccentColor remain complete.
 if [[ "$SKIP_MAIN_ASSETS" == "1" ]]; then
   echo "⚠️  Skipping main asset catalog compilation (MELD_SKIP_MAIN_ASSETS=1)."
-elif [[ -d "$ICON_SOURCE" ]] && [[ -d "$APP_ASSET_CATALOG" ]] && command -v xcrun &>/dev/null; then
+elif [[ -d "$APP_ASSET_CATALOG" ]] && command -v xcrun &>/dev/null; then
   echo "🎨 Compiling main asset catalog..."
   ICON_PARTIAL_PLIST="$BUILD_DIR/AppIconPartialInfo.plist"
-  xcrun actool "$ICON_SOURCE" "$APP_ASSET_CATALOG" \
+  xcrun actool "$APP_ASSET_CATALOG" \
     --compile "$APP_BUNDLE/Contents/Resources" \
     --notices --warnings --errors \
     --output-partial-info-plist "$ICON_PARTIAL_PLIST" \
@@ -297,12 +291,12 @@ elif [[ -d "$ICON_SOURCE" ]] && [[ -d "$APP_ASSET_CATALOG" ]] && command -v xcru
     --minimum-deployment-target 15.4 \
     --platform macosx
   if [[ ! -f "$APP_BUNDLE/Contents/Resources/Assets.car" ]]; then
-    echo "ERROR: actool did not produce Assets.car from $ICON_SOURCE and $APP_ASSET_CATALOG" >&2
+    echo "ERROR: actool did not produce Assets.car from $APP_ASSET_CATALOG" >&2
     exit 1
   fi
   echo "   ✓ App icon and accent color compiled to Contents/Resources/Assets.car"
 else
-  echo "⚠️  Warning: $ICON_SOURCE or $APP_ASSET_CATALOG not found. App will have incomplete assets."
+  echo "⚠️  Warning: $APP_ASSET_CATALOG not found. App will have incomplete assets."
 fi
 
 # ── Sparkle.framework ────────────────────────────────────────────────────────

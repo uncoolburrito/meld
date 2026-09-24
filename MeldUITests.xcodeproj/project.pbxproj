@@ -12,7 +12,7 @@
 		E500000D /* CommandBarUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E500010D /* CommandBarUITests.swift */; };
 		E5000003 /* ExploreViewUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5000103 /* ExploreViewUITests.swift */; };
 		E5000004 /* HomeViewUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5000104 /* HomeViewUITests.swift */; };
-		E5000005 /* KasetUITestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5000105 /* KasetUITestCase.swift */; };
+		E5000005 /* MeldUITestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5000105 /* MeldUITestCase.swift */; };
 		E5000006 /* LibraryViewUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5000106 /* LibraryViewUITests.swift */; };
 		E5000007 /* LikedMusicViewUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5000107 /* LikedMusicViewUITests.swift */; };
 		E5000008 /* PlayerBarUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5000108 /* PlayerBarUITests.swift */; };
@@ -28,7 +28,7 @@
 		E500010D /* CommandBarUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommandBarUITests.swift; sourceTree = "<group>"; };
 		E5000103 /* ExploreViewUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExploreViewUITests.swift; sourceTree = "<group>"; };
 		E5000104 /* HomeViewUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewUITests.swift; sourceTree = "<group>"; };
-		E5000105 /* KasetUITestCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KasetUITestCase.swift; sourceTree = "<group>"; };
+		E5000105 /* MeldUITestCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeldUITestCase.swift; sourceTree = "<group>"; };
 		E5000106 /* LibraryViewUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryViewUITests.swift; sourceTree = "<group>"; };
 		E5000107 /* LikedMusicViewUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikedMusicViewUITests.swift; sourceTree = "<group>"; };
 		E5000108 /* PlayerBarUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerBarUITests.swift; sourceTree = "<group>"; };
@@ -36,7 +36,7 @@
 		E500010A /* SidebarUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SidebarUITests.swift; sourceTree = "<group>"; };
 		E500010B /* VideoUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoUITests.swift; sourceTree = "<group>"; };
 		E500010C /* MacOS15FallbackUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacOS15FallbackUITests.swift; sourceTree = "<group>"; };
-		E5000200 /* KasetUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = KasetUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		E5000200 /* MeldUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MeldUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -53,12 +53,12 @@
 		E5000400 /* = */ = {
 			isa = PBXGroup;
 			children = (
-				E5000401 /* KasetUITests */,
+				E5000401 /* MeldUITests */,
 				E5000402 /* Products */,
 			);
 			sourceTree = "<group>";
 		};
-		E5000401 /* KasetUITests */ = {
+		E5000401 /* MeldUITests */ = {
 			isa = PBXGroup;
 			children = (
 				E5000101 /* AccountSwitcherUITests.swift */,
@@ -66,7 +66,7 @@
 				E500010D /* CommandBarUITests.swift */,
 				E5000103 /* ExploreViewUITests.swift */,
 				E5000104 /* HomeViewUITests.swift */,
-				E5000105 /* KasetUITestCase.swift */,
+				E5000105 /* MeldUITestCase.swift */,
 				E5000106 /* LibraryViewUITests.swift */,
 				E5000107 /* LikedMusicViewUITests.swift */,
 				E500010C /* MacOS15FallbackUITests.swift */,
@@ -75,14 +75,14 @@
 				E500010A /* SidebarUITests.swift */,
 				E500010B /* VideoUITests.swift */,
 			);
-			name = KasetUITests;
-			path = Tests/KasetUITests;
+			name = MeldUITests;
+			path = Tests/MeldUITests;
 			sourceTree = SOURCE_ROOT;
 		};
 		E5000402 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				E5000200 /* KasetUITests.xctest */,
+				E5000200 /* MeldUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -90,9 +90,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		E5000500 /* KasetUITests */ = {
+		E5000500 /* MeldUITests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = E5000700 /* Build configuration list for PBXNativeTarget "KasetUITests" */;
+			buildConfigurationList = E5000700 /* Build configuration list for PBXNativeTarget "MeldUITests" */;
 			buildPhases = (
 				E5000600 /* Sources */,
 				E5000300 /* Frameworks */,
@@ -101,9 +101,9 @@
 			);
 			dependencies = (
 			);
-			name = KasetUITests;
-			productName = KasetUITests;
-			productReference = E5000200 /* KasetUITests.xctest */;
+			name = MeldUITests;
+			productName = MeldUITests;
+			productReference = E5000200 /* MeldUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 /* End PBXNativeTarget section */
@@ -116,7 +116,7 @@
 				LastSwiftUpdateCheck = 1620;
 				LastUpgradeCheck = 1620;
 			};
-			buildConfigurationList = E5000900 /* Build configuration list for PBXProject "KasetUITests" */;
+			buildConfigurationList = E5000900 /* Build configuration list for PBXProject "MeldUITests" */;
 			compatibilityVersion = "Xcode 14.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -129,7 +129,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				E5000500 /* KasetUITests */,
+				E5000500 /* MeldUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -144,7 +144,7 @@
 				E500000D /* CommandBarUITests.swift in Sources */,
 				E5000003 /* ExploreViewUITests.swift in Sources */,
 				E5000004 /* HomeViewUITests.swift in Sources */,
-				E5000005 /* KasetUITestCase.swift in Sources */,
+				E5000005 /* MeldUITestCase.swift in Sources */,
 				E5000006 /* LibraryViewUITests.swift in Sources */,
 				E5000007 /* LikedMusicViewUITests.swift in Sources */,
 				E500000C /* MacOS15FallbackUITests.swift in Sources */,
@@ -285,7 +285,7 @@
 				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGNING_REQUIRED = NO;
 				GENERATE_INFOPLIST_FILE = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.sertacozercan.KasetUITests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.uncoolburrito.MeldUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_STRICT_CONCURRENCY = minimal;
 				SWIFT_VERSION = 6.0;
@@ -299,7 +299,7 @@
 				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGNING_REQUIRED = NO;
 				GENERATE_INFOPLIST_FILE = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.sertacozercan.KasetUITests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.uncoolburrito.MeldUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_STRICT_CONCURRENCY = minimal;
 				SWIFT_VERSION = 6.0;
@@ -310,7 +310,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		E5000700 /* Build configuration list for PBXNativeTarget "KasetUITests" */ = {
+		E5000700 /* Build configuration list for PBXNativeTarget "MeldUITests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				E5000B01 /* Debug */,
@@ -319,7 +319,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		E5000900 /* Build configuration list for PBXProject "KasetUITests" */ = {
+		E5000900 /* Build configuration list for PBXProject "MeldUITests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				E5000A01 /* Debug */,

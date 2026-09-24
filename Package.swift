@@ -31,7 +31,6 @@ let package = Package(
                 .product(name: "Sparkle", package: "Sparkle"),
             ],
             exclude: [
-                "Resources/AppIcon.icon",
                 "Resources/kaset.icns",
                 // The checked-in .lproj files are the SwiftPM/Xcode 26 runtime
                 // resources. build-app.sh compiles the source catalog for the

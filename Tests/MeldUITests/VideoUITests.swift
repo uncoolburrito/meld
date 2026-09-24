@@ -2,7 +2,7 @@ import XCTest
 
 /// UI tests for Video functionality.
 @MainActor
-final class VideoUITests: KasetUITestCase {
+final class VideoUITests: MeldUITestCase {
     private var videoWindow: XCUIElement {
         app.windows.matching(NSPredicate(
             format: "identifier == %@ OR label == %@",

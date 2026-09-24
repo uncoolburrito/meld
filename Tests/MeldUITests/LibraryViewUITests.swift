@@ -2,7 +2,7 @@ import XCTest
 
 /// UI tests for the LibraryView.
 @MainActor
-final class LibraryViewUITests: KasetUITestCase {
+final class LibraryViewUITests: MeldUITestCase {
     // MARK: - Basic Display
 
     func testLibraryViewDisplaysTitle() {

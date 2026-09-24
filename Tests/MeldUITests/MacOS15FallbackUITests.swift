@@ -12,7 +12,7 @@ import XCTest
 /// 2. Accessibility / label drift between the two implementations.
 /// 3. Regressions in the fallback views being silently dead-coded.
 @MainActor
-final class MacOS15FallbackUITests: KasetUITestCase {
+final class MacOS15FallbackUITests: MeldUITestCase {
     // MARK: - App Launch
 
     /// Establishes that the app boots at all on the host OS. If this test
