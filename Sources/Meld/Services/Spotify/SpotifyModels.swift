@@ -1,4 +1,5 @@
 import Foundation
+import os
 
 // MARK: - SpotifyPlayerState
 
@@ -33,6 +34,7 @@ enum SpotifyPlayerState: String, Sendable, Equatable {
                 } else if trimmed.lowercased().contains("stopped") {
                     self = .stopped
                 } else {
+                    DiagnosticsLogger.player.warning("Unrecognized Spotify player state: '\(trimmed, privacy: .public)'")
                     self = .unknown
                 }
             }
