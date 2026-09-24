@@ -33,9 +33,10 @@ jobs:
       - name: Install SwiftLint
         run: |
           set -euo pipefail
-          SWIFTLINT_VERSION="0.58.2"
-          curl -sSL "https://github.com/realm/SwiftLint/releases/download/${SWIFTLINT_VERSION}/swiftlint_linux.zip" -o swiftlint.zip
+          SWIFTLINT_VERSION="0.65.1"
+          curl -sSL "https://github.com/realm/SwiftLint/releases/download/${SWIFTLINT_VERSION}/swiftlint_linux_amd64.zip" -o swiftlint.zip
           sudo unzip -q -o swiftlint.zip -d /usr/local/bin
+          if [ -f /usr/local/bin/swiftlint-static ]; then sudo ln -sf /usr/local/bin/swiftlint-static /usr/local/bin/swiftlint; fi
           rm swiftlint.zip
           swiftlint --version
 
@@ -57,7 +58,9 @@ jobs:
           set -euo pipefail
           SWIFTFORMAT_VERSION="0.55.5"
           curl -sSL "https://github.com/nicklockwood/SwiftFormat/releases/download/${SWIFTFORMAT_VERSION}/swiftformat_linux.zip" -o swiftformat.zip
-          sudo unzip -q -o swiftformat.zip -d /usr/local/bin
+          sudo unzip -q -o swiftformat.zip -d /tmp
+          sudo mv /tmp/swiftformat_linux /usr/local/bin/swiftformat
+          sudo chmod +x /usr/local/bin/swiftformat
           rm swiftformat.zip
           swiftformat --version
 
