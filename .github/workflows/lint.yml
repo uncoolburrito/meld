@@ -66,7 +66,7 @@ jobs:
 
       - name: Check formatting
         run: |
-          swiftformat --lint Sources Tests 2>&1 || {
+          swiftformat Sources Tests --lint 2>&1 || {
             echo "::error::Code is not formatted. Run 'swiftformat .' locally and commit the changes."
             exit 1
           }
