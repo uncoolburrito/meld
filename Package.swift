@@ -4,15 +4,15 @@
 import PackageDescription
 
 let package = Package(
-    name: "Kaset",
+    name: "Meld",
     defaultLocalization: "en",
     platforms: [
         .macOS("15.4"),
     ],
     products: [
         .executable(
-            name: "Kaset",
-            targets: ["Kaset"]
+            name: "Meld",
+            targets: ["Meld"]
         ),
         .executable(
             name: "api-explorer",
@@ -25,7 +25,7 @@ let package = Package(
     targets: [
         // Main app executable
         .executableTarget(
-            name: "Kaset",
+            name: "Meld",
             dependencies: [
                 "YouTubeAskCore",
                 .product(name: "Sparkle", package: "Sparkle"),
@@ -57,7 +57,7 @@ let package = Package(
                 .process("Resources/uk.lproj"),
                 .process("Resources/zh-Hans.lproj"),
                 .process("Resources/zh-Hant.lproj"),
-                .process("Resources/Kaset.sdef"),
+                .process("Resources/Meld.sdef"),
                 .copy("Extensions"),
             ],
             swiftSettings: [
@@ -99,8 +99,8 @@ let package = Package(
         ),
         // Unit tests
         .testTarget(
-            name: "KasetTests",
-            dependencies: ["Kaset"],
+            name: "MeldTests",
+            dependencies: ["Meld"],
             // Tests for Apple-Intelligence-powered features are excluded
             // because the underlying APIs are macOS 26+ only and Swift
             // Testing's `@Test` / `@Suite` macros do not compose with

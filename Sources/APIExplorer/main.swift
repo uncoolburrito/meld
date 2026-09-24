@@ -4,7 +4,7 @@
 //  Standalone API Explorer for YouTube Music and YouTube
 //
 //  A unified tool for exploring public and authenticated YouTube Music and regular YouTube API endpoints.
-//  Reads cookies from the Kaset app's debug cookie export for authenticated requests.
+//  Reads cookies from the Meld app's debug cookie export for authenticated requests.
 //
 //  Usage:
 //    swift run api-explorer [command] [options]
@@ -40,7 +40,7 @@
 //    --mobile-web-key             - Add the resolved web API key to mobile discovery
 //    --mobile-cookie-only         - Omit the authorization header for mobile comparison
 //    --mobile-token-file <path>   - Read a mobile OAuth access token from a private file
-//    --no-auth, --guest            - Force unauthenticated requests even if Kaset cookies exist
+//    --no-auth, --guest            - Force unauthenticated requests even if Meld cookies exist
 //    --follow <index>              - Follow a discover navigation entry; repeat for deeper pages
 //
 //  Examples:
@@ -331,12 +331,12 @@ func selectedCookieBackupFile(
 
     let legacyCookieFile =
         appSupport
-            .appendingPathComponent("Kaset", isDirectory: true)
+            .appendingPathComponent("Meld", isDirectory: true)
             .appendingPathComponent("cookies.dat")
 
     let containerCookieFile = homeDirectory
-        .appendingPathComponent("Library/Containers/com.sertacozercan.Kaset/Data", isDirectory: true)
-        .appendingPathComponent("Library/Application Support/Kaset", isDirectory: true)
+        .appendingPathComponent("Library/Containers/com.uncoolburrito.meld/Data", isDirectory: true)
+        .appendingPathComponent("Library/Application Support/Meld", isDirectory: true)
         .appendingPathComponent("cookies.dat")
 
     // Once the sandboxed app has created its Application Support directory, its
@@ -351,7 +351,7 @@ func selectedCookieBackupFile(
     return FileManager.default.fileExists(atPath: legacyCookieFile.path) ? legacyCookieFile : nil
 }
 
-/// Reads cookies from Kaset app's backup file in Application Support.
+/// Reads cookies from Meld app's backup file in Application Support.
 /// This allows the standalone tool to make authenticated API requests.
 func loadCookiesFromAppBackup(from cookieFile: URL? = selectedCookieBackupFile()) -> [HTTPCookie]? {
     guard !forceUnauthenticatedRequests, let cookieFile else { return nil }
@@ -1984,7 +1984,7 @@ func exploreBrowse(
 
         if statusCode == 401 || statusCode == 403 {
             print("❌ HTTP \(statusCode) - Authentication required")
-            print("   Run the Kaset app and sign in, then try again.")
+            print("   Run the Meld app and sign in, then try again.")
             return
         }
 
@@ -2072,7 +2072,7 @@ func exploreAction(
 
         if statusCode == 401 || statusCode == 403 {
             print("❌ HTTP \(statusCode) - Authentication required")
-            print("   Run the Kaset app and sign in, then try again.")
+            print("   Run the Meld app and sign in, then try again.")
             return
         }
 
@@ -2840,9 +2840,9 @@ func checkAuthStatus() {
         print("❌ No cookies found")
         print()
         print("To enable authenticated API access:")
-        print("  1. Run the Kaset app")
+        print("  1. Run the Meld app")
         print("  2. Sign in to YouTube Music")
-        print("  3. The app will save cookies to ~/Library/Application Support/Kaset/")
+        print("  3. The app will save cookies to ~/Library/Application Support/Meld/")
         print("  4. Run this tool again")
         return
     }
@@ -3782,7 +3782,7 @@ func showHelp() {
         ======================================
 
         A standalone tool for exploring YouTube Music and regular YouTube API endpoints.
-        Supports public and authenticated endpoints (reads cookies from Kaset app).
+        Supports public and authenticated endpoints (reads cookies from Meld app).
 
         Usage:
           swift run api-explorer <command> [options]
@@ -3837,7 +3837,7 @@ func showHelp() {
           --mobile-web-key               Add the resolved web API key to mobile discovery
           --mobile-cookie-only           Omit SAPISIDHASH while retaining cookies for comparison
           --mobile-token-file <path>     Read a mobile OAuth access token from a mode-0600 file
-          --no-auth, --guest             Force signed-out requests even if Kaset cookies exist
+          --no-auth, --guest             Force signed-out requests even if Meld cookies exist
 
         YouTube mode examples:
           # Browse YouTube surfaces (auth used automatically when cookies exist)
@@ -3887,15 +3887,15 @@ func showHelp() {
           swift run api-explorer continuation <token> next      # next endpoint (for mix queues)
 
           # Safely inspect a saved response without printing raw token values
-          swift run api-explorer analyze-file Tests/KasetTests/Fixtures/example.json
+          swift run api-explorer analyze-file Tests/MeldTests/Fixtures/example.json
 
           # Check auth status
           swift run api-explorer auth
 
             Authentication:
-                For authenticated endpoints, sign in to the Kaset app first.
+                For authenticated endpoints, sign in to the Meld app first.
                 Debug builds export auth cookies to:
-                    ~/Library/Application Support/Kaset/cookies.dat
+                    ~/Library/Application Support/Meld/cookies.dat
                 Use --guest/--no-auth to validate signed-out behavior without
                 reading those cookies.
 

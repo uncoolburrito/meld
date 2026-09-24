@@ -767,8 +767,8 @@ extension DiscoveryAuditTests {
     func cookieBackupSelection() throws {
         let directory = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
         let appSupport = directory.appendingPathComponent("Library/Application Support")
-        let legacy = appSupport.appendingPathComponent("Kaset/cookies.dat")
-        let container = directory.appendingPathComponent("Library/Containers/com.sertacozercan.Kaset/Data/Library/Application Support/Kaset/cookies.dat")
+        let legacy = appSupport.appendingPathComponent("Meld/cookies.dat")
+        let container = directory.appendingPathComponent("Library/Containers/com.uncoolburrito.meld/Data/Library/Application Support/Meld/cookies.dat")
         try FileManager.default.createDirectory(at: legacy.deletingLastPathComponent(), withIntermediateDirectories: true)
         defer { try? FileManager.default.removeItem(at: directory) }
         #expect(selectedCookieBackupFile(appSupport: appSupport, homeDirectory: directory) == nil)
