@@ -219,7 +219,7 @@ struct MeldApp: App {
     }
 
     var body: some Scene {
-        Window("Kaset", id: "main") {
+        Window("Meld", id: "main") {
             // Skip UI during unit tests to prevent window spam
             if UITestConfig.isRunningUnitTests, !UITestConfig.isUITestMode {
                 Color.clear
