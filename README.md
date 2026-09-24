@@ -1,6 +1,10 @@
 <h1 align="center">Meld</h1>
 
-<p align="center">A personal unified macOS music client combining YouTube Music and Spotify, built with Swift and SwiftUI.</p>
+<p align="center">One Mac app for both YouTube Music and Spotify, with proper artwork and synced lyrics for both.</p>
+
+<p align="center">Meld is a personal native macOS music client combining YouTube Music's discovery and library with Spotify's desktop playback into a single Apple Music-inspired interface with unified controls, synced lyrics, and clean macOS media integration.</p>
+
+> ⚠️ **Spotify Support Status**: Spotify integration is currently in progress. The multi-source protocol abstraction and normalized track models are active; local AppleScript transport control, notification monitoring, and unified UI are under active development.
 
 <table>
   <tr>
@@ -15,12 +19,12 @@
 
 ## Features
 
-### Unified Music Experience
-- 🎵 **Native macOS Experience** — Apple Music-style UI with Liquid Glass player bars, clean sidebar navigation, and a multi-source toggle
-- 🎧 **YouTube Music** — In-app playback via hidden WKWebView with full DRM audio support, queue management, smart shuffle, and 6-band parametric EQ
-- 🟢 **Spotify Integration** — Remote control and metadata surface for native Spotify.app audio: instant notification-driven state sync, zero-latency transport, search, and quick-play
-- 📜 **Synced Lyrics** — Rich lyrics display with auto-scroll and line-by-line highlighting, sourced through YouTube Music with LRCLIB fallback
-- 🎛️ **Audio & Controls** — Per-source volume gain offset; media keys route to the active player with clean Now Playing handoff and zero double-skipping
+### Unified Multi-Source Experience
+- 🎵 **Native macOS Experience** — Apple Music-inspired interface featuring Liquid Glass styling, smooth sidebar navigation, and a multi-source architecture.
+- 🎧 **YouTube Music** — In-app playback via hidden WKWebView with full DRM audio support, queue management, smart shuffle, and a 6-band parametric equalizer.
+- 🟢 **Spotify Integration (In Progress)** — Remote transport control and live metadata sync for native Spotify desktop audio: instant notification-driven state sync, zero-latency transport verbs, and automatic Now Playing arbitration.
+- 📜 **Synced Lyrics for Both** — Full-featured synced lyrics display with auto-scroll and line-by-line highlighting, sourced through YouTube Music with LRCLIB fallback.
+- 🎛️ **Unified Media Routing** — macOS media keys, Now Playing claims, and notifications route to whichever source is active with zero double-skipping or conflicts.
 
 ## Requirements
 

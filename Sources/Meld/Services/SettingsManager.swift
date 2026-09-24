@@ -577,7 +577,8 @@ final class SettingsManager {
         }
 
         if let rawValue = UserDefaults.standard.string(forKey: Keys.appSource),
-           let source = AppSource(rawValue: rawValue)
+           let source = AppSource(rawValue: rawValue),
+           AppSource.visibleCases.contains(source)
         {
             self.appSource = source
         } else {

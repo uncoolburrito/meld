@@ -16,6 +16,9 @@ struct UnifiedTrack: Identifiable, Hashable, Equatable, Sendable, Codable {
     let artist: String
 
     /// The album name, if available.
+    /// Kept as String? because downstream consumers (Spotify AppleScript, LRCLIB lyrics lookup,
+    /// Last.fm scrobbling, and system NowPlaying) operate solely on album title strings;
+    /// source-specific catalog navigation retains rich browse models in their respective layers.
     let album: String?
 
     /// Total duration in seconds, if known.

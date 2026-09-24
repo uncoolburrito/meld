@@ -79,7 +79,7 @@ struct UnifiedTrackTests {
 
     @Test("SpotifySource stub conforms to MusicSourceProtocol with expected initial state")
     @MainActor
-    func spotifySourceStub() async throws {
+    func spotifySourceStub() {
         let spotify = SpotifySource()
         #expect(spotify.source == .spotify)
         #expect(spotify.currentTrack == nil)
@@ -87,14 +87,32 @@ struct UnifiedTrackTests {
         #expect(spotify.playbackDuration == 0.0)
         #expect(spotify.transportState == .idle)
         #expect(spotify.volume == 1.0)
+    }
 
-        // Verbs execute without throwing
-        try await spotify.play()
-        try await spotify.pause()
-        try await spotify.toggle()
-        try await spotify.next()
-        try await spotify.previous()
-        try await spotify.seek(to: 42.0)
-        try await spotify.setVolume(0.8)
+    @Test("SpotifySource stub verbs fail loudly with unimplemented error")
+    @MainActor
+    func spotifySourceStubFailsLoudly() async {
+        let spotify = SpotifySource()
+        await #expect(throws: SpotifySourceError.unimplemented) {
+            try await spotify.play()
+        }
+        await #expect(throws: SpotifySourceError.unimplemented) {
+            try await spotify.pause()
+        }
+        await #expect(throws: SpotifySourceError.unimplemented) {
+            try await spotify.toggle()
+        }
+        await #expect(throws: SpotifySourceError.unimplemented) {
+            try await spotify.next()
+        }
+        await #expect(throws: SpotifySourceError.unimplemented) {
+            try await spotify.previous()
+        }
+        await #expect(throws: SpotifySourceError.unimplemented) {
+            try await spotify.seek(to: 42.0)
+        }
+        await #expect(throws: SpotifySourceError.unimplemented) {
+            try await spotify.setVolume(0.8)
+        }
     }
 }
