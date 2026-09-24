@@ -40,3 +40,9 @@ This document tracks all modifications made to upstream [Kaset](https://github.c
 - `Scripts/benchmark-xctest.sh`: Updated test bundle targets to MeldTests.
 - `Scripts/verify-release-app.sh`: Updated bundle ID check to `com.uncoolburrito.meld`.
 - `Tests/MeldTests/*`: (Renamed from `Tests/KasetTests`) Updated test imports to `@testable import Meld`.
+
+### App Icon: Custom Branding
+- `Sources/Meld/Resources/Assets.xcassets/AppIcon.appiconset`: Added full 10-representation macOS AppIcon asset catalog (16x16 to 1024x1024) generated from custom Meld artwork. Replaces upstream Kaset icon.
+- `Sources/Meld/Resources/AppIcon.icon/Assets/Image Layer.png`: Updated Icon Composer image layer with custom Meld artwork for macOS Liquid Glass dynamic light/dark mode support.
+- `Scripts/build-app.sh`: Added `DEVELOPER_DIR` fallback to ensure `actool` compiles asset catalogs when `xcode-select` points to CommandLineTools.
+

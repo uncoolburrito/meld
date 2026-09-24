@@ -6,6 +6,11 @@ set -euo pipefail
 ROOT=$(cd "$(dirname "$0")/.." && pwd)
 cd "$ROOT"
 
+# Ensure DEVELOPER_DIR points to Xcode.app if available (needed for actool and asset compilation)
+if [[ -z "${DEVELOPER_DIR:-}" && -d "/Applications/Xcode.app/Contents/Developer" ]]; then
+  export DEVELOPER_DIR="/Applications/Xcode.app/Contents/Developer"
+fi
+
 # Load version info
 source "$ROOT/version.env"
 
