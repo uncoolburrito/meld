@@ -11,6 +11,11 @@ This document tracks all modifications made to upstream [Kaset](https://github.c
 - `meld-main`: Long-lived integration branch, created off `phase-0`. All phase branches merge here. `main` merges INTO `meld-main` when pulling upstream, never the reverse.
 - `phase-N`: Feature branches off `meld-main`, PR'd into `meld-main`.
 
+### Branch Protection on `main`
+- **Rules Enforced**: Require a pull request before merging, block force pushes, block deletions.
+- **Purpose**: Enforces the pristine `main` policy at the platform level so a mis-targeted PR or direct push cannot alter `main` by accident.
+- **Protocol**: If branch protection ever blocks merging upstream into `main`, report it to Ramiz rather than attempting any platform or Git workarounds.
+
 ## Modified Upstream Files
 
 ### Phase 0: Fork, Rename & Baseline
