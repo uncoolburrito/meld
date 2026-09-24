@@ -112,7 +112,7 @@ final class MockSpotifyNotificationMonitor: SpotifyNotificationMonitoring, @unch
         self.lock.unlock()
     }
 
-    func markCommandDispatched() {
+    func markCommandDispatched(expectedState _: SpotifyPlayerState? = nil) {
         self.lock.lock()
         self.commandDispatchedCalled = true
         self.lastDispatchedTime = Date()
@@ -123,6 +123,7 @@ final class MockSpotifyNotificationMonitor: SpotifyNotificationMonitoring, @unch
         self.lock.lock()
         let handler = self.updateHandler
         self.lock.unlock()
+
         handler?(snapshot)
     }
 }
@@ -169,7 +170,9 @@ struct SpotifyIntegrationTests {
         #expect(abs((snapshot.track?.duration ?? 0.0) - 213.573) < 0.001)
         #expect(snapshot.track?.artworkURL == URL(string: "https://i.scdn.co/image/abc"))
         #expect(snapshot.track?.source == .spotify)
-        #expect(snapshot.track?.sourceID == "spotify:track:4cOdK2wGLETKBW3PvgPWqT")
+        // Verify bare sourceID and clean id without double prefix
+        #expect(snapshot.track?.sourceID == "4cOdK2wGLETKBW3PvgPWqT")
+        #expect(snapshot.track?.id == "spotify:4cOdK2wGLETKBW3PvgPWqT")
     }
 
     @Test("SpotifyScriptController handles stopped and empty compound states")
@@ -207,20 +210,94 @@ struct SpotifyIntegrationTests {
         #expect(snapshot.track?.title == "Blinding Lights")
         #expect(snapshot.track?.artist == "The Weeknd")
         #expect(snapshot.track?.album == "After Hours")
-        #expect(snapshot.track?.sourceID == "spotify:track:xyz987")
+        // Verify bare sourceID and clean id without double prefix
+        #expect(snapshot.track?.sourceID == "xyz987")
+        #expect(snapshot.track?.id == "spotify:xyz987")
     }
 
-    @Test("Echo guard suppresses rapid feedback loop within configured window")
-    func echoGuardTiming() async throws {
-        let monitor = SpotifyNotificationMonitor(echoSuppressionWindow: 0.100)
-        #expect(!monitor.isEchoSuppressionActive)
+    @Test("Echo guard actively suppresses notifications during suppression window and delivers afterwards")
+    func echoGuardNotificationFiltering() async throws {
+        actor NotificationRecorder {
+            var count = 0
+            var lastSnapshot: SpotifyPlaybackSnapshot?
 
-        monitor.markCommandDispatched()
+            func record(snapshot: SpotifyPlaybackSnapshot) {
+                self.count += 1
+                self.lastSnapshot = snapshot
+            }
+        }
+
+        let monitor = SpotifyNotificationMonitor(echoSuppressionWindow: 0.100)
+        let recorder = NotificationRecorder()
+
+        monitor.startObserving { snapshot in
+            Task {
+                await recorder.record(snapshot: snapshot)
+            }
+        }
+
+        let notification = Notification(
+            name: SpotifyNotificationMonitor.notificationName,
+            object: nil,
+            userInfo: [
+                "Player State": "Playing",
+                "Playback Position": 10.0,
+                "Duration": 200_000,
+                "Track ID": "spotify:track:test1",
+                "Name": "Song 1",
+                "Artist": "Artist 1",
+            ]
+        )
+
+        // 1. Initial notification outside suppression window fires callback
+        monitor.handleNotification(notification)
+        try await Task.sleep(nanoseconds: 30_000_000)
+        let count1 = await recorder.count
+        #expect(count1 == 1)
+
+        // 2. Mark command dispatched with expectedState .playing -> active suppression
+        monitor.markCommandDispatched(expectedState: .playing)
         #expect(monitor.isEchoSuppressionActive)
 
-        // Wait past suppression window
-        try await Task.sleep(nanoseconds: 120_000_000)
+        // Notification matching commanded state arriving during suppression window is dropped
+        monitor.handleNotification(notification)
+        try await Task.sleep(nanoseconds: 30_000_000)
+        let count2 = await recorder.count
+        #expect(count2 == 1) // Callback did NOT fire!
+
+        // 3. Sleep past suppression window (100ms window -> 130ms wait)
+        try await Task.sleep(nanoseconds: 130_000_000)
         #expect(!monitor.isEchoSuppressionActive)
+
+        // Notification arriving after suppression window expires DOES fire
+        monitor.handleNotification(notification)
+        try await Task.sleep(nanoseconds: 30_000_000)
+        let count3 = await recorder.count
+        #expect(count3 == 2) // Callback DOES fire!
+
+        // 4. Test expectedState discrimination: command expecting .playing should NOT swallow a .paused notification
+        monitor.markCommandDispatched(expectedState: .playing)
+        let pausedNotification = Notification(
+            name: SpotifyNotificationMonitor.notificationName,
+            object: nil,
+            userInfo: [
+                "Player State": "Paused",
+                "Playback Position": 10.0,
+                "Duration": 200_000,
+                "Track ID": "spotify:track:test1",
+                "Name": "Song 1",
+                "Artist": "Artist 1",
+            ]
+        )
+        // User pressed pause in Spotify.app within the window -> differing state is NOT swallowed
+        monitor.handleNotification(pausedNotification)
+        try await Task.sleep(nanoseconds: 30_000_000)
+        let count4 = await recorder.count
+        #expect(count4 == 3)
+        let lastSnap = await recorder.lastSnapshot
+        #expect(lastSnap?.playerState == .paused)
+
+        monitor.stopObserving()
     }
 
     // MARK: - Missing App & Source Conformance Tests

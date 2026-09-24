@@ -27,7 +27,7 @@ enum AppSource: String, CaseIterable, Identifiable, Codable, Sendable {
         case .video:
             String(localized: "YouTube")
         case .spotify:
-            "Spotify"
+            String(localized: "Spotify")
         }
     }
 

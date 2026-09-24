@@ -62,7 +62,7 @@ final class SpotifySource: MusicSourceProtocol {
             try await Task.sleep(nanoseconds: 300_000_000)
         }
 
-        self.notificationMonitor.markCommandDispatched()
+        self.notificationMonitor.markCommandDispatched(expectedState: .playing)
         try await self.scriptController.play()
         self.transportState = .playing
     }
@@ -73,7 +73,7 @@ final class SpotifySource: MusicSourceProtocol {
         }
         guard self.isRunning else { return }
 
-        self.notificationMonitor.markCommandDispatched()
+        self.notificationMonitor.markCommandDispatched(expectedState: .paused)
         try await self.scriptController.pause()
         self.transportState = .paused
     }
@@ -88,7 +88,8 @@ final class SpotifySource: MusicSourceProtocol {
             return
         }
 
-        self.notificationMonitor.markCommandDispatched()
+        let nextState: SpotifyPlayerState = self.transportState == .playing ? .paused : .playing
+        self.notificationMonitor.markCommandDispatched(expectedState: nextState)
         try await self.scriptController.togglePlayPause()
 
         if self.transportState == .playing {
@@ -106,7 +107,6 @@ final class SpotifySource: MusicSourceProtocol {
             throw SpotifySourceError.applicationNotRunning
         }
 
-        self.notificationMonitor.markCommandDispatched()
         try await self.scriptController.nextTrack()
     }
 
@@ -118,7 +118,6 @@ final class SpotifySource: MusicSourceProtocol {
             throw SpotifySourceError.applicationNotRunning
         }
 
-        self.notificationMonitor.markCommandDispatched()
         try await self.scriptController.previousTrack()
     }
 

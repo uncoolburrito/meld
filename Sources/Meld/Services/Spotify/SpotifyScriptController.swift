@@ -185,7 +185,8 @@ final class SpotifyScriptController: SpotifyScriptControlling, @unchecked Sendab
             )
         }
 
-        let trackID = parts[3]
+        let rawTrackID = parts[3]
+        let sourceID = SpotifyPlaybackSnapshot.normalizeTrackID(rawTrackID)
         let title = parts[4]
         let artist = parts[5]
         let album = parts[6].isEmpty ? nil : parts[6]
@@ -200,7 +201,7 @@ final class SpotifyScriptController: SpotifyScriptControlling, @unchecked Sendab
             duration: durationSeconds,
             artworkURL: artworkURL,
             source: .spotify,
-            sourceID: trackID
+            sourceID: sourceID
         )
 
         return SpotifyPlaybackSnapshot(

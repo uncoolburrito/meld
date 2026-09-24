@@ -70,6 +70,16 @@ struct SpotifyPlaybackSnapshot: Sendable, Equatable {
         volume: 1.0,
         track: nil
     )
+
+    /// Strips the `"spotify:track:"` prefix if present, returning the bare Spotify track identifier.
+    /// Ensures `UnifiedTrack.id` formats cleanly as `spotify:<id>` rather than `spotify:spotify:track:<id>`.
+    static func normalizeTrackID(_ raw: String?) -> String {
+        guard let raw, !raw.isEmpty else { return "" }
+        if raw.hasPrefix("spotify:track:") {
+            return String(raw.dropFirst("spotify:track:".count))
+        }
+        return raw
+    }
 }
 
 // MARK: - SpotifySourceError

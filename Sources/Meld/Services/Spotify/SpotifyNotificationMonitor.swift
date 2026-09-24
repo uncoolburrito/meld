@@ -6,8 +6,14 @@ import Foundation
 protocol SpotifyNotificationMonitoring: AnyObject, Sendable {
     func startObserving(onUpdate: @escaping @Sendable (SpotifyPlaybackSnapshot) -> Void)
     func stopObserving()
-    func markCommandDispatched()
+    func markCommandDispatched(expectedState: SpotifyPlayerState?)
     var isEchoSuppressionActive: Bool { get }
+}
+
+extension SpotifyNotificationMonitoring {
+    func markCommandDispatched() {
+        self.markCommandDispatched(expectedState: nil)
+    }
 }
 
 // MARK: - SpotifyNotificationMonitor
@@ -20,6 +26,7 @@ final class SpotifyNotificationMonitor: SpotifyNotificationMonitoring, @unchecke
     private var observerToken: AnyObject?
     private var onUpdate: (@Sendable (SpotifyPlaybackSnapshot) -> Void)?
     private var lastCommandTimestamp: Date = .distantPast
+    private var expectedState: SpotifyPlayerState?
     private let echoSuppressionWindow: TimeInterval
 
     init(echoSuppressionWindow: TimeInterval = 0.250) {
@@ -36,9 +43,10 @@ final class SpotifyNotificationMonitor: SpotifyNotificationMonitoring, @unchecke
         return Date().timeIntervalSince(self.lastCommandTimestamp) < self.echoSuppressionWindow
     }
 
-    func markCommandDispatched() {
+    func markCommandDispatched(expectedState: SpotifyPlayerState? = nil) {
         self.lock.lock()
         self.lastCommandTimestamp = Date()
+        self.expectedState = expectedState
         self.lock.unlock()
     }
 
@@ -77,6 +85,21 @@ final class SpotifyNotificationMonitor: SpotifyNotificationMonitoring, @unchecke
         let snapshot = Self.parse(userInfo: userInfo)
 
         self.lock.lock()
+        let isWindowActive = Date().timeIntervalSince(self.lastCommandTimestamp) < self.echoSuppressionWindow
+        if isWindowActive {
+            if let expected = self.expectedState {
+                // If an expected state was specified, only suppress echoes matching that commanded state.
+                // A differing state (e.g. user pressed pause in Spotify.app) bypasses suppression.
+                if snapshot.playerState == expected {
+                    self.lock.unlock()
+                    return
+                }
+            } else {
+                // Blanket suppression fallback when no expected state was specified
+                self.lock.unlock()
+                return
+            }
+        }
         let handler = self.onUpdate
         self.lock.unlock()
 
@@ -97,7 +120,8 @@ final class SpotifyNotificationMonitor: SpotifyNotificationMonitoring, @unchecke
         // Spotify notification duration is delivered in milliseconds
         let duration = rawDuration > 0 ? rawDuration / 1000.0 : 0.0
 
-        let trackID = userInfo["Track ID"] as? String
+        let rawTrackID = userInfo["Track ID"] as? String
+        let sourceID = SpotifyPlaybackSnapshot.normalizeTrackID(rawTrackID)
         let name = userInfo["Name"] as? String
         let artist = userInfo["Artist"] as? String
         let album = userInfo["Album"] as? String
@@ -110,7 +134,7 @@ final class SpotifyNotificationMonitor: SpotifyNotificationMonitoring, @unchecke
                 duration: duration,
                 artworkURL: nil, // DistributedNotification does not carry image URL; fetched via script or API if needed
                 source: .spotify,
-                sourceID: trackID ?? ""
+                sourceID: sourceID
             )
         } else {
             nil
