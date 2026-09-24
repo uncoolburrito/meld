@@ -32,7 +32,7 @@ struct SourceToggleView: View {
 
     private var segments: some View {
         HStack(spacing: 2) {
-            ForEach(AppSource.allCases) { source in
+            ForEach(AppSource.visibleCases) { source in
                 self.segment(for: source)
             }
         }

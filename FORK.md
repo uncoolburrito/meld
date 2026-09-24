@@ -49,4 +49,38 @@ This document tracks all modifications made to upstream [Kaset](https://github.c
 ### CI & Workflows
 - `.github/workflows/release.yml.disabled`: Renamed from `release.yml` and disabled. The upstream release pipeline publishes to `sozercan`'s Homebrew tap and Sparkle appcast with upstream signing identities, neither of which are ours. It will need a full rewrite before any public release, rather than a string rename.
 
+## Public Release Constraints & Roadmap Decisions
+
+These constraints are documented now to take the cheap path before release rather than expensive refactors afterward.
+
+### 1. Immutable Bundle Identifier
+- **Identifier**: `com.uncoolburrito.meld`
+- **Rule**: Never change the bundle identifier. Application code signing, Sparkle update tracking, sandboxed Application Support containers, and user defaults are all permanently keyed off this identifier. Changing it post-release will orphan user data, logins, and cookies.
+
+### 2. Spotify Client ID Architecture (Before Phase 4)
+- **Constraint**: Spotify Developer Mode limits apps to 5 authenticated users and requires the application owner to hold Spotify Premium. Extended Quota Mode requires an approved organization.
+- **Design Rule**: Design the Spotify client ID and client secret as user-supplied settings from day one in `SettingsManager` (with local developer default values). Retrofitting user-provided credentials post-release would require migration scripts, settings UI rewrites, and docs. Implementing it as a user-configurable preference in Phase 4 costs nothing up front.
+
+### 3. Sparkle Auto-Update (Pre-Release Gate)
+- **Constraint**: Shipping a public v1 without functional auto-update permanently strands initial users (adding update machinery in v2 only benefits users who manually install v2+).
+- **Pre-Release Checklist**:
+  1. Generate dedicated Ed25519 keypair for Meld.
+  2. Stand up and host `appcast.xml` feed on a reliable domain/release asset.
+  3. Re-enable Sparkle keys in `Info.plist`.
+  4. Rewrite `.github/workflows/release.yml` to sign with the new key and publish to the appcast.
+
+### 4. Themes & Customization Architecture (Phase 6 Roadmap & Prerequisites)
+- **Planned Feature**: A theme picker in Settings. Apple Music's pink-red remains the default.
+  - Static options (Light / Dark hex pairs):
+    - **Ultramarine**: `#2F4B8C` (light) / `#3A5DA8` (dark)
+    - **Vermilion**: `#C0392B` (light) / `#D4462A` (dark)
+    - **Verdigris**: `#3E7A6B` (light) / `#4A8C7A` (dark)
+    - **Gold**: `#A67C00` (light) / `#D4AF37` (dark)
+  - **Dynamic Theme**: Accent rests at Gold, fades to Verdigris when `audioSource == .spotify`, and fades to Vermilion when `audioSource == .music` (slow ambient crossfade of 600–800ms).
+  - *Note for Phase 6*: Dynamic theme keys off `audioSource`, which also shifts when external Spotify playback is detected (e.g. playing from speaker fades UI green even while viewing YouTube Music tab). Confirm exact cross-tab intent during Phase 6 sign-off.
+- **Prerequisites Required Before Phase 6**:
+  - **Phase 3 Injectable Tint**: Compiled asset catalog `AccentColor` cannot be swapped dynamically at runtime. When touching accent-coloured UI in Phase 3, route it through a single injectable tint environment value at the root view hierarchy rather than querying asset catalogs directly. Avoid adding new direct reads of `AccentColor` anywhere in the codebase.
+  - **Explicit Light & Dark Pairs**: Every theme colour must be defined as an explicit Light and Dark pair (e.g. Gold on white is unreadable without a darkened light-mode variant).
+
+
 
