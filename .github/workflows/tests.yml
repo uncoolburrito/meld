@@ -6,7 +6,7 @@ concurrency:
 
 on:
   push:
-    branches: [main]
+    branches: [main, meld-main]
     paths:
       - "**.swift"
       - "Package.swift"
@@ -17,7 +17,7 @@ on:
       - "Tests/**"
       - ".github/workflows/tests.yml"
   pull_request:
-    branches: [main]
+    branches: [main, meld-main]
     paths:
       - "**.swift"
       - "Package.swift"

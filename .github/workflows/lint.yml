@@ -6,14 +6,14 @@ concurrency:
 
 on:
   push:
-    branches: [main]
+    branches: [main, meld-main]
     paths:
       - "**.swift"
       - ".swiftlint.yml"
       - ".swiftformat"
       - ".github/workflows/lint.yml"
   pull_request:
-    branches: [main]
+    branches: [main, meld-main]
     paths:
       - "**.swift"
       - ".swiftlint.yml"
