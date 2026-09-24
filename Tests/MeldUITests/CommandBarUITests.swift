@@ -2,7 +2,7 @@ import XCTest
 
 /// UI tests for the command bar presentation.
 @MainActor
-final class CommandBarUITests: KasetUITestCase {
+final class CommandBarUITests: MeldUITestCase {
     func testCommandBarOpensWithKeyboardShortcutAndDismissesViaOverlay() throws {
         if #unavailable(macOS 26.0) {
             throw XCTSkip("The command bar requires macOS 26.")

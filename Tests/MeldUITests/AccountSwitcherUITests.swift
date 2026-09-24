@@ -5,7 +5,7 @@ import XCTest
 /// These tests verify the sidebar profile section and account switching behavior.
 /// > ⚠️ **Ask permission before running UI tests** — UI tests launch the app and can be disruptive.
 @MainActor
-final class AccountSwitcherUITests: KasetUITestCase {
+final class AccountSwitcherUITests: MeldUITestCase {
     // MARK: - Profile Display Tests
 
     /// Verifies the profile section appears at bottom of sidebar when logged in.

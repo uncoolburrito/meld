@@ -19,9 +19,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "E5000500"
-               BuildableName = "KasetUITests.xctest"
-               BlueprintName = "KasetUITests"
-               ReferencedContainer = "container:KasetUITests.xcodeproj">
+               BuildableName = "MeldUITests.xctest"
+               BlueprintName = "MeldUITests"
+               ReferencedContainer = "container:MeldUITests.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>

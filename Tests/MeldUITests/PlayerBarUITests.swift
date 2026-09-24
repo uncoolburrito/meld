@@ -2,7 +2,7 @@ import XCTest
 
 /// UI tests for the PlayerBar.
 @MainActor
-final class PlayerBarUITests: KasetUITestCase {
+final class PlayerBarUITests: MeldUITestCase {
     // MARK: - Player Bar Visibility
 
     func testPlayerBarVisibleWithCurrentTrack() {
