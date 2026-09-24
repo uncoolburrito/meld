@@ -20,8 +20,8 @@ This document tracks all modifications made to upstream [Kaset](https://github.c
 
 ### Phase 0: Fork, Rename & Baseline
 - `Package.swift`: Renamed package, targets, and products to Meld; updated resource paths to Meld.sdef.
-- `Info.plist`: Replaced bundle identifier with `com.uncoolburrito.meld`, registered `meld://` scheme, set `Meld.sdef`.
-- `Meld.entitlements`: (Replaced `Kaset.entitlements`) Added Spotify scripting target entitlements for sandboxed AppleScript.
+- `Info.plist`: Replaced bundle identifier with `com.uncoolburrito.meld`, registered `meld://` scheme, set `Meld.sdef`. Intentionally omitted Sparkle auto-update feed keys (`SUFeedURL`, `SUPublicEDKey`, `SUEnableAutomaticChecks`, etc.) because this personal fork does not publish an auto-update appcast or hold upstream's Ed25519 signing key; attempting upstream auto-updates would fail signature verification or attempt to overwrite Meld with Kaset.
+- `Meld.entitlements`: (Replaced `Kaset.entitlements`) Updated Sparkle Mach service lookup identifiers to `com.uncoolburrito.meld-spks` and `com.uncoolburrito.meld-spki`.
 - `LICENSE`: Added copyright notice for Ramiz while preserving original sozercan copyright.
 - `README.md`: Rebranded documentation and added attribution to upstream Kaset.
 - `Sources/Meld/MeldApp.swift`: (Renamed from `KasetApp.swift`) Updated main app entry point struct and logging to Meld.
