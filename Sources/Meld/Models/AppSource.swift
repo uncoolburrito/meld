@@ -6,15 +6,18 @@ import Foundation
 /// YouTube Music (the default) and regular YouTube video. The source toggle
 /// at the bottom of the sidebar flips between them. Switching sources only
 /// swaps the visible surface — playback from the other source continues.
-enum AppSource: String, CaseIterable, Identifiable {
+enum AppSource: String, CaseIterable, Identifiable, Codable, Sendable {
     /// The YouTube Music experience (default).
     case music
 
     /// The regular YouTube video experience.
     case video
 
+    /// The native Spotify application playback experience.
+    case spotify
+
     var id: String {
-        rawValue
+        self.rawValue
     }
 
     var displayName: String {
@@ -23,6 +26,8 @@ enum AppSource: String, CaseIterable, Identifiable {
             String(localized: "Music")
         case .video:
             String(localized: "YouTube")
+        case .spotify:
+            "Spotify"
         }
     }
 
@@ -33,6 +38,14 @@ enum AppSource: String, CaseIterable, Identifiable {
             "music.note"
         case .video:
             "play.rectangle.fill"
+        case .spotify:
+            "waveform"
         }
+    }
+
+    /// Sources currently exposed in the sidebar source toggle capsule.
+    /// In Phase 3, this will expand to include `.spotify` once the UI is wired.
+    static var visibleCases: [AppSource] {
+        [.music, .video]
     }
 }

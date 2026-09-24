@@ -743,6 +743,8 @@ struct MeldApp: App {
             self.navigationSelection == .home
         case .video:
             self.youtubeNavigationSelection == .home
+        case .spotify:
+            false
         }
     }
 

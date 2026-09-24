@@ -516,6 +516,8 @@ struct MainWindow: View { // swiftlint:disable:this type_body_length
         case .video:
             guard self.youtubeNavigationSelection == .home else { return }
             await self.youtubeStore.home.refresh()
+        case .spotify:
+            break
         }
     }
 
