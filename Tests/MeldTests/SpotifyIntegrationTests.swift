@@ -601,8 +601,11 @@ struct SpotifyIntegrationTests {
         #expect(mockScript.nextCalled)
         #expect(source.currentTrack == nil)
 
-        // Wait past fallback duration (50ms -> 80ms)
-        try await Task.sleep(nanoseconds: 80_000_000)
+        // Wait up to 500ms for fallback reconcile to execute on MainActor
+        for _ in 0..<25 {
+            if source.currentTrack != nil { break }
+            try await Task.sleep(nanoseconds: 20_000_000)
+        }
 
         #expect(source.currentTrack?.title == "Fallback Reconciled Track")
         #expect(source.currentTrack?.sourceID == "fallbackTrack")
