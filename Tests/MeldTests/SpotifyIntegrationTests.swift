@@ -602,8 +602,10 @@ struct SpotifyIntegrationTests {
         #expect(source.currentTrack == nil)
 
         // Wait up to 500ms for fallback reconcile to execute on MainActor
-        for _ in 0..<25 {
-            if source.currentTrack != nil { break }
+        for _ in 0 ..< 25 {
+            if source.currentTrack != nil {
+                break
+            }
             try await Task.sleep(nanoseconds: 20_000_000)
         }
 
