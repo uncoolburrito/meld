@@ -6,6 +6,11 @@ This document tracks all modifications made to upstream [Kaset](https://github.c
 - **Upstream Repository**: `https://github.com/sozercan/kaset.git`
 - **Initial Fork Commit**: Upstream `main` at time of Phase 0 initialization.
 
+## Branching Model
+- `main`: Pristine mirror of `sozercan/kaset`. Upstream merges land here. Nothing else ever does.
+- `meld-main`: Long-lived integration branch, created off `phase-0`. All phase branches merge here. `main` merges INTO `meld-main` when pulling upstream, never the reverse.
+- `phase-N`: Feature branches off `meld-main`, PR'd into `meld-main`.
+
 ## Modified Upstream Files
 
 ### Phase 0: Fork, Rename & Baseline
