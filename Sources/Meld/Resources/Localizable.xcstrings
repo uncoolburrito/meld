@@ -12751,321 +12751,321 @@
       }
     },
     "Item %lld": {},
-    "Kaset": {},
-    "Kaset could not read saved sign-in data. Retry to restore your session.": {
+    "Meld": {},
+    "Meld could not read saved sign-in data. Retry to restore your session.": {
       "localizations": {
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "تعذّر على Kaset قراءة بيانات تسجيل الدخول المحفوظة. أعد المحاولة لاستعادة جلستك."
+            "value": "تعذّر على Meld قراءة بيانات تسجيل الدخول المحفوظة. أعد المحاولة لاستعادة جلستك."
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kaset konnte die gespeicherten Anmeldedaten nicht lesen. Versuche es erneut, um deine Sitzung wiederherzustellen."
+            "value": "Meld konnte die gespeicherten Anmeldedaten nicht lesen. Versuche es erneut, um deine Sitzung wiederherzustellen."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kaset could not read saved sign-in data. Retry to restore your session."
+            "value": "Meld could not read saved sign-in data. Retry to restore your session."
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kaset no pudo leer los datos de inicio de sesión guardados. Reinténtalo para restaurar tu sesión."
+            "value": "Meld no pudo leer los datos de inicio de sesión guardados. Reinténtalo para restaurar tu sesión."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kaset n'a pas pu lire les données de connexion enregistrées. Réessayez pour restaurer votre session."
+            "value": "Meld n'a pas pu lire les données de connexion enregistrées. Réessayez pour restaurer votre session."
           }
         },
         "id": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kaset tidak dapat membaca data masuk yang tersimpan. Coba lagi untuk memulihkan sesi Anda."
+            "value": "Meld tidak dapat membaca data masuk yang tersimpan. Coba lagi untuk memulihkan sesi Anda."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kaset non ha potuto leggere i dati di accesso salvati. Riprova per ripristinare la sessione."
+            "value": "Meld non ha potuto leggere i dati di accesso salvati. Riprova per ripristinare la sessione."
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kaset이 저장된 로그인 데이터를 읽지 못했습니다. 세션을 복원하려면 재시도하세요."
+            "value": "Meld가 저장된 로그인 데이터를 읽지 못했습니다. 세션을 복원하려면 재시도하세요."
           }
         },
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kaset kon de opgeslagen aanmeldgegevens niet lezen. Probeer het opnieuw om je sessie te herstellen."
+            "value": "Meld kon de opgeslagen aanmeldgegevens niet lezen. Probeer het opnieuw om je sessie te herstellen."
           }
         },
         "pl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kaset nie mógł odczytać zapisanych danych logowania. Spróbuj ponownie, aby przywrócić sesję."
+            "value": "Meld nie mógł odczytać zapisanych danych logowania. Spróbuj ponownie, aby przywrócić sesję."
           }
         },
         "pt": {
           "stringUnit": {
             "state": "translated",
-            "value": "O Kaset não conseguiu ler os dados de início de sessão guardados. Tente novamente para restaurar a sua sessão."
+            "value": "O Meld não conseguiu ler os dados de início de sessão guardados. Tente novamente para restaurar a sua sessão."
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kaset не удалось прочитать сохранённые данные для входа. Повторите попытку, чтобы восстановить сеанс."
+            "value": "Meld не удалось прочитать сохранённые данные для входа. Повторите попытку, чтобы восстановить сеанс."
           }
         },
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kaset kunde inte läsa sparade inloggningsdata. Försök igen för att återställa din session."
+            "value": "Meld kunde inte läsa sparade inloggningsdata. Försök igen för att återställa din session."
           }
         },
         "tr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kaset kayıtlı oturum açma verilerini okuyamadı. Oturumunuzu geri yüklemek için tekrar deneyin."
+            "value": "Meld kayıtlı oturum açma verilerini okuyamadı. Oturumunuzu geri yüklemek için tekrar deneyin."
           }
         },
         "uk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kaset не вдалося прочитати збережені дані входу. Повторіть спробу, щоб відновити сеанс."
+            "value": "Meld не вдалося прочитати збережені дані входу. Повторіть спробу, щоб відновити сеанс."
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kaset 无法读取已保存的登录数据。请重试以恢复会话。"
+            "value": "Meld 无法读取已保存的登录数据。请重试以恢复会话。"
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kaset 無法讀取已儲存的登入資料。請重試以還原工作階段。"
+            "value": "Meld 無法讀取已儲存的登入資料。請重試以還原工作階段。"
           }
         }
       }
     },
-    "Kaset could not safely clear saved sign-in data. Retry before signing in again.": {
+    "Meld could not safely clear saved sign-in data. Retry before signing in again.": {
       "localizations": {
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "تعذّر على Kaset مسح بيانات تسجيل الدخول المحفوظة بأمان. أعد المحاولة قبل تسجيل الدخول مرة أخرى."
+            "value": "تعذّر على Meld مسح بيانات تسجيل الدخول المحفوظة بأمان. أعد المحاولة قبل تسجيل الدخول مرة أخرى."
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kaset konnte die gespeicherten Anmeldedaten nicht sicher löschen. Versuche es erneut, bevor du dich wieder anmeldest."
+            "value": "Meld konnte die gespeicherten Anmeldedaten nicht sicher löschen. Versuche es erneut, bevor du dich wieder anmeldest."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kaset could not safely clear saved sign-in data. Retry before signing in again."
+            "value": "Meld could not safely clear saved sign-in data. Retry before signing in again."
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kaset no pudo borrar de forma segura los datos de inicio de sesión guardados. Reinténtalo antes de volver a iniciar sesión."
+            "value": "Meld no pudo borrar de forma segura los datos de inicio de sesión guardados. Reinténtalo antes de volver a iniciar sesión."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kaset n’a pas pu effacer en toute sécurité les données de connexion enregistrées. Réessayez avant de vous reconnecter."
+            "value": "Meld n’a pas pu effacer en toute sécurité les données de connexion enregistrées. Réessayez avant de vous reconnecter."
           }
         },
         "id": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kaset tidak dapat menghapus data masuk yang tersimpan dengan aman. Coba lagi sebelum masuk kembali."
+            "value": "Meld tidak dapat menghapus data masuk yang tersimpan dengan aman. Coba lagi sebelum masuk kembali."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kaset non ha potuto eliminare in modo sicuro i dati di accesso salvati. Riprova prima di accedere di nuovo."
+            "value": "Meld non ha potuto eliminare in modo sicuro i dati di accesso salvati. Riprova prima di accedere di nuovo."
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kaset이 저장된 로그인 데이터를 안전하게 지우지 못했습니다. 다시 로그인하기 전에 재시도하세요."
+            "value": "Meld가 저장된 로그인 데이터를 안전하게 지우지 못했습니다. 다시 로그인하기 전에 재시도하세요."
           }
         },
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kaset kon de opgeslagen aanmeldgegevens niet veilig wissen. Probeer het opnieuw voordat je je weer aanmeldt."
+            "value": "Meld kon de opgeslagen aanmeldgegevens niet veilig wissen. Probeer het opnieuw voordat je je weer aanmeldt."
           }
         },
         "pl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kaset nie mógł bezpiecznie usunąć zapisanych danych logowania. Spróbuj ponownie przed kolejnym logowaniem."
+            "value": "Meld nie mógł bezpiecznie usunąć zapisanych danych logowania. Spróbuj ponownie przed kolejnym logowaniem."
           }
         },
         "pt": {
           "stringUnit": {
             "state": "translated",
-            "value": "O Kaset não conseguiu limpar em segurança os dados de início de sessão guardados. Tente novamente antes de iniciar sessão outra vez."
+            "value": "O Meld não conseguiu limpar em segurança os dados de início de sessão guardados. Tente novamente antes de iniciar sessão outra vez."
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kaset не удалось безопасно удалить сохранённые данные для входа. Повторите попытку перед новым входом."
+            "value": "Meld не удалось безопасно удалить сохранённые данные для входа. Повторите попытку перед новым входом."
           }
         },
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kaset kunde inte rensa sparade inloggningsdata på ett säkert sätt. Försök igen innan du loggar in på nytt."
+            "value": "Meld kunde inte rensa sparade inloggningsdata på ett säkert sätt. Försök igen innan du loggar in på nytt."
           }
         },
         "tr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kaset kayıtlı oturum açma verilerini güvenli bir şekilde temizleyemedi. Yeniden oturum açmadan önce tekrar deneyin."
+            "value": "Meld kayıtlı oturum açma verilerini güvenli bir şekilde temizleyemedi. Yeniden oturum açmadan önce tekrar deneyin."
           }
         },
         "uk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kaset не вдалося безпечно видалити збережені дані входу. Повторіть спробу перед новим входом."
+            "value": "Meld не вдалося безпечно видалити збережені дані входу. Повторіть спробу перед новим входом."
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kaset 无法安全地清除已保存的登录数据。请重试后再登录。"
+            "value": "Meld 无法安全地清除已保存的登录数据。请重试后再登录。"
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kaset 無法安全地清除已儲存的登入資料。請重試後再登入。"
+            "value": "Meld 無法安全地清除已儲存的登入資料。請重試後再登入。"
           }
         }
       }
     },
-    "Kaset could not remove saved sign-in data. Try signing out again before quitting.": {
+    "Meld could not remove saved sign-in data. Try signing out again before quitting.": {
       "localizations": {
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "تعذّر على Kaset إزالة بيانات تسجيل الدخول المحفوظة. حاول تسجيل الخروج مرة أخرى قبل إنهاء التطبيق."
+            "value": "تعذّر على Meld إزالة بيانات تسجيل الدخول المحفوظة. حاول تسجيل الخروج مرة أخرى قبل إنهاء التطبيق."
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kaset konnte die gespeicherten Anmeldedaten nicht entfernen. Versuche vor dem Beenden erneut, dich abzumelden."
+            "value": "Meld konnte die gespeicherten Anmeldedaten nicht entfernen. Versuche vor dem Beenden erneut, dich abzumelden."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kaset could not remove saved sign-in data. Try signing out again before quitting."
+            "value": "Meld could not remove saved sign-in data. Try signing out again before quitting."
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kaset no pudo eliminar los datos de inicio de sesión guardados. Intenta cerrar sesión de nuevo antes de salir."
+            "value": "Meld no pudo eliminar los datos de inicio de sesión guardados. Intenta cerrar sesión de nuevo antes de salir."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kaset n’a pas pu supprimer les données de connexion enregistrées. Essayez de vous déconnecter à nouveau avant de quitter."
+            "value": "Meld n’a pas pu supprimer les données de connexion enregistrées. Essayez de vous déconnecter à nouveau avant de quitter."
           }
         },
         "id": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kaset tidak dapat menghapus data masuk yang tersimpan. Coba keluar lagi sebelum menutup aplikasi."
+            "value": "Meld tidak dapat menghapus data masuk yang tersimpan. Coba keluar lagi sebelum menutup aplikasi."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kaset non ha potuto rimuovere i dati di accesso salvati. Prova a disconnetterti di nuovo prima di uscire."
+            "value": "Meld non ha potuto rimuovere i dati di accesso salvati. Prova a disconnetterti di nuovo prima di uscire."
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kaset이 저장된 로그인 데이터를 제거하지 못했습니다. 앱을 종료하기 전에 다시 로그아웃해 보세요."
+            "value": "Meld가 저장된 로그인 데이터를 제거하지 못했습니다. 앱을 종료하기 전에 다시 로그아웃해 보세요."
           }
         },
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kaset kon de opgeslagen aanmeldgegevens niet verwijderen. Probeer opnieuw af te melden voordat je stopt."
+            "value": "Meld kon de opgeslagen aanmeldgegevens niet verwijderen. Probeer opnieuw af te melden voordat je stopt."
           }
         },
         "pl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kaset nie mógł usunąć zapisanych danych logowania. Spróbuj wylogować się ponownie przed zamknięciem aplikacji."
+            "value": "Meld nie mógł usunąć zapisanych danych logowania. Spróbuj wylogować się ponownie przed zamknięciem aplikacji."
           }
         },
         "pt": {
           "stringUnit": {
             "state": "translated",
-            "value": "O Kaset não conseguiu remover os dados de início de sessão guardados. Tente terminar sessão novamente antes de sair."
+            "value": "O Meld não conseguiu remover os dados de início de sessão guardados. Tente terminar sessão novamente antes de sair."
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kaset не удалось удалить сохранённые данные для входа. Попробуйте выйти ещё раз перед завершением работы."
+            "value": "Meld не удалось удалить сохранённые данные для входа. Попробуйте выйти ещё раз перед завершением работы."
           }
         },
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kaset kunde inte ta bort sparade inloggningsdata. Försök logga ut igen innan du avslutar."
+            "value": "Meld kunde inte ta bort sparade inloggningsdata. Försök logga ut igen innan du avslutar."
           }
         },
         "tr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kaset kayıtlı oturum açma verilerini kaldıramadı. Uygulamadan çıkmadan önce yeniden çıkış yapmayı deneyin."
+            "value": "Meld kayıtlı oturum açma verilerini kaldıramadı. Uygulamadan çıkmadan önce yeniden çıkış yapmayı deneyin."
           }
         },
         "uk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kaset не вдалося видалити збережені дані входу. Спробуйте вийти ще раз перед завершенням роботи."
+            "value": "Meld не вдалося видалити збережені дані входу. Спробуйте вийти ще раз перед завершенням роботи."
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kaset 无法移除已保存的登录数据。请在退出前重新尝试退出登录。"
+            "value": "Meld 无法移除已保存的登录数据。请在退出前重新尝试退出登录。"
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kaset 無法移除已儲存的登入資料。請在結束前重新嘗試登出。"
+            "value": "Meld 無法移除已儲存的登入資料。請在結束前重新嘗試登出。"
           }
         }
       }
@@ -29710,102 +29710,102 @@
         }
       }
     },
-    "Welcome to Kaset": {
+    "Welcome to Meld": {
       "localizations": {
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "مرحبًا بك في Kaset"
+            "value": "مرحبًا بك في Meld"
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Willkommen bei Kaset"
+            "value": "Willkommen bei Meld"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Te damos la bienvenida a Kaset"
+            "value": "Te damos la bienvenida a Meld"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Bienvenue sur Kaset"
+            "value": "Bienvenue sur Meld"
           }
         },
         "id": {
           "stringUnit": {
             "state": "translated",
-            "value": "Selamat datang di Kaset"
+            "value": "Selamat datang di Meld"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Benvenuto in Kaset"
+            "value": "Benvenuto in Meld"
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kaset에 오신 것을 환영합니다"
+            "value": "Meld에 오신 것을 환영합니다"
           }
         },
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Welkom bij Kaset"
+            "value": "Welkom bij Meld"
           }
         },
         "pl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Witaj w Kaset"
+            "value": "Witaj w Meld"
           }
         },
         "pt": {
           "stringUnit": {
             "state": "translated",
-            "value": "Bem-vindo ao Kaset"
+            "value": "Bem-vindo ao Meld"
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Добро пожаловать в Kaset"
+            "value": "Добро пожаловать в Meld"
           }
         },
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Välkommen till Kaset"
+            "value": "Välkommen till Meld"
           }
         },
         "tr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kaset'e Hoş Geldiniz"
+            "value": "Meld'e Hoş Geldiniz"
           }
         },
         "uk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ласкаво просимо до Kaset"
+            "value": "Ласкаво просимо до Meld"
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "欢迎使用 Kaset"
+            "value": "欢迎使用 Meld"
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "歡迎使用 Kaset"
+            "value": "歡迎使用 Meld"
           }
         }
       }
@@ -30110,102 +30110,102 @@
         }
       }
     },
-    "What's New in Kaset": {
+    "What's New in Meld": {
       "localizations": {
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "الجديد في Kaset"
+            "value": "الجديد في Meld"
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Neu in Kaset"
+            "value": "Neu in Meld"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Novedades de Kaset"
+            "value": "Novedades de Meld"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Nouveautés de Kaset"
+            "value": "Nouveautés de Meld"
           }
         },
         "id": {
           "stringUnit": {
             "state": "translated",
-            "value": "Apa yang Baru di Kaset"
+            "value": "Apa yang Baru di Meld"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Novità in Kaset"
+            "value": "Novità in Meld"
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kaset의 새로운 기능"
+            "value": "Meld의 새로운 기능"
           }
         },
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Nieuw in Kaset"
+            "value": "Nieuw in Meld"
           }
         },
         "pl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Co nowego w Kaset"
+            "value": "Co nowego w Meld"
           }
         },
         "pt": {
           "stringUnit": {
             "state": "translated",
-            "value": "Novidades no Kaset"
+            "value": "Novidades no Meld"
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Что нового в Kaset"
+            "value": "Что нового в Meld"
           }
         },
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Nytt i Kaset"
+            "value": "Nytt i Meld"
           }
         },
         "tr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kaset'teki Yenilikler"
+            "value": "Meld'deki Yenilikler"
           }
         },
         "uk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Нове в Kaset"
+            "value": "Нове в Meld"
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kaset 新功能"
+            "value": "Meld 新功能"
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kaset 新功能"
+            "value": "Meld 新功能"
           }
         }
       }
@@ -31011,103 +31011,103 @@
         }
       }
     },
-    "Processes Kaset's audio output through a 6-band equalizer.": {
+    "Processes Meld's audio output through a 6-band equalizer.": {
       "extractionState": "manual",
       "localizations": {
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "يعالج إخراج الصوت من Kaset باستخدام معادل من 6 نطاقات."
+            "value": "يعالج إخراج الصوت من Meld باستخدام معادل من 6 نطاقات."
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Verarbeitet die Audioausgabe von Kaset durch einen 6-Band-Equalizer."
+            "value": "Verarbeitet die Audioausgabe von Meld durch einen 6-Band-Equalizer."
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Procesa la salida de audio de Kaset mediante un ecualizador de 6 bandas."
+            "value": "Procesa la salida de audio de Meld mediante un ecualizador de 6 bandas."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Traite la sortie audio de Kaset avec un égaliseur à 6 bandes."
+            "value": "Traite la sortie audio de Meld avec un égaliseur à 6 bandes."
           }
         },
         "id": {
           "stringUnit": {
             "state": "translated",
-            "value": "Memproses output audio Kaset melalui equalizer 6-band."
+            "value": "Memproses output audio Meld melalui equalizer 6-band."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Elabora l'uscita audio di Kaset tramite un equalizzatore a 6 bande."
+            "value": "Elabora l'uscita audio di Meld tramite un equalizzatore a 6 bande."
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "6밴드 이퀄라이저로 Kaset의 오디오 출력을 처리합니다."
+            "value": "6밴드 이퀄라이저로 Meld의 오디오 출력을 처리합니다."
           }
         },
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Verwerkt de audio-uitvoer van Kaset via een 6-bands equalizer."
+            "value": "Verwerkt de audio-uitvoer van Meld via een 6-bands equalizer."
           }
         },
         "pl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Przetwarza wyjście audio Kaset przez 6-pasmowy korektor."
+            "value": "Przetwarza wyjście audio Meld przez 6-pasmowy korektor."
           }
         },
         "pt": {
           "stringUnit": {
             "state": "translated",
-            "value": "Processa a saída de áudio do Kaset através de um equalizador de 6 bandas."
+            "value": "Processa a saída de áudio do Meld através de um equalizador de 6 bandas."
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Обрабатывает аудиовыход Kaset через 6-полосный эквалайзер."
+            "value": "Обрабатывает аудиовыход Meld через 6-полосный эквалайзер."
           }
         },
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Bearbetar Kasets ljudutgång genom en 6-bandig equalizer."
+            "value": "Bearbetar Melds ljudutgång genom en 6-bandig equalizer."
           }
         },
         "tr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kaset'in ses çıkışını 6 bantlı bir ekolayzırla işler."
+            "value": "Meld'in ses çıkışını 6 bantlı bir ekolayzırla işler."
           }
         },
         "uk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Обробляє звуковий вихід Kaset за допомогою 6-смугового еквалайзера."
+            "value": "Обробляє звуковий вихід Meld за допомогою 6-смугового еквалайзера."
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "通过 6 段均衡器处理 Kaset 的音频输出。"
+            "value": "通过 6 段均衡器处理 Meld 的音频输出。"
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "透過 6 段等化器處理 Kaset 的音訊輸出。"
+            "value": "透過 6 段等化器處理 Meld 的音訊輸出。"
           }
         }
       }
@@ -32223,103 +32223,103 @@
         }
       }
     },
-    "Equalizer is processing Kaset's audio output.": {
+    "Equalizer is processing Meld's audio output.": {
       "extractionState": "manual",
       "localizations": {
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "يعالج المعادل إخراج الصوت من Kaset."
+            "value": "يعالج المعادل إخراج الصوت من Meld."
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Der Equalizer verarbeitet die Audioausgabe von Kaset."
+            "value": "Der Equalizer verarbeitet die Audioausgabe von Meld."
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "El ecualizador está procesando la salida de audio de Kaset."
+            "value": "El ecualizador está procesando la salida de audio de Meld."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "L'égaliseur traite la sortie audio de Kaset."
+            "value": "L'égaliseur traite la sortie audio de Meld."
           }
         },
         "id": {
           "stringUnit": {
             "state": "translated",
-            "value": "Equalizer sedang memproses output audio Kaset."
+            "value": "Equalizer sedang memproses output audio Meld."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "L'equalizzatore sta elaborando l'uscita audio di Kaset."
+            "value": "L'equalizzatore sta elaborando l'uscita audio di Meld."
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "이퀄라이저가 Kaset의 오디오를 처리 중입니다."
+            "value": "이퀄라이저가 Meld의 오디오를 처리 중입니다."
           }
         },
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "De equalizer verwerkt de audio-uitvoer van Kaset."
+            "value": "De equalizer verwerkt de audio-uitvoer van Meld."
           }
         },
         "pl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Korektor przetwarza wyjście audio Kaset."
+            "value": "Korektor przetwarza wyjście audio Meld."
           }
         },
         "pt": {
           "stringUnit": {
             "state": "translated",
-            "value": "O equalizador está a processar a saída de áudio do Kaset."
+            "value": "O equalizador está a processar a saída de áudio do Meld."
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Эквалайзер обрабатывает аудиовыход Kaset."
+            "value": "Эквалайзер обрабатывает аудиовыход Meld."
           }
         },
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Equalizern bearbetar Kasets ljudutgång."
+            "value": "Equalizern bearbetar Melds ljudutgång."
           }
         },
         "tr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ekolayzır Kaset'in ses çıkışını işliyor."
+            "value": "Ekolayzır Meld'in ses çıkışını işliyor."
           }
         },
         "uk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Еквалайзер обробляє звуковий вихід Kaset."
+            "value": "Еквалайзер обробляє звуковий вихід Meld."
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "均衡器正在处理 Kaset 的音频输出。"
+            "value": "均衡器正在处理 Meld 的音频输出。"
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "等化器正在處理 Kaset 的音訊輸出。"
+            "value": "等化器正在處理 Meld 的音訊輸出。"
           }
         }
       }
@@ -34849,304 +34849,304 @@
         }
       }
     },
-    "Couldn't capture Kaset's audio (status %d). Check Screen & System Audio Recording permission in System Settings.": {
+    "Couldn't capture Meld's audio (status %d). Check Screen & System Audio Recording permission in System Settings.": {
       "localizations": {
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "تعذر التقاط صوت Kaset (الحالة %d). تحقق من إذن تسجيل الشاشة وصوت النظام في إعدادات النظام."
+            "value": "تعذر التقاط صوت Meld (الحالة %d). تحقق من إذن تسجيل الشاشة وصوت النظام في إعدادات النظام."
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kasets Audio konnte nicht erfasst werden (Status %d). Prüfe die Berechtigung für Bildschirm- und Systemaudioaufnahme in den Systemeinstellungen."
+            "value": "Melds Audio konnte nicht erfasst werden (Status %d). Prüfe die Berechtigung für Bildschirm- und Systemaudioaufnahme in den Systemeinstellungen."
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "No se pudo capturar el audio de Kaset (estado %d). Revisa el permiso de Grabación de Pantalla y Audio del Sistema en Ajustes del Sistema."
+            "value": "No se pudo capturar el audio de Meld (estado %d). Revisa el permiso de Grabación de Pantalla y Audio del Sistema en Ajustes del Sistema."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Impossible de capturer l'audio de Kaset (état %d). Vérifiez l'autorisation Enregistrement de l'écran et de l'audio système dans Réglages Système."
+            "value": "Impossible de capturer l'audio de Meld (état %d). Vérifiez l'autorisation Enregistrement de l'écran et de l'audio système dans Réglages Système."
           }
         },
         "id": {
           "stringUnit": {
             "state": "translated",
-            "value": "Tidak dapat menangkap audio Kaset (status %d). Periksa izin Perekaman Layar & Audio Sistem di Pengaturan Sistem."
+            "value": "Tidak dapat menangkap audio Meld (status %d). Periksa izin Perekaman Layar & Audio Sistem di Pengaturan Sistem."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Impossibile acquisire l'audio di Kaset (stato %d). Controlla il permesso Registrazione Schermo e Audio di Sistema nelle Impostazioni di Sistema."
+            "value": "Impossibile acquisire l'audio di Meld (stato %d). Controlla il permesso Registrazione Schermo e Audio di Sistema nelle Impostazioni di Sistema."
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kaset의 오디오를 캡처할 수 없습니다(상태 %d). 시스템 설정에서 화면 및 시스템 오디오 녹음 권한을 확인하세요."
+            "value": "Meld의 오디오를 캡처할 수 없습니다(상태 %d). 시스템 설정에서 화면 및 시스템 오디오 녹음 권한을 확인하세요."
           }
         },
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kon het audio van Kaset niet vastleggen (status %d). Controleer de toestemming voor Scherm- en systeemaudio-opname in Systeeminstellingen."
+            "value": "Kon het audio van Meld niet vastleggen (status %d). Controleer de toestemming voor Scherm- en systeemaudio-opname in Systeeminstellingen."
           }
         },
         "pl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Nie udało się przechwycić dźwięku Kaset (stan %d). Sprawdź uprawnienie Nagrywanie ekranu i dźwięku systemowego w Ustawieniach systemowych."
+            "value": "Nie udało się przechwycić dźwięku Meld (stan %d). Sprawdź uprawnienie Nagrywanie ekranu i dźwięku systemowego w Ustawieniach systemowych."
           }
         },
         "pt": {
           "stringUnit": {
             "state": "translated",
-            "value": "Não foi possível capturar o áudio do Kaset (estado %d). Verifique a permissão Gravação do ecrã e áudio do sistema nas Definições do Sistema."
+            "value": "Não foi possível capturar o áudio do Meld (estado %d). Verifique a permissão Gravação do ecrã e áudio do sistema nas Definições do Sistema."
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Не удалось захватить звук Kaset (статус %d). Проверьте разрешение на запись экрана и системного звука в Системных настройках."
+            "value": "Не удалось захватить звук Meld (статус %d). Проверьте разрешение на запись экрана и системного звука в Системных настройках."
           }
         },
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Det gick inte att fånga Kasets ljud (status %d). Kontrollera behörigheten för skärm- och systemljudinspelning i Systeminställningar."
+            "value": "Det gick inte att fånga Melds ljud (status %d). Kontrollera behörigheten för skärm- och systemljudinspelning i Systeminställningar."
           }
         },
         "tr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kaset'in sesi yakalanamadı (durum %d). Sistem Ayarları'nda Ekran ve Sistem Sesi Kaydı iznini denetleyin."
+            "value": "Meld'in sesi yakalanamadı (durum %d). Sistem Ayarları'nda Ekran ve Sistem Sesi Kaydı iznini denetleyin."
           }
         },
         "uk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Не вдалося захопити звук Kaset (стан %d). Перевірте дозвіл на запис екрана й системного аудіо в Системних параметрах."
+            "value": "Не вдалося захопити звук Meld (стан %d). Перевірте дозвіл на запис екрана й системного аудіо в Системних параметрах."
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "无法捕获 Kaset 的音频（状态 %d）。请在系统设置中检查“屏幕与系统音频录制”权限。"
+            "value": "无法捕获 Meld 的音频（状态 %d）。请在系统设置中检查“屏幕与系统音频录制”权限。"
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "無法擷取 Kaset 的音訊（狀態 %d）。請在系統設定中檢查「螢幕與系統音訊錄製」權限。"
+            "value": "無法擷取 Meld 的音訊（狀態 %d）。請在系統設定中檢查「螢幕與系統音訊錄製」權限。"
           }
         }
       }
     },
-    "Open System Settings → Privacy & Security → Screen & System Audio Recording and enable Kaset, then toggle the equalizer on again.": {
+    "Open System Settings → Privacy & Security → Screen & System Audio Recording and enable Meld, then toggle the equalizer on again.": {
       "extractionState": "manual",
       "localizations": {
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "افتح إعدادات النظام ← الخصوصية والأمان ← تسجيل الشاشة وصوت النظام وقم بتفعيل Kaset، ثم أعد تشغيل المعادل."
+            "value": "افتح إعدادات النظام ← الخصوصية والأمان ← تسجيل الشاشة وصوت النظام وقم بتفعيل Meld، ثم أعد تشغيل المعادل."
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Öffne Systemeinstellungen → Datenschutz und Sicherheit → Bildschirm- und Systemaudioaufnahme, aktiviere Kaset und schalte dann den Equalizer erneut ein."
+            "value": "Öffne Systemeinstellungen → Datenschutz und Sicherheit → Bildschirm- und Systemaudioaufnahme, aktiviere Meld und schalte dann den Equalizer erneut ein."
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Abre Configuración del Sistema → Privacidad y seguridad → Grabación de pantalla y audio del sistema, activa Kaset y vuelve a activar el ecualizador."
+            "value": "Abre Configuración del Sistema → Privacidad y seguridad → Grabación de pantalla y audio del sistema, activa Meld y vuelve a activar el ecualizador."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ouvrez Réglages Système → Confidentialité et sécurité → Enregistrement de l'écran et de l'audio système, activez Kaset, puis réactivez l'égaliseur."
+            "value": "Ouvrez Réglages Système → Confidentialité et sécurité → Enregistrement de l'écran et de l'audio système, activez Meld, puis réactivez l'égaliseur."
           }
         },
         "id": {
           "stringUnit": {
             "state": "translated",
-            "value": "Buka Pengaturan Sistem → Privasi & Keamanan → Perekaman Layar & Audio Sistem dan aktifkan Kaset, lalu aktifkan kembali equalizer."
+            "value": "Buka Pengaturan Sistem → Privasi & Keamanan → Perekaman Layar & Audio Sistem dan aktifkan Meld, lalu aktifkan kembali equalizer."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Apri Impostazioni di Sistema → Privacy e Sicurezza → Registrazione schermo e audio di sistema e abilita Kaset, quindi riattiva l'equalizzatore."
+            "value": "Apri Impostazioni di Sistema → Privacy e Sicurezza → Registrazione schermo e audio di sistema e abilita Meld, quindi riattiva l'equalizzatore."
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "시스템 설정 → 개인정보 보호 및 보안 → 화면 및 시스템 오디오 녹음에서 Kaset을 활성화한 후 이퀄라이저를 다시 켜주세요."
+            "value": "시스템 설정 → 개인정보 보호 및 보안 → 화면 및 시스템 오디오 녹음에서 Meld를 활성화한 후 이퀄라이저를 다시 켜주세요."
           }
         },
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Open Systeeminstellingen → Privacy en beveiliging → Scherm- en systeemaudio-opname, schakel Kaset in en zet daarna de equalizer opnieuw aan."
+            "value": "Open Systeeminstellingen → Privacy en beveiliging → Scherm- en systeemaudio-opname, schakel Meld in en zet daarna de equalizer opnieuw aan."
           }
         },
         "pl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Otwórz Ustawienia systemowe → Prywatność i ochrona → Ekran i nagrywanie dźwięku systemowego i włącz Kaset, a następnie ponownie włącz korektor."
+            "value": "Otwórz Ustawienia systemowe → Prywatność i ochrona → Ekran i nagrywanie dźwięku systemowego i włącz Meld, a następnie ponownie włącz korektor."
           }
         },
         "pt": {
           "stringUnit": {
             "state": "translated",
-            "value": "Abra Definições do Sistema → Privacidade e segurança → Gravação do ecrã e áudio do sistema e ative o Kaset; depois ative novamente o equalizador."
+            "value": "Abra Definições do Sistema → Privacidade e segurança → Gravação do ecrã e áudio do sistema e ative o Meld; depois ative novamente o equalizador."
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Откройте Системные настройки → Конфиденциальность и безопасность → Запись экрана и системного аудио и включите Kaset, затем снова включите эквалайзер."
+            "value": "Откройте Системные настройки → Конфиденциальность и безопасность → Запись экрана и системного аудио и включите Meld, затем снова включите эквалайзер."
           }
         },
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Öppna Systeminställningar → Integritet och säkerhet → Skärminspelning och systemljudinspelning, aktivera Kaset och slå sedan på equalizern igen."
+            "value": "Öppna Systeminställningar → Integritet och säkerhet → Skärminspelning och systemljudinspelning, aktivera Meld och slå sedan på equalizern igen."
           }
         },
         "tr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Sistem Ayarları → Gizlilik ve Güvenlik → Ekran ve Sistem Sesi Kaydı'nı açıp Kaset'i etkinleştirin, ardından ekolayzırı tekrar açın."
+            "value": "Sistem Ayarları → Gizlilik ve Güvenlik → Ekran ve Sistem Sesi Kaydı'nı açıp Meld'i etkinleştirin, ardından ekolayzırı tekrar açın."
           }
         },
         "uk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Відкрийте Системні налаштування → Конфіденційність і безпека → Запис екрана та системного звуку, увімкніть Kaset, а потім знову увімкніть еквалайзер."
+            "value": "Відкрийте Системні налаштування → Конфіденційність і безпека → Запис екрана та системного звуку, увімкніть Meld, а потім знову увімкніть еквалайзер."
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "请打开“系统设置 → 隐私与安全性 → 屏幕与系统音频录制”并启用 Kaset，然后重新打开均衡器。"
+            "value": "请打开“系统设置 → 隐私与安全性 → 屏幕与系统音频录制”并启用 Meld，然后重新打开均衡器。"
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "請開啟「系統設定 → 隱私權與安全性 → 螢幕與系統音訊錄製」並啟用 Kaset，然後重新開啟等化器。"
+            "value": "請開啟「系統設定 → 隱私權與安全性 → 螢幕與系統音訊錄製」並啟用 Meld，然後重新開啟等化器。"
           }
         }
       }
     },
-    "Couldn't create the equalizer audio device. Restarting Kaset usually fixes this.": {
+    "Couldn't create the equalizer audio device. Restarting Meld usually fixes this.": {
       "extractionState": "manual",
       "localizations": {
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "تعذر إنشاء جهاز صوت المعادل. عادةً ما يؤدي إعادة تشغيل Kaset إلى حل المشكلة."
+            "value": "تعذر إنشاء جهاز صوت المعادل. عادةً ما يؤدي إعادة تشغيل Meld إلى حل المشكلة."
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Das Audioausgabegerät des Equalizers konnte nicht erstellt werden. Ein Neustart von Kaset behebt das normalerweise."
+            "value": "Das Audioausgabegerät des Equalizers konnte nicht erstellt werden. Ein Neustart von Meld behebt das normalerweise."
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "No se pudo crear el dispositivo de audio del ecualizador. Reiniciar Kaset suele solucionar esto."
+            "value": "No se pudo crear el dispositivo de audio del ecualizador. Reiniciar Meld suele solucionar esto."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Impossible de créer le périphérique audio de l'égaliseur. Redémarrer Kaset résout généralement ce problème."
+            "value": "Impossible de créer le périphérique audio de l'égaliseur. Redémarrer Meld résout généralement ce problème."
           }
         },
         "id": {
           "stringUnit": {
             "state": "translated",
-            "value": "Tidak dapat membuat perangkat audio equalizer. Memulai ulang Kaset biasanya menyelesaikan masalah ini."
+            "value": "Tidak dapat membuat perangkat audio equalizer. Memulai ulang Meld biasanya menyelesaikan masalah ini."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Impossibile creare il dispositivo audio dell'equalizzatore. Riavviare Kaset di solito risolve il problema."
+            "value": "Impossibile creare il dispositivo audio dell'equalizzatore. Riavviare Meld di solito risolve il problema."
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "이퀄라이저 오디오 장치를 생성할 수 없습니다. Kaset을 재시작하면 보통 해결됩니다."
+            "value": "이퀄라이저 오디오 장치를 생성할 수 없습니다. Meld를 재시작하면 보통 해결됩니다."
           }
         },
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kon het audioapparaat van de equalizer niet aanmaken. Kaset opnieuw starten lost dit meestal op."
+            "value": "Kon het audioapparaat van de equalizer niet aanmaken. Meld opnieuw starten lost dit meestal op."
           }
         },
         "pl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Nie udało się utworzyć urządzenia audio korektora. Ponowne uruchomienie Kaset zwykle rozwiązuje ten problem."
+            "value": "Nie udało się utworzyć urządzenia audio korektora. Ponowne uruchomienie Meld zwykle rozwiązuje ten problem."
           }
         },
         "pt": {
           "stringUnit": {
             "state": "translated",
-            "value": "Não foi possível criar o dispositivo de áudio do equalizador. Reiniciar o Kaset costuma resolver."
+            "value": "Não foi possível criar o dispositivo de áudio do equalizador. Reiniciar o Meld costuma resolver."
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Не удалось создать аудиоустройство эквалайзера. Обычно это решается перезапуском Kaset."
+            "value": "Не удалось создать аудиоустройство эквалайзера. Обычно это решается перезапуском Meld."
           }
         },
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kunde inte skapa equalizerns ljudenhet. Om du startar om Kaset brukar det lösa problemet."
+            "value": "Kunde inte skapa equalizerns ljudenhet. Om du startar om Meld brukar det lösa problemet."
           }
         },
         "tr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ekolayzır ses cihazı oluşturulamadı. Kaset'i yeniden başlatmak genellikle bu sorunu çözer."
+            "value": "Ekolayzır ses cihazı oluşturulamadı. Meld'i yeniden başlatmak genellikle bu sorunu çözer."
           }
         },
         "uk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Не вдалося створити аудіопристрій еквалайзера. Перезапуск Kaset зазвичай вирішує цю проблему."
+            "value": "Не вдалося створити аудіопристрій еквалайзера. Перезапуск Meld зазвичай вирішує цю проблему."
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "无法创建均衡器音频设备。重启 Kaset 通常可以解决此问题。"
+            "value": "无法创建均衡器音频设备。重启 Meld 通常可以解决此问题。"
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "無法建立等化器音訊裝置。重新啟動 Kaset 通常可以解決此問題。"
+            "value": "無法建立等化器音訊裝置。重新啟動 Meld 通常可以解決此問題。"
           }
         }
       }
@@ -35252,103 +35252,103 @@
         }
       }
     },
-    "The system didn't report a valid audio format for Kaset's output. Try disabling the equalizer, starting playback, then enabling it again.": {
+    "The system didn't report a valid audio format for Meld's output. Try disabling the equalizer, starting playback, then enabling it again.": {
       "extractionState": "manual",
       "localizations": {
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "لم يُبلّغ النظام عن تنسيق صوت صالح لإخراج Kaset. حاول إيقاف المعادل وبدء التشغيل ثم إعادة تشغيله."
+            "value": "لم يُبلّغ النظام عن تنسيق صوت صالح لإخراج Meld. حاول إيقاف المعادل وبدء التشغيل ثم إعادة تشغيله."
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Das System hat kein gültiges Audioformat für Kasets Ausgabe gemeldet. Versuche, den Equalizer zu deaktivieren, die Wiedergabe zu starten und ihn dann erneut zu aktivieren."
+            "value": "Das System hat kein gültiges Audioformat für Melds Ausgabe gemeldet. Versuche, den Equalizer zu deaktivieren, die Wiedergabe zu starten und ihn dann erneut zu aktivieren."
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "El sistema no informó de un formato de audio válido para la salida de Kaset. Prueba a desactivar el ecualizador, iniciar la reproducción y volver a activarlo."
+            "value": "El sistema no informó de un formato de audio válido para la salida de Meld. Prueba a desactivar el ecualizador, iniciar la reproducción y volver a activarlo."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Le système n'a pas signalé un format audio valide pour la sortie de Kaset. Désactivez l'égaliseur, lancez la lecture, puis réactivez-le."
+            "value": "Le système n'a pas signalé un format audio valide pour la sortie de Meld. Désactivez l'égaliseur, lancez la lecture, puis réactivez-le."
           }
         },
         "id": {
           "stringUnit": {
             "state": "translated",
-            "value": "Sistem tidak melaporkan format audio yang valid untuk output Kaset. Coba nonaktifkan equalizer, mulai pemutaran, lalu aktifkan kembali."
+            "value": "Sistem tidak melaporkan format audio yang valid untuk output Meld. Coba nonaktifkan equalizer, mulai pemutaran, lalu aktifkan kembali."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Il sistema non ha segnalato un formato audio valido per l'uscita di Kaset. Prova a disabilitare l'equalizzatore, avviare la riproduzione e poi riabilitarlo."
+            "value": "Il sistema non ha segnalato un formato audio valido per l'uscita di Meld. Prova a disabilitare l'equalizzatore, avviare la riproduzione e poi riabilitarlo."
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kaset 출력에 유효한 오디오 형식이 보고되지 않았습니다. 이퀄라이저를 끄고 재생을 시작한 후 다시 켜보세요."
+            "value": "Meld 출력에 유효한 오디오 형식이 보고되지 않았습니다. 이퀄라이저를 끄고 재생을 시작한 후 다시 켜보세요."
           }
         },
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Het systeem meldde geen geldige audio-indeling voor de uitvoer van Kaset. Probeer de equalizer uit te schakelen, het afspelen te starten en hem daarna opnieuw in te schakelen."
+            "value": "Het systeem meldde geen geldige audio-indeling voor de uitvoer van Meld. Probeer de equalizer uit te schakelen, het afspelen te starten en hem daarna opnieuw in te schakelen."
           }
         },
         "pl": {
           "stringUnit": {
             "state": "translated",
-            "value": "System nie zgłosił prawidłowego formatu audio dla wyjścia Kaset. Spróbuj wyłączyć korektor, rozpocząć odtwarzanie, a potem włączyć go ponownie."
+            "value": "System nie zgłosił prawidłowego formatu audio dla wyjścia Meld. Spróbuj wyłączyć korektor, rozpocząć odtwarzanie, a potem włączyć go ponownie."
           }
         },
         "pt": {
           "stringUnit": {
             "state": "translated",
-            "value": "O sistema não comunicou um formato de áudio válido para a saída do Kaset. Tente desativar o equalizador, iniciar a reprodução e voltar a ativá-lo."
+            "value": "O sistema não comunicou um formato de áudio válido para a saída do Meld. Tente desativar o equalizador, iniciar a reprodução e voltar a ativá-lo."
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Система не сообщила допустимый аудиоформат для выхода Kaset. Попробуйте отключить эквалайзер, начать воспроизведение, а затем включить его снова."
+            "value": "Система не сообщила допустимый аудиоформат для выхода Meld. Попробуйте отключить эквалайзер, начать воспроизведение, а затем включить его снова."
           }
         },
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Systemet rapporterade inget giltigt ljudformat för Kasets utgång. Prova att stänga av equalizern, starta uppspelning och slå sedan på den igen."
+            "value": "Systemet rapporterade inget giltigt ljudformat för Melds utgång. Prova att stänga av equalizern, starta uppspelning och slå sedan på den igen."
           }
         },
         "tr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Sistem Kaset'in çıkışı için geçerli bir ses biçimi bildirmedi. Ekolayzırı kapatıp oynatmayı başlatın, ardından yeniden açın."
+            "value": "Sistem Meld'in çıkışı için geçerli bir ses biçimi bildirmedi. Ekolayzırı kapatıp oynatmayı başlatın, ardından yeniden açın."
           }
         },
         "uk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Система не повідомила дійсний аудіоформат для виходу Kaset. Спробуйте вимкнути еквалайзер, почати відтворення, а потім увімкнути його знову."
+            "value": "Система не повідомила дійсний аудіоформат для виходу Meld. Спробуйте вимкнути еквалайзер, почати відтворення, а потім увімкнути його знову."
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "系统未报告 Kaset 输出的有效音频格式。请尝试关闭均衡器，开始播放后再重新启用。"
+            "value": "系统未报告 Meld 输出的有效音频格式。请尝试关闭均衡器，开始播放后再重新启用。"
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "系統未回報 Kaset 輸出的有效音訊格式。請嘗試關閉等化器，開始播放後再重新啟用。"
+            "value": "系統未回報 Meld 輸出的有效音訊格式。請嘗試關閉等化器，開始播放後再重新啟用。"
           }
         }
       }
@@ -35555,103 +35555,103 @@
         }
       }
     },
-    "Couldn't route Kaset's audio into the equalizer engine.": {
+    "Couldn't route Meld's audio into the equalizer engine.": {
       "extractionState": "manual",
       "localizations": {
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "تعذر توجيه صوت Kaset إلى محرك المعادل."
+            "value": "تعذر توجيه صوت Meld إلى محرك المعادل."
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kasets Audio konnte nicht in die Equalizer-Engine geleitet werden."
+            "value": "Melds Audio konnte nicht in die Equalizer-Engine geleitet werden."
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "No se pudo dirigir el audio de Kaset al motor del ecualizador."
+            "value": "No se pudo dirigir el audio de Meld al motor del ecualizador."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Impossible d'acheminer l'audio de Kaset vers le moteur de l'égaliseur."
+            "value": "Impossible d'acheminer l'audio de Meld vers le moteur de l'égaliseur."
           }
         },
         "id": {
           "stringUnit": {
             "state": "translated",
-            "value": "Tidak dapat merutekan audio Kaset ke mesin equalizer."
+            "value": "Tidak dapat merutekan audio Meld ke mesin equalizer."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Impossibile instradare l'audio di Kaset nel motore dell'equalizzatore."
+            "value": "Impossibile instradare l'audio di Meld nel motore dell'equalizzatore."
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kaset의 오디오를 이퀄라이저 엔진으로 라우팅할 수 없습니다."
+            "value": "Meld의 오디오를 이퀄라이저 엔진으로 라우팅할 수 없습니다."
           }
         },
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kon de audio van Kaset niet naar de equalizer-engine leiden."
+            "value": "Kon de audio van Meld niet naar de equalizer-engine leiden."
           }
         },
         "pl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Nie udało się skierować dźwięku Kaset do silnika korektora."
+            "value": "Nie udało się skierować dźwięku Meld do silnika korektora."
           }
         },
         "pt": {
           "stringUnit": {
             "state": "translated",
-            "value": "Não foi possível encaminhar o áudio do Kaset para o motor do equalizador."
+            "value": "Não foi possível encaminhar o áudio do Meld para o motor do equalizador."
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Не удалось направить аудио Kaset в движок эквалайзера."
+            "value": "Не удалось направить аудио Meld в движок эквалайзера."
           }
         },
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kunde inte dirigera Kasets ljud till equalizermotorn."
+            "value": "Kunde inte dirigera Melds ljud till equalizermotorn."
           }
         },
         "tr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kaset'in sesi ekolayzır motoruna yönlendirilemedi."
+            "value": "Meld'in sesi ekolayzır motoruna yönlendirilemedi."
           }
         },
         "uk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Не вдалося направити аудіо Kaset до модуля еквалайзера."
+            "value": "Не вдалося направити аудіо Meld до модуля еквалайзера."
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "无法将 Kaset 的音频路由到均衡器引擎。"
+            "value": "无法将 Meld 的音频路由到均衡器引擎。"
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "無法將 Kaset 的音訊路由到等化器引擎。"
+            "value": "無法將 Meld 的音訊路由到等化器引擎。"
           }
         }
       }
@@ -35958,103 +35958,103 @@
         }
       }
     },
-    "Kaset can't access its own audio output. Open System Settings → Privacy & Security → Screen & System Audio Recording and enable Kaset, then toggle the equalizer on again.": {
+    "Meld can't access its own audio output. Open System Settings → Privacy & Security → Screen & System Audio Recording and enable Meld, then toggle the equalizer on again.": {
       "extractionState": "manual",
       "localizations": {
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "لا يمكن لـ Kaset الوصول إلى إخراج الصوت الخاص به. افتح إعدادات النظام ← الخصوصية والأمان ← تسجيل الشاشة وصوت النظام وقم بتفعيل Kaset، ثم أعد تشغيل المعادل."
+            "value": "لا يمكن لـ Meld الوصول إلى إخراج الصوت الخاص به. افتح إعدادات النظام ← الخصوصية والأمان ← تسجيل الشاشة وصوت النظام وقم بتفعيل Meld، ثم أعد تشغيل المعادل."
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kaset kann nicht auf seine eigene Audioausgabe zugreifen. Öffne Systemeinstellungen → Datenschutz und Sicherheit → Bildschirm- und Systemaudioaufnahme, aktiviere Kaset und schalte dann den Equalizer erneut ein."
+            "value": "Meld kann nicht auf seine eigene Audioausgabe zugreifen. Öffne Systemeinstellungen → Datenschutz und Sicherheit → Bildschirm- und Systemaudioaufnahme, aktiviere Meld und schalte dann den Equalizer erneut ein."
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kaset no puede acceder a su propia salida de audio. Abre Configuración del Sistema → Privacidad y seguridad → Grabación de pantalla y audio del sistema, activa Kaset y vuelve a activar el ecualizador."
+            "value": "Meld no puede acceder a su propia salida de audio. Abre Configuración del Sistema → Privacidad y seguridad → Grabación de pantalla y audio del sistema, activa Meld y vuelve a activar el ecualizador."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kaset n'a pas accès à sa propre sortie audio. Ouvrez Réglages Système → Confidentialité et sécurité → Enregistrement de l'écran et de l'audio système, activez Kaset, puis réactivez l'égaliseur."
+            "value": "Meld n'a pas accès à sa propre sortie audio. Ouvrez Réglages Système → Confidentialité et sécurité → Enregistrement de l'écran et de l'audio système, activez Meld, puis réactivez l'égaliseur."
           }
         },
         "id": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kaset tidak dapat mengakses output audio-nya sendiri. Buka Pengaturan Sistem → Privasi & Keamanan → Perekaman Layar & Audio Sistem dan aktifkan Kaset, lalu aktifkan kembali equalizer."
+            "value": "Meld tidak dapat mengakses output audio-nya sendiri. Buka Pengaturan Sistem → Privasi & Keamanan → Perekaman Layar & Audio Sistem dan aktifkan Meld, lalu aktifkan kembali equalizer."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kaset non può accedere alla propria uscita audio. Apri Impostazioni di Sistema → Privacy e Sicurezza → Registrazione schermo e audio di sistema e abilita Kaset, quindi riattiva l'equalizzatore."
+            "value": "Meld non può accedere alla propria uscita audio. Apri Impostazioni di Sistema → Privacy e Sicurezza → Registrazione schermo e audio di sistema e abilita Meld, quindi riattiva l'equalizzatore."
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kaset이 자체 오디오 출력에 접근할 수 없습니다. 시스템 설정 → 개인정보 보호 및 보안 → 화면 및 시스템 오디오 녹음에서 Kaset을 활성화한 후 이퀄라이저를 다시 켜주세요."
+            "value": "Meld가 자체 오디오 출력에 접근할 수 없습니다. 시스템 설정 → 개인정보 보호 및 보안 → 화면 및 시스템 오디오 녹음에서 Meld를 활성화한 후 이퀄라이저를 다시 켜주세요."
           }
         },
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kaset heeft geen toegang tot de eigen audio-uitvoer. Open Systeeminstellingen → Privacy en beveiliging → Scherm- en systeemaudio-opname, schakel Kaset in en zet daarna de equalizer opnieuw aan."
+            "value": "Meld heeft geen toegang tot de eigen audio-uitvoer. Open Systeeminstellingen → Privacy en beveiliging → Scherm- en systeemaudio-opname, schakel Meld in en zet daarna de equalizer opnieuw aan."
           }
         },
         "pl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kaset nie ma dostępu do własnego wyjścia audio. Otwórz Ustawienia systemowe → Prywatność i ochrona → Ekran i nagrywanie dźwięku systemowego i włącz Kaset, a następnie ponownie włącz korektor."
+            "value": "Meld nie ma dostępu do własnego wyjścia audio. Otwórz Ustawienia systemowe → Prywatność i ochrona → Ekran i nagrywanie dźwięku systemowego i włącz Meld, a następnie ponownie włącz korektor."
           }
         },
         "pt": {
           "stringUnit": {
             "state": "translated",
-            "value": "O Kaset não consegue aceder à própria saída de áudio. Abra Definições do Sistema → Privacidade e segurança → Gravação do ecrã e áudio do sistema e ative o Kaset; depois ative novamente o equalizador."
+            "value": "O Meld não consegue aceder à própria saída de áudio. Abra Definições do Sistema → Privacidade e segurança → Gravação do ecrã e áudio do sistema e ative o Meld; depois ative novamente o equalizador."
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kaset не может получить доступ к собственному аудиовыходу. Откройте Системные настройки → Конфиденциальность и безопасность → Запись экрана и системного аудио и включите Kaset, затем снова включите эквалайзер."
+            "value": "Meld не может получить доступ к собственному аудиовыходу. Откройте Системные настройки → Конфиденциальность и безопасность → Запись экрана и системного аудио и включите Meld, затем снова включите эквалайзер."
           }
         },
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kaset kan inte komma åt sin egen ljudutgång. Öppna Systeminställningar → Integritet och säkerhet → Skärminspelning och systemljudinspelning, aktivera Kaset och slå sedan på equalizern igen."
+            "value": "Meld kan inte komma åt sin egen ljudutgång. Öppna Systeminställningar → Integritet och säkerhet → Skärminspelning och systemljudinspelning, aktivera Meld och slå sedan på equalizern igen."
           }
         },
         "tr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kaset kendi ses çıkışına erişemiyor. Sistem Ayarları → Gizlilik ve Güvenlik → Ekran ve Sistem Sesi Kaydı'nı açıp Kaset'i etkinleştirin, ardından ekolayzırı tekrar açın."
+            "value": "Meld kendi ses çıkışına erişemiyor. Sistem Ayarları → Gizlilik ve Güvenlik → Ekran ve Sistem Sesi Kaydı'nı açıp Meld'i etkinleştirin, ardından ekolayzırı tekrar açın."
           }
         },
         "uk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kaset не має доступу до власного звукового виходу. Відкрийте Системні налаштування → Конфіденційність і безпека → Запис екрана та системного звуку, увімкніть Kaset, а потім знову увімкніть еквалайзер."
+            "value": "Meld не має доступу до власного звукового виходу. Відкрийте Системні налаштування → Конфіденційність і безпека → Запис екрана та системного звуку, увімкніть Meld, а потім знову увімкніть еквалайзер."
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kaset 无法访问自身的音频输出。请打开“系统设置 → 隐私与安全性 → 屏幕与系统音频录制”并启用 Kaset，然后重新打开均衡器。"
+            "value": "Meld 无法访问自身的音频输出。请打开“系统设置 → 隐私与安全性 → 屏幕与系统音频录制”并启用 Meld，然后重新打开均衡器。"
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kaset 無法存取自身的音訊輸出。請開啟「系統設定 → 隱私權與安全性 → 螢幕與系統音訊錄製」並啟用 Kaset，然後重新開啟等化器。"
+            "value": "Meld 無法存取自身的音訊輸出。請開啟「系統設定 → 隱私權與安全性 → 螢幕與系統音訊錄製」並啟用 Meld，然後重新開啟等化器。"
           }
         }
       }
@@ -37259,102 +37259,102 @@
         }
       }
     },
-    "When enabled, Kaset can add richer queue analysis, AI-powered playlist refinement, and lyrics explanations.": {
+    "When enabled, Meld can add richer queue analysis, AI-powered playlist refinement, and lyrics explanations.": {
       "localizations": {
         "ar": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "عند التفعيل، يمكن لـ Kaset إضافة تحليل أعمق لقائمة الانتظار، وتحسين قوائم التشغيل بالذكاء الاصطناعي، وشرح كلمات الأغاني."
+            "value": "عند التفعيل، يمكن لـ Meld إضافة تحليل أعمق لقائمة الانتظار، وتحسين قوائم التشغيل بالذكاء الاصطناعي، وشرح كلمات الأغاني."
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Wenn diese Option aktiviert ist, kann Kaset eine umfassendere Warteschlangenanalyse, KI-gestützte Playlist-Verfeinerung und Songtext-Erklärungen hinzufügen."
+            "value": "Wenn diese Option aktiviert ist, kann Meld eine umfassendere Warteschlangenanalyse, KI-gestützte Playlist-Verfeinerung und Songtext-Erklärungen hinzufügen."
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Cuando está activado, Kaset puede añadir un análisis de cola más completo, refinado de playlists con IA y explicaciones de letras."
+            "value": "Cuando está activado, Meld puede añadir un análisis de cola más completo, refinado de playlists con IA y explicaciones de letras."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Une fois activé, Kaset peut ajouter une analyse de file d'attente plus riche, un affinage de playlist par IA et des explications de paroles."
+            "value": "Une fois activé, Meld peut ajouter une analyse de file d'attente plus riche, un affinage de playlist par IA et des explications de paroles."
           }
         },
         "id": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Saat diaktifkan, Kaset dapat menambahkan analisis antrean yang lebih kaya, penyempurnaan playlist bertenaga AI, dan penjelasan lirik."
+            "value": "Saat diaktifkan, Meld dapat menambahkan analisis antrean yang lebih kaya, penyempurnaan playlist bertenaga AI, dan penjelasan lirik."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Quando è abilitato, Kaset può aggiungere analisi della coda più ricche, affinamento delle playlist con AI e spiegazioni dei testi."
+            "value": "Quando è abilitato, Meld può aggiungere analisi della coda più ricche, affinamento delle playlist con AI e spiegazioni dei testi."
           }
         },
         "ko": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "활성화하면 Kaset이 더 풍부한 대기열 분석, AI 기반 재생목록 개선, 가사 설명을 추가할 수 있습니다."
+            "value": "활성화하면 Meld가 더 풍부한 대기열 분석, AI 기반 재생목록 개선, 가사 설명을 추가할 수 있습니다."
           }
         },
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Wanneer dit is ingeschakeld, kan Kaset uitgebreidere wachtrijanalyse, AI-gestuurde verfijning van afspeellijsten en uitleg van songteksten toevoegen."
+            "value": "Wanneer dit is ingeschakeld, kan Meld uitgebreidere wachtrijanalyse, AI-gestuurde verfijning van afspeellijsten en uitleg van songteksten toevoegen."
           }
         },
         "pl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Po włączeniu Kaset może dodawać bogatszą analizę kolejki, dopracowywanie playlist wspomagane przez AI i wyjaśnienia tekstów."
+            "value": "Po włączeniu Meld może dodawać bogatszą analizę kolejki, dopracowywanie playlist wspomagane przez AI i wyjaśnienia tekstów."
           }
         },
         "pt": {
           "stringUnit": {
             "state": "translated",
-            "value": "Quando ativado, o Kaset pode adicionar análises de fila mais ricas, refinamento de listas de reprodução com IA e explicações de letras."
+            "value": "Quando ativado, o Meld pode adicionar análises de fila mais ricas, refinamento de listas de reprodução com IA e explicações de letras."
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Когда включено, Kaset может добавлять более подробный анализ очереди, улучшение плейлистов с помощью AI и объяснения текстов."
+            "value": "Когда включено, Meld может добавлять более подробный анализ очереди, улучшение плейлистов с помощью AI и объяснения текстов."
           }
         },
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "När det är aktiverat kan Kaset lägga till mer omfattande köanalys, AI-driven förfining av spellistor och förklaringar av sångtext."
+            "value": "När det är aktiverat kan Meld lägga till mer omfattande köanalys, AI-driven förfining av spellistor och förklaringar av sångtext."
           }
         },
         "tr": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Etkinleştirildiğinde Kaset; daha zengin kuyruk analizi, yapay zeka destekli çalma listesi iyileştirmesi ve şarkı sözü açıklamaları ekleyebilir."
+            "value": "Etkinleştirildiğinde Meld; daha zengin kuyruk analizi, yapay zeka destekli çalma listesi iyileştirmesi ve şarkı sözü açıklamaları ekleyebilir."
           }
         },
         "uk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Коли увімкнено, Kaset може додавати розширений аналіз черги, удосконалення плейлистів за допомогою ШІ та пояснення тексту пісень."
+            "value": "Коли увімкнено, Meld може додавати розширений аналіз черги, удосконалення плейлистів за допомогою ШІ та пояснення тексту пісень."
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "启用后，Kaset 可提供更丰富的队列分析、AI 驱动的播放列表优化和歌词解读。"
+            "value": "启用后，Meld 可提供更丰富的队列分析、AI 驱动的播放列表优化和歌词解读。"
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "啟用後，Kaset 可提供更豐富的待播清單分析、AI 驅動的播放清單調整和歌詞解讀。"
+            "value": "啟用後，Meld 可提供更豐富的待播清單分析、AI 驅動的播放清單調整和歌詞解讀。"
           }
         }
       }
@@ -41265,102 +41265,102 @@
         }
       }
     },
-    "Extensions are loaded at launch via the native WebKit extension API. Changes take effect after restarting Kaset.": {
+    "Extensions are loaded at launch via the native WebKit extension API. Changes take effect after restarting Meld.": {
       "localizations": {
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "يتم تحميل الإضافات عند التشغيل عبر واجهة WebKit الأصلية للإضافات. تسري التغييرات بعد إعادة تشغيل Kaset."
+            "value": "يتم تحميل الإضافات عند التشغيل عبر واجهة WebKit الأصلية للإضافات. تسري التغييرات بعد إعادة تشغيل Meld."
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Erweiterungen werden beim Start über die native WebKit-Erweiterungs-API geladen. Änderungen werden nach einem Neustart von Kaset wirksam."
+            "value": "Erweiterungen werden beim Start über die native WebKit-Erweiterungs-API geladen. Änderungen werden nach einem Neustart von Meld wirksam."
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Las extensiones se cargan al iniciar mediante la API nativa de extensiones de WebKit. Los cambios se aplican después de reiniciar Kaset."
+            "value": "Las extensiones se cargan al iniciar mediante la API nativa de extensiones de WebKit. Los cambios se aplican después de reiniciar Meld."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Les extensions sont chargées au lancement via l'API native d'extensions WebKit. Les changements prennent effet après le redémarrage de Kaset."
+            "value": "Les extensions sont chargées au lancement via l'API native d'extensions WebKit. Les changements prennent effet après le redémarrage de Meld."
           }
         },
         "id": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ekstensi dimuat saat peluncuran melalui API ekstensi WebKit native. Perubahan berlaku setelah Kaset dimulai ulang."
+            "value": "Ekstensi dimuat saat peluncuran melalui API ekstensi WebKit native. Perubahan berlaku setelah Meld dimulai ulang."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Le estensioni vengono caricate all'avvio tramite l'API nativa delle estensioni WebKit. Le modifiche hanno effetto dopo il riavvio di Kaset."
+            "value": "Le estensioni vengono caricate all'avvio tramite l'API nativa delle estensioni WebKit. Le modifiche hanno effetto dopo il riavvio di Meld."
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "확장 프로그램은 실행 시 기본 WebKit 확장 프로그램 API를 통해 로드됩니다. 변경 사항은 Kaset을 다시 시작한 후 적용됩니다."
+            "value": "확장 프로그램은 실행 시 기본 WebKit 확장 프로그램 API를 통해 로드됩니다. 변경 사항은 Meld를 다시 시작한 후 적용됩니다."
           }
         },
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Extensies worden bij het opstarten geladen via de native WebKit-extensie-API. Wijzigingen worden van kracht nadat Kaset opnieuw is gestart."
+            "value": "Extensies worden bij het opstarten geladen via de native WebKit-extensie-API. Wijzigingen worden van kracht nadat Meld opnieuw is gestart."
           }
         },
         "pl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Rozszerzenia są ładowane przy uruchamianiu przez natywne API rozszerzeń WebKit. Zmiany zaczną działać po ponownym uruchomieniu Kaset."
+            "value": "Rozszerzenia są ładowane przy uruchamianiu przez natywne API rozszerzeń WebKit. Zmiany zaczną działać po ponownym uruchomieniu Meld."
           }
         },
         "pt": {
           "stringUnit": {
             "state": "translated",
-            "value": "As extensões são carregadas ao abrir através da API nativa de extensões do WebKit. As alterações entram em vigor depois de reiniciar o Kaset."
+            "value": "As extensões são carregadas ao abrir através da API nativa de extensões do WebKit. As alterações entram em vigor depois de reiniciar o Meld."
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Расширения загружаются при запуске через нативный API расширений WebKit. Изменения вступят в силу после перезапуска Kaset."
+            "value": "Расширения загружаются при запуске через нативный API расширений WebKit. Изменения вступят в силу после перезапуска Meld."
           }
         },
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Tillägg läses in vid start via WebKits inbyggda tilläggs-API. Ändringar börjar gälla efter att Kaset har startats om."
+            "value": "Tillägg läses in vid start via WebKits inbyggda tilläggs-API. Ändringar börjar gälla efter att Meld har startats om."
           }
         },
         "tr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Uzantılar açılışta yerel WebKit uzantı API'si üzerinden yüklenir. Değişiklikler Kaset yeniden başlatıldıktan sonra geçerli olur."
+            "value": "Uzantılar açılışta yerel WebKit uzantı API'si üzerinden yüklenir. Değişiklikler Meld yeniden başlatıldıktan sonra geçerli olur."
           }
         },
         "uk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Розширення завантажуються під час запуску через вбудований API розширень WebKit. Зміни набудуть чинності після перезапуску Kaset."
+            "value": "Розширення завантажуються під час запуску через вбудований API розширень WebKit. Зміни набудуть чинності після перезапуску Meld."
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "扩展会在启动时通过原生 WebKit 扩展 API 加载。更改将在重启 Kaset 后生效。"
+            "value": "扩展会在启动时通过原生 WebKit 扩展 API 加载。更改将在重启 Meld 后生效。"
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "擴充功能會在啟動時透過原生 WebKit 擴充功能 API 載入。變更將在重新啟動 Kaset 後生效。"
+            "value": "擴充功能會在啟動時透過原生 WebKit 擴充功能 API 載入。變更將在重新啟動 Meld 後生效。"
           }
         }
       }
@@ -43165,302 +43165,302 @@
         }
       }
     },
-    "Kaset creates fresh AI sessions per request. Refresh the status if Apple Intelligence finishes downloading or becomes available while the app is open.": {
+    "Meld creates fresh AI sessions per request. Refresh the status if Apple Intelligence finishes downloading or becomes available while the app is open.": {
       "localizations": {
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "ينشئ Kaset جلسات ذكاء اصطناعي جديدة لكل طلب. حدّث الحالة إذا انتهى تنزيل Apple Intelligence أو أصبح متاحًا أثناء فتح التطبيق."
+            "value": "ينشئ Meld جلسات ذكاء اصطناعي جديدة لكل طلب. حدّث الحالة إذا انتهى تنزيل Apple Intelligence أو أصبح متاحًا أثناء فتح التطبيق."
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kaset erstellt für jede Anfrage eine neue KI-Sitzung. Aktualisiere den Status, wenn Apple Intelligence fertig geladen ist oder verfügbar wird, während die App geöffnet ist."
+            "value": "Meld erstellt für jede Anfrage eine neue KI-Sitzung. Aktualisiere den Status, wenn Apple Intelligence fertig geladen ist oder verfügbar wird, während die App geöffnet ist."
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kaset crea sesiones nuevas de IA para cada solicitud. Actualiza el estado si Apple Intelligence termina de descargarse o pasa a estar disponible mientras la app está abierta."
+            "value": "Meld crea sesiones nuevas de IA para cada solicitud. Actualiza el estado si Apple Intelligence termina de descargarse o pasa a estar disponible mientras la app está abierta."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kaset crée une nouvelle session d'IA pour chaque demande. Actualisez l'état si Apple Intelligence finit de se télécharger ou devient disponible pendant que l'app est ouverte."
+            "value": "Meld crée une nouvelle session d'IA pour chaque demande. Actualisez l'état si Apple Intelligence finit de se télécharger ou devient disponible pendant que l'app est ouverte."
           }
         },
         "id": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kaset membuat sesi AI baru untuk setiap permintaan. Segarkan status jika Apple Intelligence selesai diunduh atau menjadi tersedia saat app terbuka."
+            "value": "Meld membuat sesi AI baru untuk setiap permintaan. Segarkan status jika Apple Intelligence selesai diunduh atau menjadi tersedia saat app terbuka."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kaset crea una nuova sessione AI per ogni richiesta. Aggiorna lo stato se Apple Intelligence termina il download o diventa disponibile mentre l'app è aperta."
+            "value": "Meld crea una nuova sessione AI per ogni richiesta. Aggiorna lo stato se Apple Intelligence termina il download o diventa disponibile mentre l'app è aperta."
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kaset은 요청마다 새로운 AI 세션을 만듭니다. 앱이 열려 있는 동안 Apple Intelligence 다운로드가 완료되거나 사용 가능해지면 상태를 새로 고치세요."
+            "value": "Meld는 요청마다 새로운 AI 세션을 만듭니다. 앱이 열려 있는 동안 Apple Intelligence 다운로드가 완료되거나 사용 가능해지면 상태를 새로 고치세요."
           }
         },
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kaset maakt voor elk verzoek een nieuwe AI-sessie aan. Vernieuw de status als Apple Intelligence klaar is met downloaden of beschikbaar wordt terwijl de app geopend is."
+            "value": "Meld maakt voor elk verzoek een nieuwe AI-sessie aan. Vernieuw de status als Apple Intelligence klaar is met downloaden of beschikbaar wordt terwijl de app geopend is."
           }
         },
         "pl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kaset tworzy nową sesję SI dla każdego żądania. Odśwież stan, jeśli Apple Intelligence zakończy pobieranie lub stanie się dostępne, gdy aplikacja jest otwarta."
+            "value": "Meld tworzy nową sesję SI dla każdego żądania. Odśwież stan, jeśli Apple Intelligence zakończy pobieranie lub stanie się dostępne, gdy aplikacja jest otwarta."
           }
         },
         "pt": {
           "stringUnit": {
             "state": "translated",
-            "value": "O Kaset cria novas sessões de IA para cada pedido. Atualize o estado se o Apple Intelligence terminar a transferência ou ficar disponível enquanto a app estiver aberta."
+            "value": "O Meld cria novas sessões de IA para cada pedido. Atualize o estado se o Apple Intelligence terminar a transferência ou ficar disponível enquanto a app estiver aberta."
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kaset создаёт новую сессию ИИ для каждого запроса. Обновите статус, если Apple Intelligence завершит загрузку или станет доступен, пока приложение открыто."
+            "value": "Meld создаёт новую сессию ИИ для каждого запроса. Обновите статус, если Apple Intelligence завершит загрузку или станет доступен, пока приложение открыто."
           }
         },
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kaset skapar nya AI-sessioner för varje förfrågan. Uppdatera statusen om Apple Intelligence laddas klart eller blir tillgängligt medan appen är öppen."
+            "value": "Meld skapar nya AI-sessioner för varje förfrågan. Uppdatera statusen om Apple Intelligence laddas klart eller blir tillgängligt medan appen är öppen."
           }
         },
         "tr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kaset her istek için yeni bir yapay zeka oturumu oluşturur. Uygulama açıkken Apple Intelligence indirmesi tamamlanırsa veya kullanılabilir hale gelirse durumu yenileyin."
+            "value": "Meld her istek için yeni bir yapay zeka oturumu oluşturur. Uygulama açıkken Apple Intelligence indirmesi tamamlanırsa veya kullanılabilir hale gelirse durumu yenileyin."
           }
         },
         "uk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kaset створює нові сесії ШІ для кожного запиту. Оновіть стан, якщо Apple Intelligence завершить завантаження або стане доступним, поки застосунок відкрито."
+            "value": "Meld створює нові сесії ШІ для кожного запиту. Оновіть стан, якщо Apple Intelligence завершить завантаження або стане доступним, поки застосунок відкрито."
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kaset 会为每个请求创建全新的 AI 会话。如果 Apple Intelligence 在应用运行期间完成下载或变为可用，请刷新状态。"
+            "value": "Meld 会为每个请求创建全新的 AI 会话。如果 Apple Intelligence 在应用运行期间完成下载或变为可用，请刷新状态。"
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kaset 會為每個請求建立全新的 AI 工作階段。如果 Apple Intelligence 在應用程式執行期間完成下載或變為可用，請重新整理狀態。"
+            "value": "Meld 會為每個請求建立全新的 AI 工作階段。如果 Apple Intelligence 在應用程式執行期間完成下載或變為可用，請重新整理狀態。"
           }
         }
       }
     },
-    "Kaset works without login for public YouTube search, discovery, and playback. Sign in to access personal video collections.": {
+    "Meld works without login for public YouTube search, discovery, and playback. Sign in to access personal video collections.": {
       "localizations": {
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "يعمل Kaset من دون تسجيل دخول للبحث العام في YouTube والاكتشاف والتشغيل. سجّل الدخول للوصول إلى مجموعات الفيديو الشخصية."
+            "value": "يعمل Meld من دون تسجيل دخول للبحث العام في YouTube والاكتشاف والتشغيل. سجّل الدخول للوصول إلى مجموعات الفيديو الشخصية."
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kaset funktioniert ohne Anmeldung für öffentliche YouTube-Suche, Entdecken und Wiedergabe. Melde dich an, um auf persönliche Videosammlungen zuzugreifen."
+            "value": "Meld funktioniert ohne Anmeldung für öffentliche YouTube-Suche, Entdecken und Wiedergabe. Melde dich an, um auf persönliche Videosammlungen zuzugreifen."
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kaset funciona sin iniciar sesión para la búsqueda pública, el descubrimiento y la reproducción en YouTube. Inicia sesión para acceder a tus colecciones personales de videos."
+            "value": "Meld funciona sin iniciar sesión para la búsqueda pública, el descubrimiento y la reproducción en YouTube. Inicia sesión para acceder a tus colecciones personales de videos."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kaset fonctionne sans connexion pour la recherche publique, la découverte et la lecture sur YouTube. Connectez-vous pour accéder à vos collections vidéo personnelles."
+            "value": "Meld fonctionne sans connexion pour la recherche publique, la découverte et la lecture sur YouTube. Connectez-vous pour accéder à vos collections vidéo personnelles."
           }
         },
         "id": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kaset berfungsi tanpa login untuk pencarian, penemuan, dan pemutaran YouTube publik. Masuk untuk mengakses koleksi video pribadi."
+            "value": "Meld berfungsi tanpa login untuk pencarian, penemuan, dan pemutaran YouTube publik. Masuk untuk mengakses koleksi video pribadi."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kaset funziona senza accesso per ricerca pubblica, scoperta e riproduzione su YouTube. Accedi per vedere le tue raccolte video personali."
+            "value": "Meld funziona senza accesso per ricerca pubblica, scoperta e riproduzione su YouTube. Accedi per vedere le tue raccolte video personali."
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kaset은 로그인 없이 공개 YouTube 검색, 탐색 및 재생을 사용할 수 있습니다. 개인 동영상 모음을 보려면 로그인하세요."
+            "value": "Meld는 로그인 없이 공개 YouTube 검색, 탐색 및 재생을 사용할 수 있습니다. 개인 동영상 모음을 보려면 로그인하세요."
           }
         },
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kaset werkt zonder inloggen voor openbare YouTube-zoekopdrachten, ontdekking en weergave. Log in voor toegang tot persoonlijke videocollecties."
+            "value": "Meld werkt zonder inloggen voor openbare YouTube-zoekopdrachten, ontdekking en weergave. Log in voor toegang tot persoonlijke videocollecties."
           }
         },
         "pl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kaset działa bez logowania w przypadku publicznego wyszukiwania, odkrywania i odtwarzania w YouTube. Zaloguj się, aby uzyskać dostęp do osobistych kolekcji wideo."
+            "value": "Meld działa bez logowania w przypadku publicznego wyszukiwania, odkrywania i odtwarzania w YouTube. Zaloguj się, aby uzyskać dostęp do osobistych kolekcji wideo."
           }
         },
         "pt": {
           "stringUnit": {
             "state": "translated",
-            "value": "O Kaset funciona sem iniciar sessão para pesquisa, descoberta e reprodução públicas no YouTube. Inicie sessão para aceder a coleções pessoais de vídeos."
+            "value": "O Meld funciona sem iniciar sessão para pesquisa, descoberta e reprodução públicas no YouTube. Inicie sessão para aceder a coleções pessoais de vídeos."
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kaset работает без входа для публичного поиска, рекомендаций и воспроизведения на YouTube. Войдите, чтобы получить доступ к личным коллекциям видео."
+            "value": "Meld работает без входа для публичного поиска, рекомендаций и воспроизведения на YouTube. Войдите, чтобы получить доступ к личным коллекциям видео."
           }
         },
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kaset fungerar utan inloggning för offentlig YouTube-sökning, upptäckt och uppspelning. Logga in för att komma åt personliga videosamlingar."
+            "value": "Meld fungerar utan inloggning för offentlig YouTube-sökning, upptäckt och uppspelning. Logga in för att komma åt personliga videosamlingar."
           }
         },
         "tr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kaset, herkese açık YouTube araması, keşif ve oynatma için giriş yapmadan çalışır. Kişisel video koleksiyonlarına erişmek için giriş yapın."
+            "value": "Meld, herkese açık YouTube araması, keşif ve oynatma için giriş yapmadan çalışır. Kişisel video koleksiyonlarına erişmek için giriş yapın."
           }
         },
         "uk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kaset працює без входу для публічного пошуку, рекомендацій і відтворення на YouTube. Увійдіть, щоб отримати доступ до особистих колекцій відео."
+            "value": "Meld працює без входу для публічного пошуку, рекомендацій і відтворення на YouTube. Увійдіть, щоб отримати доступ до особистих колекцій відео."
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "无需登录即可使用 Kaset 进行公开的 YouTube 搜索、发现和播放。登录后可访问个人视频收藏。"
+            "value": "无需登录即可使用 Meld 进行公开的 YouTube 搜索、发现和播放。登录后可访问个人视频收藏。"
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "無需登入即可使用 Kaset 進行公開的 YouTube 搜尋、探索和播放。登入後可存取個人影片收藏。"
+            "value": "無需登入即可使用 Meld 進行公開的 YouTube 搜尋、探索和播放。登入後可存取個人影片收藏。"
           }
         }
       }
     },
-    "Kaset works without login for public browsing, search, and playback. Sign in to access personal music collections.": {
+    "Meld works without login for public browsing, search, and playback. Sign in to access personal music collections.": {
       "localizations": {
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "يعمل Kaset من دون تسجيل دخول للتصفح العام والبحث والتشغيل. سجّل الدخول للوصول إلى مجموعات الموسيقى الشخصية."
+            "value": "يعمل Meld من دون تسجيل دخول للتصفح العام والبحث والتشغيل. سجّل الدخول للوصول إلى مجموعات الموسيقى الشخصية."
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kaset funktioniert ohne Anmeldung für öffentliches Browsen, Suchen und Wiedergeben. Melde dich an, um auf persönliche Musiksammlungen zuzugreifen."
+            "value": "Meld funktioniert ohne Anmeldung für öffentliches Browsen, Suchen und Wiedergeben. Melde dich an, um auf persönliche Musiksammlungen zuzugreifen."
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kaset funciona sin iniciar sesión para explorar, buscar y reproducir contenido público. Inicia sesión para acceder a tus colecciones personales de música."
+            "value": "Meld funciona sin iniciar sesión para explorar, buscar y reproducir contenido público. Inicia sesión para acceder a tus colecciones personales de música."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kaset fonctionne sans connexion pour la navigation publique, la recherche et la lecture. Connectez-vous pour accéder à vos collections musicales personnelles."
+            "value": "Meld fonctionne sans connexion pour la navigation publique, la recherche et la lecture. Connectez-vous pour accéder à vos collections musicales personnelles."
           }
         },
         "id": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kaset berfungsi tanpa login untuk penelusuran, pencarian, dan pemutaran publik. Masuk untuk mengakses koleksi musik pribadi."
+            "value": "Meld berfungsi tanpa login untuk penelusuran, pencarian, dan pemutaran publik. Masuk untuk mengakses koleksi musik pribadi."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kaset funziona senza accesso per navigazione pubblica, ricerca e riproduzione. Accedi per vedere le tue raccolte musicali personali."
+            "value": "Meld funziona senza accesso per navigazione pubblica, ricerca e riproduzione. Accedi per vedere le tue raccolte musicali personali."
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kaset은 로그인 없이 공개 탐색, 검색 및 재생을 사용할 수 있습니다. 개인 음악 모음을 보려면 로그인하세요."
+            "value": "Meld는 로그인 없이 공개 탐색, 검색 및 재생을 사용할 수 있습니다. 개인 음악 모음을 보려면 로그인하세요."
           }
         },
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kaset werkt zonder inloggen voor openbaar bladeren, zoeken en afspelen. Log in voor toegang tot persoonlijke muziekcollecties."
+            "value": "Meld werkt zonder inloggen voor openbaar bladeren, zoeken en afspelen. Log in voor toegang tot persoonlijke muziekcollecties."
           }
         },
         "pl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kaset działa bez logowania w przypadku publicznego przeglądania, wyszukiwania i odtwarzania. Zaloguj się, aby uzyskać dostęp do osobistych kolekcji muzyki."
+            "value": "Meld działa bez logowania w przypadku publicznego przeglądania, wyszukiwania i odtwarzania. Zaloguj się, aby uzyskać dostęp do osobistych kolekcji muzyki."
           }
         },
         "pt": {
           "stringUnit": {
             "state": "translated",
-            "value": "O Kaset funciona sem iniciar sessão para exploração, pesquisa e reprodução públicas. Inicie sessão para aceder a coleções pessoais de música."
+            "value": "O Meld funciona sem iniciar sessão para exploração, pesquisa e reprodução públicas. Inicie sessão para aceder a coleções pessoais de música."
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kaset работает без входа для публичного просмотра, поиска и воспроизведения. Войдите, чтобы получить доступ к личным музыкальным коллекциям."
+            "value": "Meld работает без входа для публичного просмотра, поиска и воспроизведения. Войдите, чтобы получить доступ к личным музыкальным коллекциям."
           }
         },
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kaset fungerar utan inloggning för offentlig bläddring, sökning och uppspelning. Logga in för att komma åt personliga musiksamlingar."
+            "value": "Meld fungerar utan inloggning för offentlig bläddring, sökning och uppspelning. Logga in för att komma åt personliga musiksamlingar."
           }
         },
         "tr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kaset, herkese açık gezinme, arama ve oynatma için giriş yapmadan çalışır. Kişisel müzik koleksiyonlarına erişmek için giriş yapın."
+            "value": "Meld, herkese açık gezinme, arama ve oynatma için giriş yapmadan çalışır. Kişisel müzik koleksiyonlarına erişmek için giriş yapın."
           }
         },
         "uk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kaset працює без входу для публічного перегляду, пошуку й відтворення. Увійдіть, щоб отримати доступ до особистих музичних колекцій."
+            "value": "Meld працює без входу для публічного перегляду, пошуку й відтворення. Увійдіть, щоб отримати доступ до особистих музичних колекцій."
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "无需登录即可使用 Kaset 进行公开浏览、搜索和播放。登录后可访问个人音乐收藏。"
+            "value": "无需登录即可使用 Meld 进行公开浏览、搜索和播放。登录后可访问个人音乐收藏。"
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "無需登入即可使用 Kaset 進行公開瀏覽、搜尋和播放。登入後可存取個人音樂收藏。"
+            "value": "無需登入即可使用 Meld 進行公開瀏覽、搜尋和播放。登入後可存取個人音樂收藏。"
           }
         }
       }
@@ -47566,102 +47566,102 @@
         }
       }
     },
-    "Pop video back into Kaset": {
+    "Pop video back into Meld": {
       "localizations": {
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "إرجاع الفيديو إلى Kaset"
+            "value": "إرجاع الفيديو إلى Meld"
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Video zurück in Kaset holen"
+            "value": "Video zurück in Meld holen"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Volver a poner el video en Kaset"
+            "value": "Volver a poner el video en Meld"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Réintégrer la vidéo dans Kaset"
+            "value": "Réintégrer la vidéo dans Meld"
           }
         },
         "id": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kembalikan video ke Kaset"
+            "value": "Kembalikan video ke Meld"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Riporta il video in Kaset"
+            "value": "Riporta il video in Meld"
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "비디오를 Kaset으로 다시 가져오기"
+            "value": "비디오를 Meld로 다시 가져오기"
           }
         },
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Video terug in Kaset plaatsen"
+            "value": "Video terug in Meld plaatsen"
           }
         },
         "pl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Przenieś wideo z powrotem do Kaset"
+            "value": "Przenieś wideo z powrotem do Meld"
           }
         },
         "pt": {
           "stringUnit": {
             "state": "translated",
-            "value": "Voltar a colocar o vídeo no Kaset"
+            "value": "Voltar a colocar o vídeo no Meld"
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Вернуть видео в Kaset"
+            "value": "Вернуть видео в Meld"
           }
         },
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Flytta tillbaka videon till Kaset"
+            "value": "Flytta tillbaka videon till Meld"
           }
         },
         "tr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Videoyu yeniden Kaset'e al"
+            "value": "Videoyu yeniden Meld'e al"
           }
         },
         "uk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Повернути відео назад у Kaset"
+            "value": "Повернути відео назад у Meld"
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "将视频放回 Kaset"
+            "value": "将视频放回 Meld"
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "將影片放回 Kaset"
+            "value": "將影片放回 Meld"
           }
         }
       }
@@ -48766,102 +48766,102 @@
         }
       }
     },
-    "Return to Kaset": {
+    "Return to Meld": {
       "localizations": {
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "العودة إلى Kaset"
+            "value": "العودة إلى Meld"
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Zu Kaset zurückkehren"
+            "value": "Zu Meld zurückkehren"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Volver a Kaset"
+            "value": "Volver a Meld"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Revenir à Kaset"
+            "value": "Revenir à Meld"
           }
         },
         "id": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kembali ke Kaset"
+            "value": "Kembali ke Meld"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Torna a Kaset"
+            "value": "Torna a Meld"
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kaset으로 돌아가기"
+            "value": "Meld로 돌아가기"
           }
         },
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Terug naar Kaset"
+            "value": "Terug naar Meld"
           }
         },
         "pl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Wróć do Kaset"
+            "value": "Wróć do Meld"
           }
         },
         "pt": {
           "stringUnit": {
             "state": "translated",
-            "value": "Voltar ao Kaset"
+            "value": "Voltar ao Meld"
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Вернуться в Kaset"
+            "value": "Вернуться в Meld"
           }
         },
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Återgå till Kaset"
+            "value": "Återgå till Meld"
           }
         },
         "tr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kaset'e dön"
+            "value": "Meld'e dön"
           }
         },
         "uk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Повернутися до Kaset"
+            "value": "Повернутися до Meld"
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "返回 Kaset"
+            "value": "返回 Meld"
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "返回 Kaset"
+            "value": "返回 Meld"
           }
         }
       }

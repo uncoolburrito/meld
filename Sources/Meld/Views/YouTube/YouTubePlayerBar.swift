@@ -458,7 +458,7 @@ struct YouTubePlayerBar: View {
                 isSelected: self.youtubePlayer.surfaceLocation == .floating,
                 accessibilityID: AccessibilityID.YouTubeContent.watchPictureInPicture,
                 accessibilityLabel: self.youtubePlayer.surfaceLocation == .floating
-                    ? String(localized: "Pop video back into Kaset")
+                    ? String(localized: "Pop video back into Meld")
                     : String(localized: "Picture in Picture")
             ) {
                 Image(systemName: self.youtubePlayer.surfaceLocation == .floating ? "pip.exit" : "pip.enter")

@@ -209,7 +209,7 @@ struct MainWindow: View { // swiftlint:disable:this type_body_length
                 if self.authService.isCookieRestoreUnavailable {
                     SignInRequiredView(
                         title: String(localized: "Sign-In Temporarily Unavailable"),
-                        message: String(localized: "Kaset could not read saved sign-in data. Retry to restore your session.")
+                        message: String(localized: "Meld could not read saved sign-in data. Retry to restore your session.")
                     )
                 } else if self.authService.state.isInitializing {
                     // Show loading while checking login status to avoid guest-content flash
@@ -771,7 +771,7 @@ struct MainWindow: View { // swiftlint:disable:this type_body_length
     private func signInRequiredView(for item: NavigationItem) -> some View {
         SignInRequiredView(
             title: String(localized: "Sign in to use \(item.displayName)"),
-            message: String(localized: "Kaset works without login for public browsing, search, and playback. Sign in to access personal music collections.")
+            message: String(localized: "Meld works without login for public browsing, search, and playback. Sign in to access personal music collections.")
         )
     }
 

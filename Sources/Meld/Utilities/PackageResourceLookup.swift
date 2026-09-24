@@ -2,7 +2,7 @@ import AppKit
 import SwiftUI
 
 enum PackageResourceLookup {
-    private static let resourceBundleName = "Kaset_Kaset.bundle"
+    private static let resourceBundleName = "Meld_Meld.bundle"
     private static let accentColorName = NSColor.Name("AccentColor")
 
     static let bundle = Self.candidateBundles.first

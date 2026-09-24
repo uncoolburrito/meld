@@ -12,7 +12,7 @@ enum WhatsNewProvider {
     static let fallbackCollection: [WhatsNew] = [
         WhatsNew(
             version: "1.0.0",
-            title: "What's New in Kaset",
+            title: "What's New in Meld",
             features: [
                 .init(
                     icon: "play.circle.fill",

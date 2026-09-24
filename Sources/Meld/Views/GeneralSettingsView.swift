@@ -178,7 +178,7 @@ struct GeneralSettingsView: View {
             Button(String(localized: "OK"), role: .cancel) {}
         } message: {
             Text(
-                "Kaset could not remove saved sign-in data. Try signing out again before quitting.",
+                "Meld could not remove saved sign-in data. Try signing out again before quitting.",
                 comment: "Sign-out durable storage failure message"
             )
         }

@@ -582,7 +582,7 @@ struct MeldApp: App {
 
                 Divider()
 
-                Button(String(localized: "Kaset")) {
+                Button(String(localized: "Meld")) {
                     self.showMainWindow()
                 }
                 .keyboardShortcut("0", modifiers: .command)
@@ -591,7 +591,7 @@ struct MeldApp: App {
             // Help menu - What's New
             CommandGroup(after: .appInfo) {
                 Divider()
-                Button(String(localized: "What's New in Kaset")) {
+                Button(String(localized: "What's New in Meld")) {
                     self.showWhatsNew = true
                 }
             }

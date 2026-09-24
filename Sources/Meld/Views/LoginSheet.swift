@@ -55,7 +55,7 @@ struct LoginSheet: View {
             Button(String(localized: "OK"), role: .cancel) {}
         } message: {
             Text(
-                "Kaset could not remove saved sign-in data. Try signing out again before quitting.",
+                "Meld could not remove saved sign-in data. Try signing out again before quitting.",
                 comment: "Sign-out durable storage failure message"
             )
         }
@@ -163,8 +163,8 @@ struct LoginSheet: View {
                 .font(.headline)
 
             Text(self.authService.isCookieRestoreUnavailable
-                ? String(localized: "Kaset could not read saved sign-in data. Retry to restore your session.")
-                : String(localized: "Kaset could not safely clear saved sign-in data. Retry before signing in again.", comment: "Failed login cleanup explanation"))
+                ? String(localized: "Meld could not read saved sign-in data. Retry to restore your session.")
+                : String(localized: "Meld could not safely clear saved sign-in data. Retry before signing in again.", comment: "Failed login cleanup explanation"))
                 .multilineTextAlignment(.center)
                 .foregroundStyle(.secondary)
                 .frame(maxWidth: 340)

@@ -71,7 +71,7 @@ struct ExtensionsSettingsView: View {
                         .font(.headline)
                         .padding(.bottom, 2)
 
-                    Text(String(localized: "Extensions are loaded at launch via the native WebKit extension API. Changes take effect after restarting Kaset."))
+                    Text(String(localized: "Extensions are loaded at launch via the native WebKit extension API. Changes take effect after restarting Meld."))
                         .foregroundStyle(.secondary)
 
                     HStack(spacing: 4) {
