@@ -11,7 +11,7 @@ on:
       - "**.swift"
       - "Package.swift"
       - "Info.plist"
-      - "Kaset.entitlements"
+      - "Meld.entitlements"
       - "Sources/**"
       - "Scripts/**"
       - "Tests/**"
@@ -22,7 +22,7 @@ on:
       - "**.swift"
       - "Package.swift"
       - "Info.plist"
-      - "Kaset.entitlements"
+      - "Meld.entitlements"
       - "Sources/**"
       - "Scripts/**"
       - "Tests/**"
@@ -90,10 +90,11 @@ jobs:
         # Suites share process-wide app singletons, including the playback
         # WebView. Serialize both runners so another suite cannot invalidate
         # a test's document generation while its bridge events are queued.
-        run: swift test -q --skip KasetUITests --disable-xctest --no-parallel
+        run: swift test -q --skip MeldUITests --disable-xctest --no-parallel
 
   macos_ui_tests:
     name: macOS UI Tests (${{ matrix.os }})
+    if: github.event_name != 'pull_request'
     timeout-minutes: 30
     runs-on: ${{ matrix.os }}
     strategy:
@@ -143,27 +144,25 @@ jobs:
 
       - name: Build app bundle for UI tests
         env:
-          KASET_SIGNING: adhoc
-          # Xcode 26 actool cannot distill Icon Composer assets on macos-15
-          # runners, but UI tests only need a launchable bundle.
-          KASET_SKIP_MAIN_ASSETS: ${{ matrix.os == 'macos-15' && '1' || '0' }}
+          MELD_SIGNING: adhoc
+          MELD_SKIP_MAIN_ASSETS: ${{ matrix.os == 'macos-15' && '1' || '0' }}
         run: Scripts/build-app.sh debug
 
       - name: Verify packaged app
-        run: Scripts/verify-release-app.sh .build/app/Kaset.app
+        run: Scripts/verify-release-app.sh .build/app/Meld.app
 
       - name: Install app for UI tests
         run: |
-          sudo cp -R .build/app/Kaset.app /Applications/Kaset.app
+          sudo cp -R .build/app/Meld.app /Applications/Meld.app
           # Register with Launch Services so XCUIApplication can find it
-          /System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/LaunchServices.framework/Versions/A/Support/lsregister -f /Applications/Kaset.app
+          /System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/LaunchServices.framework/Versions/A/Support/lsregister -f /Applications/Meld.app
 
       - name: Run UI tests
         run: |
           set -o pipefail
           xcodebuild \
-            -project KasetUITests.xcodeproj \
-            -scheme KasetUITests \
+            -project MeldUITests.xcodeproj \
+            -scheme MeldUITests \
             -destination 'platform=macOS' \
             -derivedDataPath ./build \
             CODE_SIGN_IDENTITY="-" \

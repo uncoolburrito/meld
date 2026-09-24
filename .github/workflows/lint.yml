@@ -23,23 +23,21 @@ on:
 jobs:
   swiftlint:
     name: SwiftLint
-    runs-on: macos-26
+    runs-on: ubuntu-latest
     timeout-minutes: 10
 
     steps:
       - name: Checkout code
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v4
 
-      - name: Cache Homebrew
-        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
-        with:
-          path: |
-            /usr/local/Homebrew
-            ~/Library/Caches/Homebrew
-          key: ${{ runner.os }}-homebrew-swiftlint
-
       - name: Install SwiftLint
-        run: brew install swiftlint
+        run: |
+          set -euo pipefail
+          SWIFTLINT_VERSION="0.58.2"
+          curl -sSL "https://github.com/realm/SwiftLint/releases/download/${SWIFTLINT_VERSION}/swiftlint_linux.zip" -o swiftlint.zip
+          sudo unzip -q -o swiftlint.zip -d /usr/local/bin
+          rm swiftlint.zip
+          swiftlint --version
 
       - name: Run SwiftLint
         run: |
@@ -47,24 +45,20 @@ jobs:
 
   swiftformat:
     name: SwiftFormat
-    runs-on: macos-26
+    runs-on: ubuntu-latest
     timeout-minutes: 10
 
     steps:
       - name: Checkout code
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v4
 
-      - name: Cache Homebrew
-        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
-        with:
-          path: |
-            /usr/local/Homebrew
-            ~/Library/Caches/Homebrew
-          key: ${{ runner.os }}-homebrew-swiftformat
-
       - name: Install SwiftFormat
         run: |
-          brew install swiftformat
+          set -euo pipefail
+          SWIFTFORMAT_VERSION="0.55.5"
+          curl -sSL "https://github.com/nicklockwood/SwiftFormat/releases/download/${SWIFTFORMAT_VERSION}/swiftformat_linux.zip" -o swiftformat.zip
+          sudo unzip -q -o swiftformat.zip -d /usr/local/bin
+          rm swiftformat.zip
           swiftformat --version
 
       - name: Check formatting
