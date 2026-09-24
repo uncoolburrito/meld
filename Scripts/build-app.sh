@@ -477,9 +477,13 @@ ${APP_LOCALIZATIONS_PLIST}
 
     <!-- Core Audio process tap (Equalizer) - macOS 14.2+ TCC requires these -->
     <key>NSAudioCaptureUsageDescription</key>
-    <string>Meld processes its own music output through a built-in equalizer. This permission only covers Kaset's own playback — no other app's audio is captured.</string>
+    <string>Meld processes its own music output through a built-in equalizer. This permission only covers Meld's own playback — no other app's audio is captured.</string>
     <key>NSScreenCaptureUsageDescription</key>
     <string>Meld taps its own audio output (not the screen) so the built-in equalizer can apply effects to your music. No screen content is recorded.</string>
+
+    <!-- Spotify Remote Control via Apple Events -->
+    <key>NSAppleEventsUsageDescription</key>
+    <string>Meld controls Spotify playback and receives now-playing track updates.</string>
 
     <!-- Build Metadata -->
     <key>MeldBuildTimestamp</key>

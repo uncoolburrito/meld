@@ -76,43 +76,4 @@ struct UnifiedTrackTests {
         #expect(track.album == nil)
         #expect(track.sourceID == "v-press")
     }
-
-    @Test("SpotifySource stub conforms to MusicSourceProtocol with expected initial state")
-    @MainActor
-    func spotifySourceStub() {
-        let spotify = SpotifySource()
-        #expect(spotify.source == .spotify)
-        #expect(spotify.currentTrack == nil)
-        #expect(spotify.playbackPosition == 0.0)
-        #expect(spotify.playbackDuration == 0.0)
-        #expect(spotify.transportState == .idle)
-        #expect(spotify.volume == 1.0)
-    }
-
-    @Test("SpotifySource stub verbs fail loudly with unimplemented error")
-    @MainActor
-    func spotifySourceStubFailsLoudly() async {
-        let spotify = SpotifySource()
-        await #expect(throws: SpotifySourceError.unimplemented) {
-            try await spotify.play()
-        }
-        await #expect(throws: SpotifySourceError.unimplemented) {
-            try await spotify.pause()
-        }
-        await #expect(throws: SpotifySourceError.unimplemented) {
-            try await spotify.toggle()
-        }
-        await #expect(throws: SpotifySourceError.unimplemented) {
-            try await spotify.next()
-        }
-        await #expect(throws: SpotifySourceError.unimplemented) {
-            try await spotify.previous()
-        }
-        await #expect(throws: SpotifySourceError.unimplemented) {
-            try await spotify.seek(to: 42.0)
-        }
-        await #expect(throws: SpotifySourceError.unimplemented) {
-            try await spotify.setVolume(0.8)
-        }
-    }
 }
