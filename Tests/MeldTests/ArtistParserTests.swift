@@ -1218,7 +1218,7 @@ struct ArtistParserTests {
     }
 
     /// Loads a JSON fixture bundled with the test target and decodes it to a
-    /// plain dictionary. Fixtures live in `Tests/KasetTests/Fixtures/` and are
+    /// plain dictionary. Fixtures live in `Tests/MeldTests/Fixtures/` and are
     /// exposed via `Bundle.module` by SwiftPM's `.process("Fixtures")` rule.
     private static func loadArtistFixture(_ name: String) throws -> [String: Any] {
         guard let url = Bundle.module.url(forResource: name, withExtension: "json") else {

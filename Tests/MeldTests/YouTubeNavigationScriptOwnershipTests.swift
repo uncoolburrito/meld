@@ -8,8 +8,8 @@ struct YouTubeNavigationScriptOwnershipTests {
     func redirectReinstallPreservesPendingSeekAttempt() throws {
         let source = try String(
             contentsOfFile: #filePath.replacingOccurrences(
-                of: "Tests/KasetTests/YouTubeNavigationScriptOwnershipTests.swift",
-                with: "Sources/Kaset/Views/YouTube/YouTubeWatchWebView.swift"
+                of: "Tests/MeldTests/YouTubeNavigationScriptOwnershipTests.swift",
+                with: "Sources/Meld/Views/YouTube/YouTubeWatchWebView.swift"
             ),
             encoding: .utf8
         )

@@ -10,8 +10,8 @@ struct SingletonPlayerNavigationStateTests {
     func navigationFinishResynchronizesWebQueue() throws {
         let source = try String(
             contentsOfFile: #filePath.replacingOccurrences(
-                of: "Tests/KasetTests/SingletonPlayerNavigationStateTests.swift",
-                with: "Sources/Kaset/Views/MiniPlayerWebView+Coordinator.swift"
+                of: "Tests/MeldTests/SingletonPlayerNavigationStateTests.swift",
+                with: "Sources/Meld/Views/MiniPlayerWebView+Coordinator.swift"
             ),
             encoding: .utf8
         )
@@ -122,8 +122,8 @@ struct SingletonPlayerNavigationStateTests {
     func navigationStartValidationPrecedesGateMutation() throws {
         let source = try String(
             contentsOfFile: #filePath.replacingOccurrences(
-                of: "Tests/KasetTests/SingletonPlayerNavigationStateTests.swift",
-                with: "Sources/Kaset/Views/MiniPlayerWebView.swift"
+                of: "Tests/MeldTests/SingletonPlayerNavigationStateTests.swift",
+                with: "Sources/Meld/Views/MiniPlayerWebView.swift"
             ),
             encoding: .utf8
         )
@@ -181,8 +181,8 @@ struct SingletonPlayerNavigationStateTests {
     func redirectRefreshPrecedesDocumentIDAdoption() throws {
         let source = try String(
             contentsOfFile: #filePath.replacingOccurrences(
-                of: "Tests/KasetTests/SingletonPlayerNavigationStateTests.swift",
-                with: "Sources/Kaset/Views/MiniPlayerWebView.swift"
+                of: "Tests/MeldTests/SingletonPlayerNavigationStateTests.swift",
+                with: "Sources/Meld/Views/MiniPlayerWebView.swift"
             ),
             encoding: .utf8
         )

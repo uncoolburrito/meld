@@ -268,8 +268,8 @@ struct AutoplayRecoveryJSTests {
     @Test("Restoration resume only unsuppresses ready advertisement media")
     func restoredAdResumeIsGated() {
         let source = try? String(contentsOfFile: #filePath.replacingOccurrences(
-            of: "Tests/KasetTests/AutoplayRecoveryTests.swift",
-            with: "Sources/Kaset/Views/SingletonPlayerWebView+PlaybackControls.swift"
+            of: "Tests/MeldTests/AutoplayRecoveryTests.swift",
+            with: "Sources/Meld/Views/SingletonPlayerWebView+PlaybackControls.swift"
         ))
         #expect(source?.contains("if (!isAd || !video || !video.currentSrc") == true)
         #expect(source?.contains("window.__kasetDocumentGeneration !==") == true)

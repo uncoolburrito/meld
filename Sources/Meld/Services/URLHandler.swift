@@ -3,7 +3,7 @@ import Foundation
 // MARK: - URLHandler
 
 /// Handles parsing and routing of YouTube Music URLs, regular YouTube watch
-/// links, and Kaset custom-scheme URLs.
+/// links, and Meld custom-scheme URLs.
 ///
 /// Supports URLs like:
 /// - `https://music.youtube.com/watch?v=dQw4w9WgXcQ` - Play song
@@ -14,10 +14,10 @@ import Foundation
 /// - `https://music.youtube.com/browse/MPLAUCxxx` - Open library artist
 /// - `https://www.youtube.com/watch?v=dQw4w9WgXcQ` - Play regular YouTube video
 /// - `https://youtu.be/dQw4w9WgXcQ` - Play regular YouTube video
-/// - `kaset://play?v=dQw4w9WgXcQ` - Custom scheme for song
-/// - `kaset://playlist?list=PLxxx` - Custom scheme for playlist
-/// - `kaset://album?id=MPRExxx` - Custom scheme for album
-/// - `kaset://artist?id=UCxxx` - Custom scheme for artist
+/// - `meld://play?v=dQw4w9WgXcQ` - Custom scheme for song
+/// - `meld://playlist?list=PLxxx` - Custom scheme for playlist
+/// - `meld://album?id=MPRExxx` - Custom scheme for album
+/// - `meld://artist?id=UCxxx` - Custom scheme for artist
 enum URLHandler {
     // MARK: - Types
 

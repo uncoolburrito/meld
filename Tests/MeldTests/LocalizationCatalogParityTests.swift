@@ -91,14 +91,14 @@ struct LocalizationCatalogParityTests {
 
     // MARK: - Helpers
 
-    /// `Sources/Kaset/Resources`, resolved from this file rather than a bundle:
+    /// `Sources/Meld/Resources`, resolved from this file rather than a bundle:
     /// the catalog is deliberately excluded from the target's resources.
     static var resourcesDirectory: URL {
         URL(fileURLWithPath: #filePath)
-            .deletingLastPathComponent() // KasetTests
+            .deletingLastPathComponent() // MeldTests
             .deletingLastPathComponent() // Tests
             .deletingLastPathComponent() // repo root
-            .appendingPathComponent("Sources/Kaset/Resources")
+            .appendingPathComponent("Sources/Meld/Resources")
     }
 
     /// The catalog's source language, whose `.strings` needs no entry per key

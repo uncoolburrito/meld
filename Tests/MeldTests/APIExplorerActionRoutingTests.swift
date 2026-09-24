@@ -61,7 +61,7 @@ struct APIExplorerActionRoutingTests {
 
     private static func apiExplorerSource() throws -> String {
         let sourcePath = #filePath.replacingOccurrences(
-            of: "Tests/KasetTests/APIExplorerActionRoutingTests.swift",
+            of: "Tests/MeldTests/APIExplorerActionRoutingTests.swift",
             with: "Sources/APIExplorer/main.swift"
         )
         return try String(contentsOfFile: sourcePath, encoding: .utf8)

@@ -105,9 +105,9 @@ struct URLHandlerTests {
 
     // MARK: - Custom Scheme Tests
 
-    @Test("Parse kaset://play URL extracts video ID")
-    func parseKasetPlayURL() throws {
-        let url = try #require(URL(string: "kaset://play?v=abc123"))
+    @Test("Parse meld://play URL extracts video ID")
+    func parseMeldPlayURL() throws {
+        let url = try #require(URL(string: "meld://play?v=abc123"))
         let result = URLHandler.parse(url)
 
         guard case let .song(videoId) = result else {
@@ -117,9 +117,9 @@ struct URLHandlerTests {
         #expect(videoId == "abc123")
     }
 
-    @Test("Parse kaset://playlist URL extracts playlist ID")
-    func parseKasetPlaylistURL() throws {
-        let url = try #require(URL(string: "kaset://playlist?list=PLmylist"))
+    @Test("Parse meld://playlist URL extracts playlist ID")
+    func parseMeldPlaylistURL() throws {
+        let url = try #require(URL(string: "meld://playlist?list=PLmylist"))
         let result = URLHandler.parse(url)
 
         guard case let .playlist(id) = result else {
@@ -129,9 +129,9 @@ struct URLHandlerTests {
         #expect(id == "PLmylist")
     }
 
-    @Test("Parse kaset://album URL extracts album ID")
-    func parseKasetAlbumURL() throws {
-        let url = try #require(URL(string: "kaset://album?id=MPREb_album"))
+    @Test("Parse meld://album URL extracts album ID")
+    func parseMeldAlbumURL() throws {
+        let url = try #require(URL(string: "meld://album?id=MPREb_album"))
         let result = URLHandler.parse(url)
 
         guard case let .album(id) = result else {
@@ -141,9 +141,9 @@ struct URLHandlerTests {
         #expect(id == "MPREb_album")
     }
 
-    @Test("Parse kaset://artist URL extracts artist ID")
-    func parseKasetArtistURL() throws {
-        let url = try #require(URL(string: "kaset://artist?id=UCchannel"))
+    @Test("Parse meld://artist URL extracts artist ID")
+    func parseMeldArtistURL() throws {
+        let url = try #require(URL(string: "meld://artist?id=UCchannel"))
         let result = URLHandler.parse(url)
 
         guard case let .artist(id) = result else {

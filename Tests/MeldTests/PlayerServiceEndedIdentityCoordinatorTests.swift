@@ -4,11 +4,17 @@ import Testing
 @testable import Meld
 
 extension PlayerServiceWebQueueSyncTests {
-    @Test(
-        "An uncertain ended event leaves its occurrence available for the resolved retry",
-        arguments: [false, true]
-    )
-    func uncertainEndedRetryContinuesPendingHandoff(repairThroughPolling: Bool) async throws {
+    @Test("An uncertain ended event leaves its occurrence available for the resolved retry (canplay)")
+    func uncertainEndedRetryContinuesPendingHandoffCanPlay() async throws {
+        try await self.uncertainEndedRetryContinuesPendingHandoff(repairThroughPolling: false)
+    }
+
+    @Test("An uncertain ended event leaves its occurrence available for the resolved retry (polling)")
+    func uncertainEndedRetryContinuesPendingHandoffPolling() async throws {
+        try await self.uncertainEndedRetryContinuesPendingHandoff(repairThroughPolling: true)
+    }
+
+    private func uncertainEndedRetryContinuesPendingHandoff(repairThroughPolling: Bool) async throws {
         try await self.withEndedIdentityCoordinator { coordinator, context, documentGeneration in
             let pendingGeneration = self.playerService.pendingNativeQueueAdvanceGeneration
             let uncertain = try Self.endedIdentityPayload(in: context)
@@ -95,8 +101,17 @@ extension PlayerServiceWebQueueSyncTests {
         }
     }
 
-    @Test("Legacy ended events without the uncertainty flag retain fallback behavior", arguments: [false, true])
-    func legacyEndedWithoutUncertaintyFlagStillAdvances(hasVideoId: Bool) async throws {
+    @Test("Legacy ended events without the uncertainty flag retain fallback behavior (without videoId)")
+    func legacyEndedWithoutVideoIdStillAdvances() async throws {
+        try await self.legacyEndedWithoutUncertaintyFlagStillAdvances(hasVideoId: false)
+    }
+
+    @Test("Legacy ended events without the uncertainty flag retain fallback behavior (with videoId)")
+    func legacyEndedWithVideoIdStillAdvances() async throws {
+        try await self.legacyEndedWithoutUncertaintyFlagStillAdvances(hasVideoId: true)
+    }
+
+    private func legacyEndedWithoutUncertaintyFlagStillAdvances(hasVideoId: Bool) async throws {
         try await self.withEndedIdentityCoordinator(preparePendingHandoff: false) { coordinator, context, documentGeneration in
             context.evaluateScript(
                 """

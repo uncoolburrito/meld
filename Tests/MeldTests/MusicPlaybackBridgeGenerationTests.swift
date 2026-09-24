@@ -299,8 +299,8 @@ struct MusicPlaybackBridgeGenerationTests {
     func supersededPendingHandoffContentRecoveryRetries() throws {
         let source = try String(
             contentsOfFile: #filePath.replacingOccurrences(
-                of: "Tests/KasetTests/MusicPlaybackBridgeGenerationTests.swift",
-                with: "Sources/Kaset/Views/MiniPlayerWebView.swift"
+                of: "Tests/MeldTests/MusicPlaybackBridgeGenerationTests.swift",
+                with: "Sources/Meld/Views/MiniPlayerWebView.swift"
             ),
             encoding: .utf8
         )
@@ -764,8 +764,8 @@ struct MusicPlaybackBridgeGenerationTests {
     @Test("Navigation failure pause clears autoplay retry intent")
     func navigationFailurePauseClearsAutoplayRetryIntent() throws {
         let source = try String(contentsOfFile: #filePath.replacingOccurrences(
-            of: "Tests/KasetTests/MusicPlaybackBridgeGenerationTests.swift",
-            with: "Sources/Kaset/Views/MiniPlayerWebView.swift"
+            of: "Tests/MeldTests/MusicPlaybackBridgeGenerationTests.swift",
+            with: "Sources/Meld/Views/MiniPlayerWebView.swift"
         ))
 
         #expect(source.contains("window.__kasetAutoplayPending = false;"))
@@ -789,8 +789,8 @@ struct MusicPlaybackBridgeGenerationTests {
 
         let source = try String(
             contentsOfFile: #filePath.replacingOccurrences(
-                of: "Tests/KasetTests/MusicPlaybackBridgeGenerationTests.swift",
-                with: "Sources/Kaset/Views/MiniPlayerWebView+Coordinator.swift"
+                of: "Tests/MeldTests/MusicPlaybackBridgeGenerationTests.swift",
+                with: "Sources/Meld/Views/MiniPlayerWebView+Coordinator.swift"
             ),
             encoding: .utf8
         )
@@ -808,15 +808,15 @@ extension MusicPlaybackBridgeGenerationTests {
     func routerNavigationConfirmationFollowsBridgeValidation() throws {
         let coordinatorSource = try String(
             contentsOfFile: #filePath.replacingOccurrences(
-                of: "Tests/KasetTests/MusicPlaybackBridgeGenerationTests.swift",
-                with: "Sources/Kaset/Views/MiniPlayerWebView+Coordinator.swift"
+                of: "Tests/MeldTests/MusicPlaybackBridgeGenerationTests.swift",
+                with: "Sources/Meld/Views/MiniPlayerWebView+Coordinator.swift"
             ),
             encoding: .utf8
         )
         let multiplexerSource = try String(
             contentsOfFile: #filePath.replacingOccurrences(
-                of: "Tests/KasetTests/MusicPlaybackBridgeGenerationTests.swift",
-                with: "Sources/Kaset/Views/MiniPlayerWebView.swift"
+                of: "Tests/MeldTests/MusicPlaybackBridgeGenerationTests.swift",
+                with: "Sources/Meld/Views/MiniPlayerWebView.swift"
             ),
             encoding: .utf8
         )
@@ -913,8 +913,8 @@ struct WebPlaybackTransitionFallbackPolicyTests {
     func routerFallbackWatchdogStartsBeforeCommandEvaluation() throws {
         let source = try String(
             contentsOfFile: #filePath.replacingOccurrences(
-                of: "Tests/KasetTests/MusicPlaybackBridgeGenerationTests.swift",
-                with: "Sources/Kaset/Views/MiniPlayerWebView.swift"
+                of: "Tests/MeldTests/MusicPlaybackBridgeGenerationTests.swift",
+                with: "Sources/Meld/Views/MiniPlayerWebView.swift"
             ),
             encoding: .utf8
         )
@@ -940,8 +940,8 @@ struct WebPlaybackTransitionFallbackPolicyTests {
     func orderedContentClearsAdBeforePendingSourceRejection() throws {
         let source = try String(
             contentsOfFile: #filePath.replacingOccurrences(
-                of: "Tests/KasetTests/MusicPlaybackBridgeGenerationTests.swift",
-                with: "Sources/Kaset/Views/MiniPlayerWebView+Coordinator.swift"
+                of: "Tests/MeldTests/MusicPlaybackBridgeGenerationTests.swift",
+                with: "Sources/Meld/Views/MiniPlayerWebView+Coordinator.swift"
             ),
             encoding: .utf8
         )

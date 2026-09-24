@@ -540,8 +540,8 @@ struct YouTubeAskClientTests {
     @Test("Production app explicitly enables Ask Gemini")
     func productionAppExplicitlyEnablesAsk() throws {
         let sourcePath = #filePath.replacingOccurrences(
-            of: "Tests/KasetTests/YouTubeAskClientTests.swift",
-            with: "Sources/Kaset/KasetApp.swift"
+            of: "Tests/MeldTests/YouTubeAskClientTests.swift",
+            with: "Sources/Meld/MeldApp.swift"
         )
         let source = try String(contentsOfFile: sourcePath, encoding: .utf8)
 

@@ -27,7 +27,7 @@ struct AppLocalizationTests {
     }
 
     private func sourceCatalogStrings() throws -> [String: Any] {
-        let catalogURL = self.repositoryRoot.appendingPathComponent("Sources/Kaset/Resources/Localizable.xcstrings")
+        let catalogURL = self.repositoryRoot.appendingPathComponent("Sources/Meld/Resources/Localizable.xcstrings")
         let data = try Data(contentsOf: catalogURL)
         let catalog = try #require(JSONSerialization.jsonObject(with: data) as? [String: Any])
         return try #require(catalog["strings"] as? [String: Any])
@@ -58,7 +58,7 @@ struct AppLocalizationTests {
 
     private func sourceLocalizationKeys(localeIdentifier: String) throws -> Set<String> {
         let stringsURL = self.repositoryRoot
-            .appendingPathComponent("Sources/Kaset/Resources")
+            .appendingPathComponent("Sources/Meld/Resources")
             .appendingPathComponent("\(localeIdentifier).lproj/Localizable.strings")
         let data = try Data(contentsOf: stringsURL)
         let propertyList = try PropertyListSerialization.propertyList(from: data, options: [], format: nil)

@@ -10,7 +10,7 @@ struct ScriptingDefinitionTests {
             .deletingLastPathComponent()
             .deletingLastPathComponent()
             .deletingLastPathComponent()
-        let sdefURL = repositoryRoot.appendingPathComponent("Sources/Kaset/Resources/Kaset.sdef")
+        let sdefURL = repositoryRoot.appendingPathComponent("Sources/Meld/Resources/Meld.sdef")
         let data = try Data(contentsOf: sdefURL)
         let document = try XMLDocument(data: data)
 
