@@ -89,15 +89,46 @@ final class MockSpotifyScriptController: SpotifyScriptControlling, @unchecked Se
 // MARK: - MockSpotifyNotificationMonitor
 
 final class MockSpotifyNotificationMonitor: SpotifyNotificationMonitoring, @unchecked Sendable {
+    private struct ExpectedStateRecord {
+        let state: SpotifyPlayerState
+        let timestamp: Date
+    }
+
     private let lock = NSLock()
     var updateHandler: (@Sendable (SpotifyPlaybackSnapshot) -> Void)?
     var commandDispatchedCalled = false
     private var lastDispatchedTime: Date = .distantPast
+    private var activeExpectedState: ExpectedStateRecord?
+    let echoSuppressionWindow: TimeInterval
+
+    init(echoSuppressionWindow: TimeInterval = 0.250) {
+        self.echoSuppressionWindow = echoSuppressionWindow
+    }
 
     var isEchoSuppressionActive: Bool {
         self.lock.lock()
         defer { self.lock.unlock() }
-        return Date().timeIntervalSince(self.lastDispatchedTime) < 0.200
+        let elapsed = Date().timeIntervalSince(self.lastDispatchedTime)
+        if elapsed >= self.echoSuppressionWindow {
+            self.activeExpectedState = nil
+            return false
+        }
+        return true
+    }
+
+    var currentExpectedState: SpotifyPlayerState? {
+        self.lock.lock()
+        defer { self.lock.unlock() }
+        return self.getValidExpectedState()
+    }
+
+    private func getValidExpectedState(now: Date = Date()) -> SpotifyPlayerState? {
+        guard let record = self.activeExpectedState else { return nil }
+        if now.timeIntervalSince(record.timestamp) < self.echoSuppressionWindow {
+            return record.state
+        }
+        self.activeExpectedState = nil
+        return nil
     }
 
     func startObserving(onUpdate: @escaping @Sendable (SpotifyPlaybackSnapshot) -> Void) {
@@ -112,14 +143,45 @@ final class MockSpotifyNotificationMonitor: SpotifyNotificationMonitoring, @unch
         self.lock.unlock()
     }
 
-    func markCommandDispatched(expectedState _: SpotifyPlayerState? = nil) {
+    func markCommandDispatched(expectedState: SpotifyPlayerState? = nil) {
         self.lock.lock()
+        let now = Date()
         self.commandDispatchedCalled = true
-        self.lastDispatchedTime = Date()
+        self.lastDispatchedTime = now
+        if let expectedState {
+            self.activeExpectedState = ExpectedStateRecord(state: expectedState, timestamp: now)
+        } else {
+            self.activeExpectedState = nil
+        }
         self.lock.unlock()
     }
 
+    /// Delivers an incoming notification with full echo suppression filtering matching production monitor.
     func simulateNotification(snapshot: SpotifyPlaybackSnapshot) {
+        self.lock.lock()
+        let now = Date()
+        let elapsed = now.timeIntervalSince(self.lastDispatchedTime)
+        if elapsed < self.echoSuppressionWindow {
+            if let expected = self.getValidExpectedState(now: now) {
+                if snapshot.playerState == expected {
+                    self.lock.unlock()
+                    return
+                }
+            } else {
+                self.lock.unlock()
+                return
+            }
+        } else {
+            self.activeExpectedState = nil
+        }
+        let handler = self.updateHandler
+        self.lock.unlock()
+
+        handler?(snapshot)
+    }
+
+    /// Delivers a snapshot directly, explicitly bypassing echo suppression filtering.
+    func deliverUnfiltered(snapshot: SpotifyPlaybackSnapshot) {
         self.lock.lock()
         let handler = self.updateHandler
         self.lock.unlock()
@@ -415,5 +477,134 @@ struct SpotifyIntegrationTests {
         #expect(result.maxMs == 32.0)
         #expect(result.p50Ms > 15.0 && result.p50Ms < 25.0)
         #expect(result.p99Ms > 25.0)
+    }
+
+    @Test("expectedState lifetime strictly matches suppression window")
+    func expectedStateLifetime() async throws {
+        let monitor = SpotifyNotificationMonitor(echoSuppressionWindow: 0.080)
+        #expect(monitor.currentExpectedState == nil)
+
+        monitor.markCommandDispatched(expectedState: .paused)
+        #expect(monitor.currentExpectedState == .paused)
+
+        // Sleep past window
+        try await Task.sleep(nanoseconds: 100_000_000)
+        #expect(monitor.currentExpectedState == nil)
+        #expect(!monitor.isEchoSuppressionActive)
+    }
+
+    @Test("MockSpotifyNotificationMonitor enforces suppression and supports deliverUnfiltered")
+    func mockMonitorSuppression() {
+        final class Counter: @unchecked Sendable {
+            private let lock = NSLock()
+            private(set) var value = 0
+            func increment() {
+                self.lock.lock()
+                defer { self.lock.unlock() }
+                self.value += 1
+            }
+        }
+
+        let counter = Counter()
+        let mock = MockSpotifyNotificationMonitor(echoSuppressionWindow: 0.100)
+        mock.startObserving { _ in counter.increment() }
+
+        let snapshot = SpotifyPlaybackSnapshot(
+            playerState: .playing,
+            position: 0.0,
+            duration: 180.0,
+            volume: 1.0,
+            track: nil
+        )
+
+        // 1. Initial notification outside window delivers
+        mock.simulateNotification(snapshot: snapshot)
+        #expect(counter.value == 1)
+
+        // 2. Mark dispatched with expected state .playing -> suppresses matching snapshot
+        mock.markCommandDispatched(expectedState: .playing)
+        mock.simulateNotification(snapshot: snapshot)
+        #expect(counter.value == 1) // Dropped by simulateNotification!
+
+        // 3. deliverUnfiltered explicitly bypasses suppression
+        mock.deliverUnfiltered(snapshot: snapshot)
+        #expect(counter.value == 2)
+    }
+
+    @Test("SpotifySource cancels fallback reconcile when notification arrives before timeout")
+    @MainActor
+    func trackTransitionFallbackCancelledByNotification() async throws {
+        let mockScript = MockSpotifyScriptController()
+        let mockMonitor = MockSpotifyNotificationMonitor()
+        let source = SpotifySource(
+            scriptController: mockScript,
+            notificationMonitor: mockMonitor,
+            autoRefresh: false
+        )
+
+        // Trigger next()
+        try await source.next()
+        #expect(mockScript.nextCalled)
+
+        // Simulate notification arriving quickly (e.g. 50ms)
+        let newTrack = UnifiedTrack(
+            title: "Track B",
+            artist: "Artist B",
+            source: .spotify,
+            sourceID: "trackB"
+        )
+        let snapshot = SpotifyPlaybackSnapshot(
+            playerState: .playing,
+            position: 0.0,
+            duration: 180.0,
+            volume: 1.0,
+            track: newTrack
+        )
+        mockMonitor.simulateNotification(snapshot: snapshot)
+
+        // Yield to let MainActor process notification
+        try await Task.sleep(nanoseconds: 50_000_000)
+
+        #expect(source.currentTrack?.title == "Track B")
+        #expect(source.currentTrack?.sourceID == "trackB")
+    }
+
+    @Test("SpotifySource triggers fallback reconcile when no notification arrives within timeout")
+    @MainActor
+    func trackTransitionFallbackFiresWhenNoNotificationArrives() async throws {
+        let mockScript = MockSpotifyScriptController()
+        let mockMonitor = MockSpotifyNotificationMonitor()
+        let source = SpotifySource(
+            scriptController: mockScript,
+            notificationMonitor: mockMonitor,
+            autoRefresh: false
+        )
+        source.trackTransitionFallbackDuration = 0.050
+
+        mockScript.snapshotToReturn = SpotifyPlaybackSnapshot(
+            playerState: .playing,
+            position: 0.0,
+            duration: 210.0,
+            volume: 1.0,
+            track: UnifiedTrack(
+                title: "Fallback Reconciled Track",
+                artist: "Fallback Artist",
+                source: .spotify,
+                sourceID: "fallbackTrack"
+            )
+        )
+
+        #expect(source.currentTrack == nil)
+
+        // Trigger next()
+        try await source.next()
+        #expect(mockScript.nextCalled)
+        #expect(source.currentTrack == nil)
+
+        // Wait past fallback duration (50ms -> 80ms)
+        try await Task.sleep(nanoseconds: 80_000_000)
+
+        #expect(source.currentTrack?.title == "Fallback Reconciled Track")
+        #expect(source.currentTrack?.sourceID == "fallbackTrack")
     }
 }

@@ -22,11 +22,16 @@ extension SpotifyNotificationMonitoring {
 final class SpotifyNotificationMonitor: SpotifyNotificationMonitoring, @unchecked Sendable {
     static let notificationName = NSNotification.Name("com.spotify.client.PlaybackStateChanged")
 
+    private struct ExpectedStateRecord {
+        let state: SpotifyPlayerState
+        let timestamp: Date
+    }
+
     private let lock = NSLock()
     private var observerToken: AnyObject?
     private var onUpdate: (@Sendable (SpotifyPlaybackSnapshot) -> Void)?
     private var lastCommandTimestamp: Date = .distantPast
-    private var expectedState: SpotifyPlayerState?
+    private var activeExpectedState: ExpectedStateRecord?
     private let echoSuppressionWindow: TimeInterval
 
     init(echoSuppressionWindow: TimeInterval = 0.250) {
@@ -40,14 +45,40 @@ final class SpotifyNotificationMonitor: SpotifyNotificationMonitoring, @unchecke
     var isEchoSuppressionActive: Bool {
         self.lock.lock()
         defer { self.lock.unlock() }
-        return Date().timeIntervalSince(self.lastCommandTimestamp) < self.echoSuppressionWindow
+        let elapsed = Date().timeIntervalSince(self.lastCommandTimestamp)
+        if elapsed >= self.echoSuppressionWindow {
+            self.activeExpectedState = nil
+            return false
+        }
+        return true
+    }
+
+    /// The active commanded state expectation, or `nil` if expired or unset.
+    var currentExpectedState: SpotifyPlayerState? {
+        self.lock.lock()
+        defer { self.lock.unlock() }
+        return self.getValidExpectedState()
     }
 
     func markCommandDispatched(expectedState: SpotifyPlayerState? = nil) {
         self.lock.lock()
-        self.lastCommandTimestamp = Date()
-        self.expectedState = expectedState
+        let now = Date()
+        self.lastCommandTimestamp = now
+        if let expectedState {
+            self.activeExpectedState = ExpectedStateRecord(state: expectedState, timestamp: now)
+        } else {
+            self.activeExpectedState = nil
+        }
         self.lock.unlock()
+    }
+
+    private func getValidExpectedState(now: Date = Date()) -> SpotifyPlayerState? {
+        guard let record = self.activeExpectedState else { return nil }
+        if now.timeIntervalSince(record.timestamp) < self.echoSuppressionWindow {
+            return record.state
+        }
+        self.activeExpectedState = nil
+        return nil
     }
 
     func startObserving(onUpdate: @escaping @Sendable (SpotifyPlaybackSnapshot) -> Void) {
@@ -85,9 +116,11 @@ final class SpotifyNotificationMonitor: SpotifyNotificationMonitoring, @unchecke
         let snapshot = Self.parse(userInfo: userInfo)
 
         self.lock.lock()
-        let isWindowActive = Date().timeIntervalSince(self.lastCommandTimestamp) < self.echoSuppressionWindow
+        let now = Date()
+        let elapsed = now.timeIntervalSince(self.lastCommandTimestamp)
+        let isWindowActive = elapsed < self.echoSuppressionWindow
         if isWindowActive {
-            if let expected = self.expectedState {
+            if let expected = self.getValidExpectedState(now: now) {
                 // If an expected state was specified, only suppress echoes matching that commanded state.
                 // A differing state (e.g. user pressed pause in Spotify.app) bypasses suppression.
                 if snapshot.playerState == expected {
@@ -99,6 +132,9 @@ final class SpotifyNotificationMonitor: SpotifyNotificationMonitoring, @unchecke
                 self.lock.unlock()
                 return
             }
+        } else {
+            // Window expired: clear expectation so it never leaks across subsequent commands
+            self.activeExpectedState = nil
         }
         let handler = self.onUpdate
         self.lock.unlock()

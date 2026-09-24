@@ -99,6 +99,12 @@ final class SpotifySource: MusicSourceProtocol {
         }
     }
 
+    @ObservationIgnored
+    var trackTransitionFallbackDuration: TimeInterval = 0.500
+
+    @ObservationIgnored
+    private var trackTransitionFallbackTask: Task<Void, Never>?
+
     func next() async throws {
         guard self.isInstalled else {
             throw SpotifySourceError.applicationNotFound
@@ -108,6 +114,7 @@ final class SpotifySource: MusicSourceProtocol {
         }
 
         try await self.scriptController.nextTrack()
+        self.scheduleTrackTransitionFallback()
     }
 
     func previous() async throws {
@@ -119,6 +126,7 @@ final class SpotifySource: MusicSourceProtocol {
         }
 
         try await self.scriptController.previousTrack()
+        self.scheduleTrackTransitionFallback()
     }
 
     func seek(to position: TimeInterval) async throws {
@@ -187,7 +195,25 @@ final class SpotifySource: MusicSourceProtocol {
         }
     }
 
+    private func scheduleTrackTransitionFallback() {
+        self.trackTransitionFallbackTask?.cancel()
+        let duration = self.trackTransitionFallbackDuration
+        self.trackTransitionFallbackTask = Task { @MainActor [weak self] in
+            do {
+                try await Task.sleep(nanoseconds: UInt64(duration * 1_000_000_000))
+                guard !Task.isCancelled else { return }
+                await self?.refreshState()
+            } catch {
+                // Cancelled when notification arrived before fallback deadline
+            }
+        }
+    }
+
     private func apply(snapshot: SpotifyPlaybackSnapshot) {
+        // Notification arrived: cancel any pending track transition reconcile fallback
+        self.trackTransitionFallbackTask?.cancel()
+        self.trackTransitionFallbackTask = nil
+
         self.transportState = snapshot.playerState.transportState
         self.playbackPosition = snapshot.position
         self.playbackDuration = snapshot.duration
