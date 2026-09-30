@@ -24,6 +24,9 @@ final class SpotifySource: MusicSourceProtocol {
     @ObservationIgnored
     private let notificationMonitor: any SpotifyNotificationMonitoring
 
+    /// Callback invoked when Spotify starts or resumes playing (for Arbiter Path A detection).
+    var onPlaybackStarted: (@MainActor () -> Void)?
+
     init(
         scriptController: any SpotifyScriptControlling = SpotifyScriptController.shared,
         notificationMonitor: any SpotifyNotificationMonitoring = SpotifyNotificationMonitor(),
@@ -218,6 +221,10 @@ final class SpotifySource: MusicSourceProtocol {
         self.playbackPosition = snapshot.position
         self.playbackDuration = snapshot.duration
         self.volume = snapshot.volume
+
+        if snapshot.playerState == .playing {
+            self.onPlaybackStarted?()
+        }
 
         if let newTrack = snapshot.track {
             // Retain existing artwork URL if the new notification omitted it for the same track

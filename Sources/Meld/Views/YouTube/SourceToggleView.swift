@@ -3,14 +3,14 @@ import SwiftUI
 // MARK: - SourceToggleView
 
 /// A two-segment glass capsule that flips the whole app between the
-/// YouTube Music and YouTube video experiences.
+/// YouTube Music and Spotify experiences.
 ///
 /// Lives at the bottom of both sidebars, just above the profile section.
 struct SourceToggleView: View {
-    private static let brandAccent = PackageResourceLookup.brandAccent
-
     @Environment(\.usesLegacyMacOS15UI) private var usesLegacyMacOS15UI
+    @Environment(\.appTint) private var tint
     @Environment(YouTubePlayerService.self) private var youtubePlayer
+    @Environment(SourceManager.self) private var sourceManager: SourceManager?
     @State private var settings = SettingsManager.shared
 
     /// Namespace for the sliding selection highlight.
@@ -28,6 +28,27 @@ struct SourceToggleView: View {
         }
         .accessibilityIdentifier(AccessibilityID.SourceToggle.container)
         .accessibilityElement(children: .contain)
+        .alert(
+            String(localized: "Playback Transition Failed"),
+            isPresented: Binding(
+                get: { self.sourceManager?.transitionAlert != nil },
+                set: {
+                    if !$0 {
+                        self.sourceManager?.clearTransitionAlert()
+                    }
+                }
+            ),
+            actions: {
+                Button(String(localized: "OK"), role: .cancel) {
+                    self.sourceManager?.clearTransitionAlert()
+                }
+            },
+            message: {
+                if let message = self.sourceManager?.transitionAlert {
+                    Text(message)
+                }
+            }
+        )
     }
 
     private var segments: some View {
@@ -40,7 +61,8 @@ struct SourceToggleView: View {
     }
 
     private func segment(for source: AppSource) -> some View {
-        let isSelected = self.settings.appSource == source
+        let isSelected = (self.sourceManager?.selectedTab ?? self.settings.appSource) == source
+        let isSpotifyPlayingExternally = source == .spotify && (self.sourceManager?.spotifyPlayingExternallyCue ?? false)
 
         return Button {
             self.select(source)
@@ -48,9 +70,18 @@ struct SourceToggleView: View {
             HStack(spacing: 5) {
                 Image(systemName: source.icon)
                     .font(.system(size: 10, weight: .semibold))
+
                 Text(source.displayName)
                     .font(.system(size: 11, weight: .semibold))
                     .lineLimit(1)
+
+                if isSpotifyPlayingExternally {
+                    Circle()
+                        .fill(Color.green)
+                        .frame(width: 5, height: 5)
+                        .shadow(color: .green.opacity(0.6), radius: 2)
+                        .help(String(localized: "Spotify is playing in the background"))
+                }
             }
             .frame(maxWidth: .infinity)
             .padding(.vertical, 5)
@@ -61,32 +92,40 @@ struct SourceToggleView: View {
         .background {
             if isSelected {
                 Capsule()
-                    .fill(Self.brandAccent)
+                    .fill(self.tint)
                     .matchedGeometryEffect(id: "selectedSegment", in: self.segmentNamespace)
             }
         }
         .accessibilityIdentifier(AccessibilityID.SourceToggle.segment(for: source))
         .accessibilityLabel(source.displayName)
         .accessibilityAddTraits(isSelected ? [.isSelected] : [])
-        .help(
-            source == .music
-                ? String(localized: "Switch to YouTube Music")
-                : String(localized: "Switch to YouTube")
-        )
+        .help(source.displayName)
     }
 
     private func select(_ source: AppSource) {
-        guard self.settings.appSource != source else { return }
-
-        if source == .music {
-            // Pause a docked video in place — don't hand it to the pop-out.
-            self.youtubePlayer.prepareForSourceSwitch()
+        if let sourceManager = self.sourceManager {
+            guard sourceManager.selectedTab != source else { return }
+            Task {
+                let success = await sourceManager.requestTransition(to: source)
+                if success {
+                    withAnimation(.easeInOut(duration: 0.2)) {
+                        self.settings.appSource = source
+                    }
+                    HapticService.navigation()
+                    DiagnosticsLogger.ui.info("Source toggled to \(source.rawValue)")
+                }
+            }
+        } else {
+            guard self.settings.appSource != source else { return }
+            if source == .music {
+                self.youtubePlayer.prepareForSourceSwitch()
+            }
+            withAnimation(.easeInOut(duration: 0.2)) {
+                self.settings.appSource = source
+            }
+            HapticService.navigation()
+            DiagnosticsLogger.ui.info("Source toggled to \(source.rawValue)")
         }
-        withAnimation(.easeInOut(duration: 0.2)) {
-            self.settings.appSource = source
-        }
-        HapticService.navigation()
-        DiagnosticsLogger.ui.info("Source toggled to \(source.rawValue)")
     }
 }
 

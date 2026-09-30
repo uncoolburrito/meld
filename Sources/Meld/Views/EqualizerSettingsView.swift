@@ -7,6 +7,11 @@ import SwiftUI
 /// picker, a preamp slider, and a master toggle.
 struct EqualizerSettingsView: View {
     @Environment(EqualizerService.self) private var service
+    @Environment(SourceManager.self) private var sourceManager: SourceManager?
+
+    private var isSpotifyActive: Bool {
+        self.sourceManager?.audioSource == .spotify
+    }
 
     private let bands: [EQBand] = EQBand.defaultBands
 
@@ -52,9 +57,28 @@ struct EqualizerSettingsView: View {
 
     var body: some View {
         Form {
+            if self.isSpotifyActive {
+                Section {
+                    HStack(spacing: 12) {
+                        Image(systemName: "exclamationmark.triangle.fill")
+                            .foregroundStyle(.orange)
+                            .font(.title2)
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text("Equalizer Unavailable for Spotify")
+                                .font(.headline)
+                            Text("Meld's DSP audio engine processes internal playback only. External desktop audio cannot be intercepted.")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        }
+                    }
+                    .padding(.vertical, 4)
+                }
+            }
+
             Section {
                 Toggle("Enable Equalizer", isOn: self.isEnabled)
                     .help(String(localized: "Processes Meld's audio output through a 6-band equalizer."))
+                    .disabled(self.isSpotifyActive)
 
                 EQStatusRow(status: self.service.status)
 
@@ -110,9 +134,12 @@ struct EqualizerSettingsView: View {
             } header: {
                 Text(String(localized: "Preamp"))
             }
+            .disabled(self.isSpotifyActive)
         }
         .formStyle(.grouped)
         .frame(minWidth: 460, minHeight: 420)
+        .opacity(self.isSpotifyActive ? 0.45 : 1.0)
+        .animation(.easeInOut(duration: 0.2), value: self.isSpotifyActive)
         .localizedNavigationTitle("Equalizer")
     }
 

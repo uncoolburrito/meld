@@ -197,6 +197,7 @@ final class NowPlayingManager {
 
     /// Reads current player state and pushes the desired claim to the system center.
     private func updateNowPlayingClaim() {
+        guard self.playbackArbiter?.audioSource != .spotify else { return }
         guard let player = self.playerService else { return }
         let track = player.currentTrack.map { song in
             (title: song.title, artist: song.artists.map(\.name).joined(separator: ", "))
@@ -304,8 +305,24 @@ final class NowPlayingManager {
 
         self.observeSettingsChanges()
 
+        AudioRouteObserver.shared.startObserving { [weak self] in
+            guard let self else { return }
+            guard self.playbackArbiter?.audioSource != .spotify else {
+                self.logger.debug("NowPlayingManager: route changed while audioSource is .spotify, keeping hands off")
+                return
+            }
+            self.logger.info("NowPlayingManager: audio route changed, re-asserting remote commands & claim")
+            self.setRemoteCommandsEnabled(true)
+            self.updateNowPlayingClaim()
+        }
+
         self.updateNowPlayingClaim()
         self.restartNowPlayingObservation()
+    }
+
+    /// Configures the arbiter instance for source inspection.
+    func configureArbiter(_ arbiter: PlaybackArbiter) {
+        self.playbackArbiter = arbiter
     }
 
     /// Registers the YouTube video player for media-key routing.
@@ -320,6 +337,41 @@ final class NowPlayingManager {
         self.restartNowPlayingObservation()
         self.updateNowPlayingClaim()
         self.logger.info("NowPlayingManager: YouTube video routing configured")
+    }
+
+    /// Reconfigures Now Playing ownership and remote commands when the active audio source changes.
+    func handleAudioSourceChanged(to source: AppSource) {
+        if source == .spotify {
+            self.logger.info("NowPlayingManager: releasing Now Playing claim and remote commands for Spotify")
+            self.isAssertingNativeClaim = false
+            let center = MPNowPlayingInfoCenter.default()
+            center.nowPlayingInfo = nil
+            center.playbackState = .stopped
+            self.setRemoteCommandsEnabled(false)
+        } else {
+            self.logger.info("NowPlayingManager: reclaiming Now Playing and remote commands for \(source.rawValue)")
+            self.setRemoteCommandsEnabled(true)
+            self.updateNowPlayingClaim()
+        }
+    }
+
+    /// Enables or disables remote command handlers across MPRemoteCommandCenter.
+    func setRemoteCommandsEnabled(_ enabled: Bool) {
+        let commandCenter = MPRemoteCommandCenter.shared()
+        commandCenter.playCommand.isEnabled = enabled
+        commandCenter.pauseCommand.isEnabled = enabled
+        commandCenter.togglePlayPauseCommand.isEnabled = enabled
+        commandCenter.nextTrackCommand.isEnabled = enabled
+        commandCenter.previousTrackCommand.isEnabled = enabled
+        commandCenter.changePlaybackPositionCommand.isEnabled = enabled
+
+        if enabled {
+            let useNextPrev = self.settings.mediaControlStyle == .nextPreviousTrack
+            self.syncSkipCommandAvailability(useNextPrev: useNextPrev)
+        } else {
+            commandCenter.skipForwardCommand.isEnabled = false
+            commandCenter.skipBackwardCommand.isEnabled = false
+        }
     }
 
     /// Whether play/pause media keys should control the YouTube video player.
@@ -338,7 +390,7 @@ final class NowPlayingManager {
         withObservationTracking {
             _ = self.settings.mediaControlStyle
             _ = self.settings.playbackAudioQuality
-        } onChange: {
+        } onChange: { [weak self] in
             Task { @MainActor [weak self] in
                 self?.syncMediaControlSetting()
                 self?.syncPlaybackAudioQualitySetting()

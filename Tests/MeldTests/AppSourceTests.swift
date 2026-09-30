@@ -55,6 +55,15 @@ struct AppSourceTests {
 
     @Test("AppSource restoration falls back to .music for unknown or non-visible sources")
     func appSourceRestorationSafety() {
+        let original = UserDefaults.standard.string(forKey: SettingsManager.Keys.appSource)
+        defer {
+            if let original {
+                UserDefaults.standard.set(original, forKey: SettingsManager.Keys.appSource)
+            } else {
+                UserDefaults.standard.removeObject(forKey: SettingsManager.Keys.appSource)
+            }
+        }
+
         // Unknown raw value fallback
         UserDefaults.standard.set("unknown_service", forKey: SettingsManager.Keys.appSource)
         let restoredUnknown = UserDefaults.standard.string(forKey: SettingsManager.Keys.appSource)
@@ -62,11 +71,18 @@ struct AppSourceTests {
             .flatMap { AppSource.visibleCases.contains($0) ? $0 : nil } ?? .music
         #expect(restoredUnknown == .music)
 
-        // Non-visible source fallback (.spotify is not in visibleCases yet)
+        // Non-visible source fallback (.video is not in visibleCases)
+        UserDefaults.standard.set(AppSource.video.rawValue, forKey: SettingsManager.Keys.appSource)
+        let restoredVideo = UserDefaults.standard.string(forKey: SettingsManager.Keys.appSource)
+            .flatMap { AppSource(rawValue: $0) }
+            .flatMap { AppSource.visibleCases.contains($0) ? $0 : nil } ?? .music
+        #expect(restoredVideo == .music)
+
+        // Visible source restoration (.spotify is in visibleCases)
         UserDefaults.standard.set(AppSource.spotify.rawValue, forKey: SettingsManager.Keys.appSource)
         let restoredSpotify = UserDefaults.standard.string(forKey: SettingsManager.Keys.appSource)
             .flatMap { AppSource(rawValue: $0) }
             .flatMap { AppSource.visibleCases.contains($0) ? $0 : nil } ?? .music
-        #expect(restoredSpotify == .music)
+        #expect(restoredSpotify == .spotify)
     }
 }

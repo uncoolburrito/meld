@@ -8,7 +8,7 @@ struct MusicQueueEntryIdentityTests {
     @Test("Stale metadata cannot overwrite a newer same-video queue entry")
     func staleMetadataCannotOverwriteNewerEntry() async throws {
         let (playerService, mockClient) = self.makePlayerService()
-        defer { SingletonPlayerWebView.shared.tearDown() }
+        defer { SingletonPlayerWebView.shared.currentVideoId = nil }
         let metadataStarted = AsyncGate()
         let releaseMetadata = AsyncGate()
         let first = self.song(id: "first", title: "First", videoId: "shared")
@@ -52,7 +52,7 @@ struct MusicQueueEntryIdentityTests {
     @Test("Metadata enrichment updates the active duplicate entry, not the first match")
     func metadataUpdatesExactActiveEntry() async {
         let (playerService, mockClient) = self.makePlayerService()
-        defer { SingletonPlayerWebView.shared.tearDown() }
+        defer { SingletonPlayerWebView.shared.currentVideoId = nil }
         let first = self.song(id: "first", title: "First complete", videoId: "shared")
         let second = Song(
             id: "second",
@@ -177,7 +177,7 @@ struct MusicQueueEntryIdentityTests {
     @Test("Clearing a detached playback queue gives the standalone song a fresh entry ID")
     func clearQueueDoesNotReassignUnrelatedEntryID() async throws {
         let (playerService, _) = self.makePlayerService()
-        defer { SingletonPlayerWebView.shared.tearDown() }
+        defer { SingletonPlayerWebView.shared.currentVideoId = nil }
         let first = self.song(id: "first", title: "First", videoId: "first")
         let second = self.song(id: "second", title: "Second", videoId: "second")
         let standalone = self.song(id: "standalone", title: "Standalone", videoId: "standalone")
@@ -198,7 +198,7 @@ struct MusicQueueEntryIdentityTests {
         let (playerService, _) = self.makePlayerService()
         defer {
             playerService.clearSavedQueue()
-            SingletonPlayerWebView.shared.tearDown()
+            SingletonPlayerWebView.shared.currentVideoId = nil
         }
         playerService.clearSavedQueue()
         let queued = self.song(id: "queued", title: "Queued", videoId: "queued")
@@ -225,7 +225,7 @@ struct MusicQueueEntryIdentityTests {
     @Test("Deferred queue selection follows the captured entry ID after insertion")
     func deferredSelectionFollowsEntryID() async {
         let (playerService, _) = self.makePlayerService()
-        defer { SingletonPlayerWebView.shared.tearDown() }
+        defer { SingletonPlayerWebView.shared.currentVideoId = nil }
         let first = self.song(id: "first", title: "First", videoId: "first")
         let selected = self.song(id: "selected", title: "Selected", videoId: "selected")
         let inserted = self.song(id: "inserted", title: "Inserted", videoId: "inserted")
@@ -253,7 +253,7 @@ struct MusicQueueEntryIdentityTests {
     @Test("Direct video metadata has no queue-entry owner")
     func directVideoMetadataDoesNotEnrichPreviousQueueEntry() async {
         let (playerService, mockClient) = self.makePlayerService()
-        defer { SingletonPlayerWebView.shared.tearDown() }
+        defer { SingletonPlayerWebView.shared.currentVideoId = nil }
         let queued = Song(
             id: "queued",
             title: "Loading...",
@@ -279,7 +279,7 @@ struct MusicQueueEntryIdentityTests {
     @Test("Direct video playback matching a queued song remains detached")
     func directVideoPlaybackDoesNotAdoptMatchingQueueEntry() async {
         let (playerService, mockClient) = self.makePlayerService()
-        defer { SingletonPlayerWebView.shared.tearDown() }
+        defer { SingletonPlayerWebView.shared.currentVideoId = nil }
         let queued = self.song(id: "queued-logical", title: "Queued", videoId: "shared-video")
         let other = self.song(id: "other", title: "Other", videoId: "other-video")
         mockClient.songResponses[queued.videoId] = self.song(
@@ -302,7 +302,7 @@ struct MusicQueueEntryIdentityTests {
         let (playerService, mockClient) = self.makePlayerService()
         defer {
             playerService.clearSavedQueue()
-            SingletonPlayerWebView.shared.tearDown()
+            SingletonPlayerWebView.shared.currentVideoId = nil
         }
         playerService.clearSavedQueue()
         let incomplete = Song(
@@ -335,7 +335,7 @@ struct MusicQueueEntryIdentityTests {
     @Test("Background enrichment cannot overwrite newer complete entry metadata")
     func backgroundEnrichmentPreservesNewerEntryMetadata() async {
         let (playerService, mockClient) = self.makePlayerService()
-        defer { SingletonPlayerWebView.shared.tearDown() }
+        defer { SingletonPlayerWebView.shared.currentVideoId = nil }
         let entryID = UUID()
         let incomplete = Song(
             id: "enrichment-logical",
@@ -382,7 +382,7 @@ struct MusicQueueEntryIdentityTests {
     @Test("Pausing does not discard metadata for the same active entry")
     func pausePreservesActiveEntryMetadataRequest() async {
         let (playerService, mockClient) = self.makePlayerService()
-        defer { SingletonPlayerWebView.shared.tearDown() }
+        defer { SingletonPlayerWebView.shared.currentVideoId = nil }
         let song = Song(
             id: "metadata",
             title: "Loading...",
@@ -417,7 +417,7 @@ struct MusicQueueEntryIdentityTests {
     @Test("Duplicate removal retains the active entry owning in-flight metadata")
     func duplicateRemovalRetainsActiveMetadataOwner() async {
         let (playerService, mockClient) = self.makePlayerService()
-        defer { SingletonPlayerWebView.shared.tearDown() }
+        defer { SingletonPlayerWebView.shared.currentVideoId = nil }
         let first = self.song(id: "first", title: "First complete", videoId: "shared")
         let active = Song(
             id: "active",
@@ -469,7 +469,6 @@ struct MusicQueueEntryIdentityTests {
     }
 
     private func makePlayerService() -> (PlayerService, MockYTMusicClient) {
-        SingletonPlayerWebView.shared.tearDown()
         SingletonPlayerWebView.shared.currentVideoId = nil
         let mockClient = MockYTMusicClient()
         let playerService = PlayerService()

@@ -34,6 +34,7 @@ final class SettingsManager {
         static let ambientBackdropEnabled = "settings.ambientBackdropEnabled"
         static let ambientBackdropStyle = "settings.ambientBackdropStyle"
         static let popOutVideoOnNavigateAway = "settings.popOutVideoOnNavigateAway"
+        static let spotifyVolumeGainOffset = "settings.spotifyVolumeGainOffset"
         #if DEBUG
             static let useLegacyMacOS15UI = "settings.debug.useLegacyMacOS15UI"
         #endif
@@ -245,6 +246,13 @@ final class SettingsManager {
     var appSource: AppSource {
         didSet {
             UserDefaults.standard.set(self.appSource.rawValue, forKey: Keys.appSource)
+        }
+    }
+
+    /// Per-source volume gain offset in decibels for Spotify (default: 0.0 dB).
+    var spotifyVolumeGainOffset: Double {
+        didSet {
+            UserDefaults.standard.set(self.spotifyVolumeGainOffset, forKey: Keys.spotifyVolumeGainOffset)
         }
     }
 
@@ -585,6 +593,12 @@ final class SettingsManager {
             self.appSource = .music
         }
 
+        if let gain = UserDefaults.standard.object(forKey: Keys.spotifyVolumeGainOffset) as? Double {
+            self.spotifyVolumeGainOffset = gain
+        } else {
+            self.spotifyVolumeGainOffset = 0.0
+        }
+
         AppLocalization.setLanguage(self.contentLanguage.languageCode)
 
         // Persist migration from legacy lastFMEnabled key (must run after all properties initialized)
@@ -611,5 +625,15 @@ final class SettingsManager {
     /// Returns the NavigationItem to use on app launch.
     var launchNavigationItem: NavigationItem {
         self.launchPage.navigationItem
+    }
+
+    /// Returns the linear volume gain multiplier for the given content source.
+    func volumeGainMultiplier(for source: AppSource) -> Double {
+        switch source {
+        case .spotify:
+            pow(10.0, self.spotifyVolumeGainOffset / 20.0)
+        case .music, .video:
+            1.0
+        }
     }
 }

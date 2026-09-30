@@ -256,6 +256,20 @@ extension SingletonPlayerWebView {
         webView.evaluateJavaScript(script, completionHandler: nil)
     }
 
+    /// Actively suppresses HTML5 media playback and dual-session assertions.
+    func suppressPlayback() {
+        self.pause()
+        self.suppressSurvivingDocumentMedia(self.webView)
+    }
+
+    /// Lifts media suppression when returning to internal web playback.
+    func unsuppressPlayback() {
+        guard let webView else { return }
+        webView.evaluateJavaScript("""
+            window.__kasetPlaybackSuppressed = false;
+        """, completionHandler: nil)
+    }
+
     /// Skip to next track.
     func next() {
         guard let webView else { return }

@@ -46,6 +46,20 @@ This document tracks all modifications made to upstream [Kaset](https://github.c
 - `Sources/Meld/Resources/AppIcon.icon`: Removed. Replaced with pure `AppIcon.appiconset` to enable slot-specific tuning (Icon Composer bundles apply a single uniform raster across all resolutions and cannot render distinct crops for small slots).
 - `Scripts/build-app.sh`: Updated to compile `Assets.xcassets` directly with `actool` and improved `DEVELOPER_DIR` fallback to avoid overriding active Xcode selections on CI runners.
 
+### Phase 3: Extend PlaybackArbiter & Wire SourceManager
+- `Sources/Meld/Services/Player/PlaybackArbiter.swift`: Extended with `audioSource` (audible engine) and `selectedTab` (visible surface) split. Implemented Path A (passive external Spotify detection) and Path B (explicit source toggle transition with asymmetric timeout: force-pauses internal WebKit via suppression, aborts and alerts if Spotify fails to pause).
+- `Sources/Meld/Services/Player/SourceManager.swift`: Created central coordinator unifying `YouTubeMusicSource` and `SpotifySource` behind `MusicSourceProtocol`. Publishes unified playback state, delegates transport verbs, and applies per-source volume gain offsets.
+- `Sources/Meld/Utilities/AppTint.swift`: Added `EnvironmentValues.appTint` and `.appTint(_:)` modifier as the single injectable accent tint across the root view hierarchy, ensuring zero new direct reads of `AccentColor` or `brandAccent`.
+- `Sources/Meld/Services/Audio/AudioRouteObserver.swift`: Added CoreAudio HAL default output device change listener. Signals `NowPlayingManager` to recover `MPRemoteCommandCenter` handlers upon Bluetooth route switches without using `DispatchQueue`.
+- `Sources/Meld/Services/Player/NowPlayingManager.swift`: Added `handleAudioSourceChanged(to:)`, conditional remote command disabling, and tagged Now Playing claim suppression when `audioSource == .spotify` to prevent double-skipping media keys with Spotify.app.
+- `Sources/Meld/Services/AI/FoundationModelsService.swift`: Added `currentAudioSource: AppSource` with Terms v10 AI Gate: `isAvailable` and generation methods fail closed whenever `audioSource != .music`.
+- `Sources/Meld/Services/SettingsManager.swift`: Added `spotifyVolumeGainOffset` preference and `volumeGainMultiplier(for:)`.
+- `Sources/Meld/Views/YouTube/SourceToggleView.swift`: Updated capsule to toggle between `.music` and `.spotify` (with `.video` hidden), animated transition, and non-modal background playing cue.
+- `Sources/Meld/Views/EqualizerSettingsView.swift`: Visibly greys out and disables parametric EQ when `audioSource == .spotify`.
+- `Sources/Meld/Views/PlayerBar.swift`: Routed all accent colours through `@Environment(\.appTint)`, wired transport controls, seek bar, and track metadata to `SourceManager` for Spotify playback, and disabled YTM-only actions when Spotify is active.
+- `Sources/Meld/Views/Spotify/SpotifySidebar.swift` & `SpotifyContentView.swift`: Implemented sidebar navigation and detail content for the Spotify experience (including Now Playing surface, debug panel integration, and missing application guidance).
+- `Tests/MeldTests/Phase3ArbiterAndSourceManagerTests.swift`: Unit test suite covering Path A, Path B, AI gating, command delegation, volume gain offset, and audio route changes.
+
 ### CI & Workflows
 - `.github/workflows/release.yml.disabled`: Renamed from `release.yml` and disabled. The upstream release pipeline publishes to `sozercan`'s Homebrew tap and Sparkle appcast with upstream signing identities, neither of which are ours. It will need a full rewrite before any public release, rather than a string rename.
 

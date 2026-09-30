@@ -73,6 +73,7 @@ struct MainWindow: View { // swiftlint:disable:this type_body_length
     @State private var isCommandBarPresented = false
     @State private var whatsNewToPresent: PresentedWhatsNew?
     @State private var selectedSidebarPinnedItem: SidebarPinnedItem?
+    @State private var spotifyNavigationSelection: SpotifyNavigationItem? = .nowPlaying
     @State private var contentResetID = UUID()
     @State private var guestRefreshTask: Task<Void, Never>?
     @State private var accountResolutionFailOpenGeneration: UInt64?
@@ -525,7 +526,8 @@ struct MainWindow: View { // swiftlint:disable:this type_body_length
         ZStack(alignment: .trailing) {
             // Main navigation content — sidebar and detail swap with the active source.
             NavigationSplitView(columnVisibility: self.$columnVisibility) {
-                if self.settings.appSource == .music {
+                switch self.settings.appSource {
+                case .music:
                     Sidebar(
                         selection: self.$navigationSelection,
                         pinnedSelection: self.$selectedSidebarPinnedItem,
@@ -544,7 +546,11 @@ struct MainWindow: View { // swiftlint:disable:this type_body_length
                             self.pinnedNavigationPaths[item.contentId] = NavigationPath()
                         }
                     )
-                } else {
+                case .spotify:
+                    SpotifySidebar(
+                        selection: self.$spotifyNavigationSelection
+                    )
+                case .video:
                     YouTubeSidebar(
                         selection: self.$youtubeNavigationSelection,
                         onReselect: { _ in
@@ -553,13 +559,18 @@ struct MainWindow: View { // swiftlint:disable:this type_body_length
                     )
                 }
             } detail: {
-                if self.settings.appSource == .music {
+                switch self.settings.appSource {
+                case .music:
                     self.detailView(
                         for: self.navigationSelection,
                         pinnedItem: self.selectedSidebarPinnedItem,
                         client: self.client
                     )
-                } else {
+                case .spotify:
+                    SpotifyContentView(
+                        selection: self.spotifyNavigationSelection
+                    )
+                case .video:
                     YouTubeContentView(
                         selection: self.youtubeNavigationSelection,
                         store: self.youtubeStore

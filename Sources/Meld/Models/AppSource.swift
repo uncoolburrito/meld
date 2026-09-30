@@ -44,8 +44,8 @@ enum AppSource: String, CaseIterable, Identifiable, Codable, Sendable {
     }
 
     /// Sources currently exposed in the sidebar source toggle capsule.
-    /// In Phase 3, this will expand to include `.spotify` once the UI is wired.
+    /// Exposes Spotify beside Music; YouTube is hidden.
     static var visibleCases: [AppSource] {
-        [.music, .video]
+        [.music, .spotify]
     }
 }
