@@ -1,7 +1,7 @@
 import SwiftUI
 
 extension EnvironmentValues {
-    // The app-wide injectable accent tint color.
+    /// The app-wide injectable accent tint color.
     @Entry var appTint: Color = PackageResourceLookup.brandAccent
 }
 
