@@ -573,6 +573,8 @@
 "New Ask Gemini chat ready" = "Nieuwe chat met Vraag Gemini is klaar";
 "Spotify" = "Spotify";
 "When switching sources" = "Bij het wisselen van bronnen";
-"Resume where I left off" = "Hervatten waar ik gebleven was";
 "Pause only" = "Alleen pauzeren";
-"Choose whether to resume playback or stay paused when switching between music sources" = "Kies of u het afspelen wilt hervatten of gepauzeerd wilt laten bij het wisselen tussen muziekbronnen";
+"Keep playing" = "Blijven afspelen";
+"Pause, resume when I switch back" = "Pauzeren, hervatten bij terugkeren";
+"Spotify is playing in the background" = "Spotify speelt af op de achtergrond";
+"YouTube Music is playing in the background" = "YouTube Music speelt af op de achtergrond";

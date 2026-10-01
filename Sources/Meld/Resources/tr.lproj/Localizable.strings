@@ -573,6 +573,8 @@
 "New Ask Gemini chat ready" = "Yeni Gemini sohbeti hazır";
 "Spotify" = "Spotify";
 "When switching sources" = "Kaynaklar arasında geçiş yaparken";
-"Resume where I left off" = "Kaldığım yerden devam et";
 "Pause only" = "Yalnızca duraklat";
-"Choose whether to resume playback or stay paused when switching between music sources" = "Müzik kaynakları arasında geçiş yaparken oynatmanın devam etmesini veya duraklatılmış kalmasını seçin";
+"Keep playing" = "Çalmaya devam et";
+"Pause, resume when I switch back" = "Duraklat, geri döndüğümde devam et";
+"Spotify is playing in the background" = "Spotify arka planda çalıyor";
+"YouTube Music is playing in the background" = "YouTube Music arka planda çalıyor";

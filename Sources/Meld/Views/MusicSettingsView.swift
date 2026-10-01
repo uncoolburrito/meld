@@ -35,7 +35,6 @@ struct MusicSettingsView: View {
                         Text(behavior.displayName).tag(behavior)
                     }
                 }
-                .help(String(localized: "Choose whether to resume playback or stay paused when switching between music sources"))
 
                 Toggle("Remember Shuffle & Repeat", isOn: self.$settings.rememberPlaybackSettings)
                     .help(String(localized: "Save shuffle and repeat settings across app restarts"))

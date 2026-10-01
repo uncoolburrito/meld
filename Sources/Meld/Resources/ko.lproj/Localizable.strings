@@ -573,6 +573,8 @@
 "New Ask Gemini chat ready" = "새 Gemini 채팅이 준비되었습니다";
 "Spotify" = "Spotify";
 "When switching sources" = "소스 전환 시";
-"Resume where I left off" = "마지막 재생 위치에서 재개";
 "Pause only" = "일시 정지만";
-"Choose whether to resume playback or stay paused when switching between music sources" = "음악 소스를 전환할 때 재생을 재개할지 또는 일시 정지 상태를 유지할지 선택합니다";
+"Keep playing" = "계속 재생";
+"Pause, resume when I switch back" = "일시 정지, 다시 전환할 때 재개";
+"Spotify is playing in the background" = "Spotify가 백그라운드에서 재생 중입니다";
+"YouTube Music is playing in the background" = "YouTube Music이 백그라운드에서 재생 중입니다";

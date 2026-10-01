@@ -42,6 +42,8 @@
 "New Ask Gemini chat ready" = "New Ask Gemini chat ready";
 "Spotify" = "Spotify";
 "When switching sources" = "When switching sources";
-"Resume where I left off" = "Resume where I left off";
 "Pause only" = "Pause only";
-"Choose whether to resume playback or stay paused when switching between music sources" = "Choose whether to resume playback or stay paused when switching between music sources";
+"Keep playing" = "Keep playing";
+"Pause, resume when I switch back" = "Pause, resume when I switch back";
+"Spotify is playing in the background" = "Spotify is playing in the background";
+"YouTube Music is playing in the background" = "YouTube Music is playing in the background";

@@ -573,6 +573,8 @@
 "New Ask Gemini chat ready" = "Ny Fråga Gemini-chatt är klar";
 "Spotify" = "Spotify";
 "When switching sources" = "Vid byte av källor";
-"Resume where I left off" = "Återuppta där jag slutade";
 "Pause only" = "Pausa endast";
-"Choose whether to resume playback or stay paused when switching between music sources" = "Välj om uppspelningen ska återupptas eller förbli pausad vid byte mellan musikkällor";
+"Keep playing" = "Fortsätt spela";
+"Pause, resume when I switch back" = "Pausa, återuppta när jag växlar tillbaka";
+"Spotify is playing in the background" = "Spotify spelas i bakgrunden";
+"YouTube Music is playing in the background" = "YouTube Music spelas i bakgrunden";

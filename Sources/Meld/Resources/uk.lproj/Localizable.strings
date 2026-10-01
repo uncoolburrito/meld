@@ -573,6 +573,8 @@
 "New Ask Gemini chat ready" = "Новий чат «Запитати Gemini» готовий";
 "Spotify" = "Spotify";
 "When switching sources" = "Під час перемикання джерел";
-"Resume where I left off" = "Продовжити з місця зупинки";
 "Pause only" = "Лише пауза";
-"Choose whether to resume playback or stay paused when switching between music sources" = "Виберіть, чи відновлювати відтворення, чи залишати паузу під час перемикання між джерелами музики";
+"Keep playing" = "Продовжувати відтворення";
+"Pause, resume when I switch back" = "Призупинити, відновити після повернення";
+"Spotify is playing in the background" = "Spotify відтворюється у фоновому режимі";
+"YouTube Music is playing in the background" = "YouTube Music відтворюється у фоновому режимі";
