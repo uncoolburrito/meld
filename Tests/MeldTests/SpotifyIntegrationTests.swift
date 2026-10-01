@@ -16,6 +16,7 @@ final class MockSpotifyScriptController: SpotifyScriptControlling, @unchecked Se
     var previousCalled = false
     var seekPosition: TimeInterval?
     var volumeSet: Double?
+    var pauseKeepsPlaying = false
 
     var snapshotToReturn = SpotifyPlaybackSnapshot(
         playerState: .playing,
@@ -55,13 +56,15 @@ final class MockSpotifyScriptController: SpotifyScriptControlling, @unchecked Se
         guard self.isInstalled else { throw SpotifySourceError.applicationNotFound }
         guard self.isRunning else { throw SpotifySourceError.applicationNotRunning }
         self.pauseCalled = true
-        self.snapshotToReturn = SpotifyPlaybackSnapshot(
-            playerState: .paused,
-            position: self.snapshotToReturn.position,
-            duration: self.snapshotToReturn.duration,
-            volume: self.snapshotToReturn.volume,
-            track: self.snapshotToReturn.track
-        )
+        if !self.pauseKeepsPlaying {
+            self.snapshotToReturn = SpotifyPlaybackSnapshot(
+                playerState: .paused,
+                position: self.snapshotToReturn.position,
+                duration: self.snapshotToReturn.duration,
+                volume: self.snapshotToReturn.volume,
+                track: self.snapshotToReturn.track
+            )
+        }
     }
 
     func togglePlayPause() async throws {

@@ -1,3 +1,4 @@
+import AppKit
 import Foundation
 import Observation
 
@@ -36,12 +37,21 @@ final class SpotifySource: MusicSourceProtocol {
         self.notificationMonitor = notificationMonitor
 
         self.setupNotificationObservation()
+        self.setupTerminationObservation()
 
         if autoRefresh {
             Task { [weak self] in
                 await self?.refreshState()
             }
         }
+    }
+
+    @ObservationIgnored
+    private var capturedFadeVolume: Double?
+
+    /// True while Spotify volume is actively being faded during a source transition.
+    var isFadingVolume: Bool {
+        self.capturedFadeVolume != nil
     }
 
     var isInstalled: Bool {
@@ -171,6 +181,51 @@ final class SpotifySource: MusicSourceProtocol {
         self.volume = clamped
     }
 
+    // MARK: - Crossfade Support
+
+    /// Prepares Spotify for a volume crossfade by capturing its current volume.
+    @discardableResult
+    func beginVolumeFade() -> Double {
+        let original = self.volume
+        self.capturedFadeVolume = original
+        return original
+    }
+
+    /// Sets Spotify sound volume during a crossfade step without tripping the echo guard or mutating self.volume.
+    func stepFadeVolume(_ volume: Double) async {
+        guard self.isInstalled, self.isRunning else { return }
+        let clamped = max(0.0, min(1.0, volume))
+        try? await self.scriptController.setVolume(clamped)
+    }
+
+    /// Restores Spotify sound volume after a fade sequence or on transition abort/error.
+    func endVolumeFade(restoring volume: Double? = nil) async {
+        let volumeToRestore = volume ?? self.capturedFadeVolume ?? self.volume
+        self.capturedFadeVolume = nil
+        guard self.isInstalled, self.isRunning else { return }
+        try? await self.scriptController.setVolume(volumeToRestore)
+    }
+
+    /// Synchronous restore executed on NSApplication.willTerminateNotification.
+    func emergencyRestoreVolume() {
+        guard let volumeToRestore = self.capturedFadeVolume else { return }
+        self.capturedFadeVolume = nil
+        let clamped = max(0, min(100, Int(volumeToRestore * 100)))
+        let script = "tell application id \"com.spotify.client\" to set sound volume to \(clamped)"
+        var error: NSDictionary?
+        NSAppleScript(source: script)?.executeAndReturnError(&error)
+    }
+
+    private func setupTerminationObservation() {
+        NotificationCenter.default.addObserver(
+            forName: NSApplication.willTerminateNotification,
+            object: nil,
+            queue: .main
+        ) { [weak self] _ in
+            self?.emergencyRestoreVolume()
+        }
+    }
+
     func launchHidden() async throws {
         guard self.isInstalled else {
             throw SpotifySourceError.applicationNotFound
@@ -234,7 +289,9 @@ final class SpotifySource: MusicSourceProtocol {
         self.transportState = snapshot.playerState.transportState
         self.playbackPosition = snapshot.position
         self.playbackDuration = snapshot.duration
-        self.volume = snapshot.volume
+        if !self.isFadingVolume {
+            self.volume = snapshot.volume
+        }
 
         if snapshot.playerState == .playing {
             self.onPlaybackStarted?()

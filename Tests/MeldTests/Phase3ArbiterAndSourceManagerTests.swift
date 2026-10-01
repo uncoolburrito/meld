@@ -439,5 +439,72 @@ extension SingletonPlayerWebViewTestSuite {
             #expect(harness.arbiter.isInterruptedByToggle(.music) == false)
             #expect(harness.arbiter.isInterruptedByToggle(.spotify) == false)
         }
+
+        // MARK: - Smooth Fade Tests
+
+        @Test("Smooth fade: outgoing source fades out and restores original volume after pause")
+        func smoothFadeOutgoingSourceRestoresVolume() async {
+            let harness = self.createHarness()
+            harness.arbiter.fadeStepDuration = 0.001
+            defer {
+                SingletonPlayerWebView.shared.unsuppressPlayback()
+            }
+
+            // Set up Spotify playing at 0.75 volume
+            _ = await harness.arbiter.requestTransition(to: .spotify)
+            harness.mockScript.snapshotToReturn = SpotifyPlaybackSnapshot(
+                playerState: .playing,
+                position: 10.0,
+                duration: 180.0,
+                volume: 0.75,
+                track: nil
+            )
+            await harness.spotifySource.refreshState()
+            #expect(harness.spotifySource.volume == 0.75)
+
+            // Transition to Music: Spotify should fade out, pause, and restore volume to 0.75
+            let transitioned = await harness.arbiter.requestTransition(to: .music)
+            #expect(transitioned == true)
+            #expect(harness.mockScript.volumeSet == 0.75)
+            #expect(harness.spotifySource.isFadingVolume == false)
+        }
+
+        @Test("Smooth fade: aborted transition restores Spotify volume immediately")
+        func abortedTransitionRestoresSpotifyVolume() async {
+            let harness = self.createHarness()
+            harness.arbiter.fadeStepDuration = 0.001
+            defer {
+                SingletonPlayerWebView.shared.unsuppressPlayback()
+            }
+
+            // Set up Spotify playing
+            _ = await harness.arbiter.requestTransition(to: .spotify)
+            harness.mockScript.snapshotToReturn = SpotifyPlaybackSnapshot(
+                playerState: .playing,
+                position: 10.0,
+                duration: 180.0,
+                volume: 0.65,
+                track: nil
+            )
+            await harness.spotifySource.refreshState()
+            #expect(harness.spotifySource.volume == 0.65)
+
+            // Make pause fail/remain playing so transition aborts
+            harness.mockScript.pauseKeepsPlaying = true
+            harness.mockScript.snapshotToReturn = SpotifyPlaybackSnapshot(
+                playerState: .playing,
+                position: 10.0,
+                duration: 180.0,
+                volume: 0.65,
+                track: nil
+            )
+
+            let transitioned = await harness.arbiter.requestTransition(to: .music)
+            #expect(transitioned == false)
+            #expect(harness.arbiter.transitionAlert != nil)
+            // Volume must be restored even though transition was aborted
+            #expect(harness.mockScript.volumeSet == 0.65)
+            #expect(harness.spotifySource.isFadingVolume == false)
+        }
     }
 }

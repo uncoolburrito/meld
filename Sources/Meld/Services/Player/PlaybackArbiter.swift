@@ -134,6 +134,9 @@ final class PlaybackArbiter {
 
     // MARK: - Path B: Toggle-Driven Transition (Asymmetric Timeout)
 
+    /// Duration of each step in the crossfade animation (5 steps total ≈ 250ms).
+    var fadeStepDuration: TimeInterval = 0.050
+
     /// Requests a transition to the target source.
     ///
     /// Implements asymmetric timeout:
@@ -158,9 +161,43 @@ final class PlaybackArbiter {
 
         let outgoingSource = self.audioSource
         let outgoingWasPlaying = self.isSourcePlaying(outgoingSource)
-        let behavior = SettingsManager.shared.sourceSwitchBehavior
+        let outgoingOriginalVolume = self.originalVolume(for: outgoingSource)
 
-        let success: Bool = switch targetSource {
+        // 1. If outgoing source was playing, fade out to 0 over ~250ms
+        if outgoingWasPlaying {
+            await self.fadeOutSource(outgoingSource, originalVolume: outgoingOriginalVolume)
+        }
+
+        let success = await self.performTransition(to: targetSource)
+
+        // 2. Immediately restore outgoing source's original volume (so next resume is not silent)
+        await self.restoreOriginalVolume(outgoingOriginalVolume, for: outgoingSource)
+
+        guard success else { return false }
+
+        // 3. Resume mode: auto-resume if target was previously interrupted by a toggle
+        await self.handleResumePostTransition(
+            targetSource: targetSource,
+            outgoingSource: outgoingSource,
+            outgoingWasPlaying: outgoingWasPlaying
+        )
+
+        return true
+    }
+
+    private func originalVolume(for source: AppSource) -> Double {
+        switch source {
+        case .music:
+            self.playerService.volume
+        case .spotify:
+            self.spotifySource?.beginVolumeFade() ?? 1.0
+        case .video:
+            self.youtubePlayerService.volume
+        }
+    }
+
+    private func performTransition(to targetSource: AppSource) async -> Bool {
+        switch targetSource {
         case .spotify:
             await self.transitionToSpotify()
         case .music:
@@ -168,22 +205,83 @@ final class PlaybackArbiter {
         case .video:
             await self.transitionToVideo()
         }
+    }
 
-        guard success else { return false }
+    private func handleResumePostTransition(
+        targetSource: AppSource,
+        outgoingSource: AppSource,
+        outgoingWasPlaying: Bool
+    ) async {
+        guard SettingsManager.shared.sourceSwitchBehavior == .resume else { return }
 
-        // Resume mode: auto-resume if target was previously interrupted by a toggle
-        if behavior == .resume {
-            if outgoingWasPlaying {
-                self.interruptedByToggleSources.insert(outgoingSource)
-                self.logger.info("Arbiter: marked \(outgoingSource.rawValue) as interrupted by toggle")
-            }
-            if self.interruptedByToggleSources.remove(targetSource) != nil {
-                self.logger.info("Arbiter: resuming \(targetSource.rawValue) interrupted by earlier toggle")
-                await self.resumeSource(targetSource)
+        if outgoingWasPlaying {
+            self.interruptedByToggleSources.insert(outgoingSource)
+            self.logger.info("Arbiter: marked \(outgoingSource.rawValue) as interrupted by toggle")
+        }
+        if self.interruptedByToggleSources.remove(targetSource) != nil {
+            self.logger.info("Arbiter: resuming \(targetSource.rawValue) interrupted by earlier toggle")
+            let incomingTargetVolume = self.originalVolume(for: targetSource)
+
+            // Start incoming at 0 volume, resume, and fade in over ~250ms
+            await self.applyTransientVolume(0.0, for: targetSource)
+            await self.resumeSource(targetSource)
+            await self.fadeInSource(targetSource, targetVolume: incomingTargetVolume)
+
+            if targetSource == .spotify {
+                await self.spotifySource?.endVolumeFade(restoring: incomingTargetVolume)
             }
         }
+    }
 
-        return true
+    private func fadeOutSource(_ source: AppSource, originalVolume: Double) async {
+        guard originalVolume > 0 else { return }
+        let steps = 5
+        let stepSeconds = self.fadeStepDuration
+        for step in (0 ..< steps).reversed() {
+            let volume = (Double(step) / Double(steps)) * originalVolume
+            await self.applyTransientVolume(volume, for: source)
+            try? await Task.sleep(nanoseconds: UInt64(stepSeconds * 1_000_000_000))
+        }
+        await self.applyTransientVolume(0.0, for: source)
+    }
+
+    private func fadeInSource(_ source: AppSource, targetVolume: Double) async {
+        guard targetVolume > 0 else { return }
+        let steps = 5
+        let stepSeconds = self.fadeStepDuration
+        await self.applyTransientVolume(0.0, for: source)
+        for step in 1 ... steps {
+            try? await Task.sleep(nanoseconds: UInt64(stepSeconds * 1_000_000_000))
+            let volume = (Double(step) / Double(steps)) * targetVolume
+            await self.applyTransientVolume(volume, for: source)
+        }
+        await self.applyTransientVolume(targetVolume, for: source)
+    }
+
+    private func applyTransientVolume(_ volume: Double, for source: AppSource) async {
+        switch source {
+        case .music:
+            SingletonPlayerWebView.shared.setVolume(volume)
+        case .spotify:
+            if let spotify = self.spotifySource {
+                await spotify.stepFadeVolume(volume)
+            }
+        case .video:
+            self.youtubePlayerService.volume = volume
+        }
+    }
+
+    private func restoreOriginalVolume(_ volume: Double, for source: AppSource) async {
+        switch source {
+        case .music:
+            SingletonPlayerWebView.shared.setVolume(volume)
+        case .spotify:
+            if let spotify = self.spotifySource {
+                await spotify.endVolumeFade(restoring: volume)
+            }
+        case .video:
+            self.youtubePlayerService.volume = volume
+        }
     }
 
     private func resumeSource(_ source: AppSource) async {
