@@ -78,7 +78,21 @@ final class SpotifySource: MusicSourceProtocol {
 
         self.notificationMonitor.markCommandDispatched(expectedState: .paused)
         try await self.scriptController.pause()
-        self.transportState = .paused
+        if let snapshot = try? await self.scriptController.fetchPlaybackSnapshot() {
+            self.apply(snapshot: snapshot)
+        }
+    }
+
+    /// Confirms with Spotify whether playback is currently paused or stopped by querying a fresh snapshot.
+    func confirmPaused() async -> Bool {
+        guard self.isInstalled, self.isRunning else { return true }
+        do {
+            let snapshot = try await self.scriptController.fetchPlaybackSnapshot()
+            self.apply(snapshot: snapshot)
+            return snapshot.playerState != .playing
+        } catch {
+            return false
+        }
     }
 
     func toggle() async throws {

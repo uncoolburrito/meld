@@ -121,9 +121,8 @@ final class SourceManager {
     }
 
     func setVolume(_ volume: Double) async throws {
-        let gainMultiplier = SettingsManager.shared.volumeGainMultiplier(for: self.audioSource)
-        let adjustedVolume = max(0.0, min(1.0, volume * gainMultiplier))
-        try await self.activeSource.setVolume(adjustedVolume)
+        let clampedVolume = max(0.0, min(1.0, volume))
+        try await self.activeSource.setVolume(clampedVolume)
     }
 
     // MARK: - Transitions

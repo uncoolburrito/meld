@@ -135,7 +135,7 @@ final class NowPlayingManager {
     /// media keys control it instead of the music player. Guarded so music
     /// behavior is identical when video routing is not configured/active.
     private weak var youtubePlayerService: YouTubePlayerService?
-    private weak var playbackArbiter: PlaybackArbiter?
+    private(set) weak var playbackArbiter: PlaybackArbiter?
     private let settings = SettingsManager.shared
     private let remoteMusicCommandIngress = RemoteMusicCommandIngress()
     private static let defaultSkipInterval: TimeInterval = 15
@@ -321,7 +321,7 @@ final class NowPlayingManager {
     }
 
     /// Configures the arbiter instance for source inspection.
-    func configureArbiter(_ arbiter: PlaybackArbiter) {
+    func configureArbiter(_ arbiter: PlaybackArbiter?) {
         self.playbackArbiter = arbiter
     }
 

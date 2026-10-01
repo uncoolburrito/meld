@@ -16,16 +16,18 @@ struct SpotifyContentView: View {
                 switch self.selection ?? .nowPlaying {
                 case .nowPlaying:
                     self.nowPlayingView
-                case .diagnostics:
-                    if let spotify = self.sourceManager?.spotifySource {
-                        SpotifyDebugView(spotifySource: spotify)
-                    } else {
-                        ContentUnavailableView(
-                            String(localized: "Spotify Unavailable"),
-                            systemImage: "waveform",
-                            description: Text(String(localized: "Spotify source is not initialized."))
-                        )
-                    }
+                #if DEBUG
+                    case .diagnostics:
+                        if let spotify = self.sourceManager?.spotifySource {
+                            SpotifyDebugView(spotifySource: spotify)
+                        } else {
+                            ContentUnavailableView(
+                                String(localized: "Spotify Unavailable"),
+                                systemImage: "waveform",
+                                description: Text(String(localized: "Spotify source is not initialized."))
+                            )
+                        }
+                #endif
                 }
             }
         }

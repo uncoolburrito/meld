@@ -54,35 +54,31 @@ struct AppSourceTests {
     }
 
     @Test("AppSource restoration falls back to .music for unknown or non-visible sources")
-    func appSourceRestorationSafety() {
-        let original = UserDefaults.standard.string(forKey: SettingsManager.Keys.appSource)
+    func appSourceRestorationSafety() throws {
+        let suiteName = "test-appSourceRestorationSafety-\(UUID().uuidString)"
+        let isolatedDefaults = try #require(UserDefaults(suiteName: suiteName))
         defer {
-            if let original {
-                UserDefaults.standard.set(original, forKey: SettingsManager.Keys.appSource)
-            } else {
-                UserDefaults.standard.removeObject(forKey: SettingsManager.Keys.appSource)
-            }
+            isolatedDefaults.removePersistentDomain(forName: suiteName)
         }
 
         // Unknown raw value fallback
-        UserDefaults.standard.set("unknown_service", forKey: SettingsManager.Keys.appSource)
-        let restoredUnknown = UserDefaults.standard.string(forKey: SettingsManager.Keys.appSource)
-            .flatMap { AppSource(rawValue: $0) }
-            .flatMap { AppSource.visibleCases.contains($0) ? $0 : nil } ?? .music
-        #expect(restoredUnknown == .music)
+        isolatedDefaults.set("unknown_service", forKey: SettingsManager.Keys.appSource)
+        let managerUnknown = SettingsManager(defaults: isolatedDefaults)
+        #expect(managerUnknown.appSource == .music)
 
         // Non-visible source fallback (.video is not in visibleCases)
-        UserDefaults.standard.set(AppSource.video.rawValue, forKey: SettingsManager.Keys.appSource)
-        let restoredVideo = UserDefaults.standard.string(forKey: SettingsManager.Keys.appSource)
-            .flatMap { AppSource(rawValue: $0) }
-            .flatMap { AppSource.visibleCases.contains($0) ? $0 : nil } ?? .music
-        #expect(restoredVideo == .music)
+        isolatedDefaults.set(AppSource.video.rawValue, forKey: SettingsManager.Keys.appSource)
+        let managerVideo = SettingsManager(defaults: isolatedDefaults)
+        #expect(managerVideo.appSource == .music)
 
         // Visible source restoration (.spotify is in visibleCases)
-        UserDefaults.standard.set(AppSource.spotify.rawValue, forKey: SettingsManager.Keys.appSource)
-        let restoredSpotify = UserDefaults.standard.string(forKey: SettingsManager.Keys.appSource)
-            .flatMap { AppSource(rawValue: $0) }
-            .flatMap { AppSource.visibleCases.contains($0) ? $0 : nil } ?? .music
-        #expect(restoredSpotify == .spotify)
+        isolatedDefaults.set(AppSource.spotify.rawValue, forKey: SettingsManager.Keys.appSource)
+        let managerSpotify = SettingsManager(defaults: isolatedDefaults)
+        #expect(managerSpotify.appSource == .spotify)
+
+        // Default when key does not exist
+        isolatedDefaults.removeObject(forKey: SettingsManager.Keys.appSource)
+        let managerDefault = SettingsManager(defaults: isolatedDefaults)
+        #expect(managerDefault.appSource == .music)
     }
 }

@@ -5,7 +5,9 @@ import SwiftUI
 /// Navigation destinations within the Spotify experience.
 enum SpotifyNavigationItem: String, CaseIterable, Identifiable, Sendable {
     case nowPlaying = "now_playing"
-    case diagnostics
+    #if DEBUG
+        case diagnostics
+    #endif
 
     var id: String {
         self.rawValue
@@ -15,8 +17,10 @@ enum SpotifyNavigationItem: String, CaseIterable, Identifiable, Sendable {
         switch self {
         case .nowPlaying:
             String(localized: "Now Playing")
-        case .diagnostics:
-            String(localized: "Diagnostics")
+        #if DEBUG
+            case .diagnostics:
+                String(localized: "Diagnostics")
+        #endif
         }
     }
 
@@ -24,8 +28,10 @@ enum SpotifyNavigationItem: String, CaseIterable, Identifiable, Sendable {
         switch self {
         case .nowPlaying:
             "play.circle.fill"
-        case .diagnostics:
-            "wrench.and.screwdriver"
+        #if DEBUG
+            case .diagnostics:
+                "wrench.and.screwdriver"
+        #endif
         }
     }
 }
@@ -42,7 +48,9 @@ struct SpotifySidebar: View {
         List {
             Section {
                 self.row(for: .nowPlaying)
-                self.row(for: .diagnostics)
+                #if DEBUG
+                    self.row(for: .diagnostics)
+                #endif
             }
         }
         .listStyle(.sidebar)

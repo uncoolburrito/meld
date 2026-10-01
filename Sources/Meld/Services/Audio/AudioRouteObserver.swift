@@ -57,7 +57,7 @@ final class AudioRouteObserver {
         }
     }
 
-    private func handleDefaultOutputDeviceChange() {
+    func handleDefaultOutputDeviceChange() {
         self.logger.info("AudioRouteObserver: default output device changed")
         self.onRouteChange?()
     }

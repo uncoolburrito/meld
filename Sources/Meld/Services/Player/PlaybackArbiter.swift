@@ -17,7 +17,9 @@ final class PlaybackArbiter {
     private(set) var audioSource: AppSource = .music
 
     /// The surface currently displayed in the main window.
-    private(set) var selectedTab: AppSource = SettingsManager.shared.appSource
+    var selectedTab: AppSource {
+        SettingsManager.shared.appSource
+    }
 
     /// Backwards-compatible alias for the active audio source.
     var activeSource: AppSource {
@@ -26,7 +28,7 @@ final class PlaybackArbiter {
 
     /// Whether Spotify is playing audio externally while the user is viewing another tab.
     var spotifyPlayingExternallyCue: Bool {
-        self.audioSource == .spotify && self.selectedTab != .spotify
+        self.audioSource == .spotify && self.selectedTab != .spotify && (self.spotifySource?.transportState == .playing)
     }
 
     /// True while an asynchronous source transition is executing.
@@ -73,7 +75,6 @@ final class PlaybackArbiter {
 
     /// Updates the selected tab without altering playback state.
     func setSelectedTab(_ tab: AppSource) {
-        self.selectedTab = tab
         SettingsManager.shared.appSource = tab
     }
 
@@ -114,6 +115,11 @@ final class PlaybackArbiter {
         self.isTransitioning = true
         defer { self.isTransitioning = false }
         self.transitionAlert = nil
+
+        // If leaving a docked video, pause it in place
+        if self.selectedTab == .video || self.audioSource == .video, targetSource != .video {
+            self.youtubePlayerService.prepareForSourceSwitch()
+        }
 
         if targetSource == self.audioSource {
             self.setSelectedTab(targetSource)
@@ -169,15 +175,15 @@ final class PlaybackArbiter {
                 self.logger.warning("Arbiter: error requesting Spotify pause: \(error.localizedDescription)")
             }
 
-            // Bounded wait (up to 500ms)
-            var spotifyPaused = spotify.transportState != .playing
+            // Bounded wait (up to 500ms) confirming pause via fetchPlaybackSnapshot
+            var spotifyPaused = await spotify.confirmPaused()
             if !spotifyPaused {
                 try? await Task.sleep(nanoseconds: 200_000_000)
-                spotifyPaused = spotify.transportState != .playing
+                spotifyPaused = await spotify.confirmPaused()
                 if !spotifyPaused {
                     try? await spotify.pause()
                     try? await Task.sleep(nanoseconds: 300_000_000)
-                    spotifyPaused = spotify.transportState != .playing
+                    spotifyPaused = await spotify.confirmPaused()
                 }
             }
 
@@ -209,14 +215,14 @@ final class PlaybackArbiter {
                 self.logger.warning("Arbiter: error requesting Spotify pause: \(error.localizedDescription)")
             }
 
-            var spotifyPaused = spotify.transportState != .playing
+            var spotifyPaused = await spotify.confirmPaused()
             if !spotifyPaused {
                 try? await Task.sleep(nanoseconds: 200_000_000)
-                spotifyPaused = spotify.transportState != .playing
+                spotifyPaused = await spotify.confirmPaused()
                 if !spotifyPaused {
                     try? await spotify.pause()
                     try? await Task.sleep(nanoseconds: 300_000_000)
-                    spotifyPaused = spotify.transportState != .playing
+                    spotifyPaused = await spotify.confirmPaused()
                 }
             }
 
