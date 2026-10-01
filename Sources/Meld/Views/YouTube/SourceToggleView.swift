@@ -62,7 +62,7 @@ struct SourceToggleView: View {
 
     private func segment(for source: AppSource) -> some View {
         let isSelected = (self.sourceManager?.selectedTab ?? self.settings.appSource) == source
-        let isSpotifyPlayingExternally = source == .spotify && (self.sourceManager?.spotifyPlayingExternallyCue ?? false)
+        let isPlayingInBackground = !isSelected && (self.sourceManager?.isPlayingInBackground(source) ?? false)
 
         return Button {
             self.select(source)
@@ -75,12 +75,17 @@ struct SourceToggleView: View {
                     .font(.system(size: 11, weight: .semibold))
                     .lineLimit(1)
 
-                if isSpotifyPlayingExternally {
+                if isPlayingInBackground {
+                    let dotColor = source == .spotify ? Color.green : self.tint
                     Circle()
-                        .fill(Color.green)
+                        .fill(dotColor)
                         .frame(width: 5, height: 5)
-                        .shadow(color: .green.opacity(0.6), radius: 2)
-                        .help(String(localized: "Spotify is playing in the background"))
+                        .shadow(color: dotColor.opacity(0.6), radius: 2)
+                        .help(
+                            source == .spotify
+                                ? String(localized: "Spotify is playing in the background")
+                                : String(localized: "YouTube Music is playing in the background")
+                        )
                 }
             }
             .frame(maxWidth: .infinity)

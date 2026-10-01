@@ -222,7 +222,9 @@ final class SpotifySource: MusicSourceProtocol {
             object: nil,
             queue: .main
         ) { [weak self] _ in
-            self?.emergencyRestoreVolume()
+            MainActor.assumeIsolated {
+                self?.emergencyRestoreVolume()
+            }
         }
     }
 

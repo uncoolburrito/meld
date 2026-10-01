@@ -101,14 +101,112 @@ struct Phase3ArbiterAndSourceManagerTests {
         #expect(harness.sourceManager.spotifyPlayingExternallyCue == false)
     }
 
+    // MARK: - Keep Playing Mode (Default Behavior)
+
+    @Test("Keep playing mode: toggle switches view only without pausing or changing audioSource")
+    func keepPlayingModeToggleSwitchesViewOnly() async {
+        let harness = self.createHarness()
+        let previousBehavior = SettingsManager.shared.sourceSwitchBehavior
+        defer {
+            SettingsManager.shared.sourceSwitchBehavior = previousBehavior
+            SingletonPlayerWebView.shared.unsuppressPlayback()
+        }
+        SettingsManager.shared.sourceSwitchBehavior = .keepPlaying
+
+        // Start on Music with YTM playing
+        harness.arbiter.setSelectedTab(.music)
+        harness.playerService.state = .playing
+        #expect(harness.arbiter.audioSource == .music)
+        #expect(harness.arbiter.selectedTab == .music)
+        #expect(harness.sourceManager.selectedSourceType == .music)
+        #expect(harness.sourceManager.audibleSource == .music)
+
+        // Toggle to Spotify
+        let switched = await harness.sourceManager.requestTransition(to: .spotify)
+        #expect(switched == true)
+
+        // selectedTab updated, but audioSource and YTM playback are untouched!
+        #expect(harness.arbiter.selectedTab == .spotify)
+        #expect(harness.arbiter.audioSource == .music)
+        #expect(harness.sourceManager.selectedSourceType == .spotify)
+        #expect(harness.sourceManager.audibleSource == .music)
+        #expect(harness.playerService.isPlaying == true)
+
+        // PlayerBar follows selected tab (Spotify), while media keys/Now Playing follow audioSource (Music)
+        #expect(harness.sourceManager.selectedSource is SpotifySource)
+        #expect(harness.sourceManager.audibleEngine is YouTubeMusicSource)
+
+        // Background cue dot appears on Music segment because Music is playing while on Spotify tab
+        #expect(harness.arbiter.isPlayingInBackground(.music) == true)
+        #expect(harness.arbiter.isPlayingInBackground(.spotify) == false)
+
+        // Starting playback on Spotify triggers handoff
+        harness.mockScript.snapshotToReturn = SpotifyPlaybackSnapshot(
+            playerState: .playing,
+            position: 12.0,
+            duration: 210.0,
+            volume: 0.85,
+            track: nil
+        )
+        await harness.spotifySource.refreshState()
+        harness.arbiter.handlePlaybackStarted(on: .spotify)
+        harness.playerService.state = .paused
+
+        // audioSource hands over to Spotify
+        #expect(harness.arbiter.audioSource == .spotify)
+        #expect(harness.sourceManager.audibleSource == .spotify)
+        #expect(harness.arbiter.isPlayingInBackground(.music) == false)
+        #expect(harness.arbiter.isPlayingInBackground(.spotify) == false)
+    }
+
+    @Test("Keep playing mode: generalized cue dot appears symmetrically")
+    func keepPlayingCueDotAppearsSymmetrically() async {
+        let harness = self.createHarness()
+        let previousBehavior = SettingsManager.shared.sourceSwitchBehavior
+        defer {
+            SettingsManager.shared.sourceSwitchBehavior = previousBehavior
+            SingletonPlayerWebView.shared.unsuppressPlayback()
+        }
+        SettingsManager.shared.sourceSwitchBehavior = .keepPlaying
+
+        // 1. Music playing, on Spotify tab -> Music cue dot visible
+        harness.arbiter.setSelectedTab(.spotify)
+        harness.playerService.state = .playing
+        #expect(harness.sourceManager.isPlayingInBackground(.music) == true)
+        #expect(harness.sourceManager.isPlayingInBackground(.spotify) == false)
+
+        // Switching back to Music clears cue dot
+        _ = await harness.sourceManager.requestTransition(to: .music)
+        #expect(harness.sourceManager.isPlayingInBackground(.music) == false)
+
+        // 2. Spotify playing, on Music tab -> Spotify cue dot visible
+        harness.mockScript.snapshotToReturn = SpotifyPlaybackSnapshot(
+            playerState: .playing,
+            position: 5.0,
+            duration: 100.0,
+            volume: 0.8,
+            track: nil
+        )
+        await harness.spotifySource.refreshState()
+        #expect(harness.sourceManager.isPlayingInBackground(.spotify) == true)
+        #expect(harness.sourceManager.isPlayingInBackground(.music) == false)
+
+        // Switching to Spotify tab clears cue dot
+        _ = await harness.sourceManager.requestTransition(to: .spotify)
+        #expect(harness.sourceManager.isPlayingInBackground(.spotify) == false)
+    }
+
     // MARK: - Path B: Asymmetric Timeout Transition
 
     @Test("Path B: Transition to Spotify succeeds and updates both audioSource and selectedTab")
     func pathBTransitionToSpotifySucceeds() async {
         let harness = self.createHarness()
+        let previousBehavior = SettingsManager.shared.sourceSwitchBehavior
         defer {
+            SettingsManager.shared.sourceSwitchBehavior = previousBehavior
             SingletonPlayerWebView.shared.unsuppressPlayback()
         }
+        SettingsManager.shared.sourceSwitchBehavior = .resume
 
         harness.arbiter.setSelectedTab(.music)
         let success = await harness.sourceManager.requestTransition(to: .spotify)
@@ -123,9 +221,12 @@ struct Phase3ArbiterAndSourceManagerTests {
     @Test("Path B: Transition to Music succeeds when Spotify pauses cooperatively")
     func pathBTransitionToMusicSucceedsWhenSpotifyPauses() async {
         let harness = self.createHarness()
+        let previousBehavior = SettingsManager.shared.sourceSwitchBehavior
         defer {
+            SettingsManager.shared.sourceSwitchBehavior = previousBehavior
             SingletonPlayerWebView.shared.unsuppressPlayback()
         }
+        SettingsManager.shared.sourceSwitchBehavior = .resume
 
         _ = await harness.sourceManager.requestTransition(to: .spotify)
         #expect(harness.arbiter.audioSource == .spotify)
@@ -468,13 +569,16 @@ struct Phase3ArbiterAndSourceManagerTests {
         #expect(harness.spotifySource.isFadingVolume == false)
     }
 
-    @Test("Smooth fade: aborted transition restores Spotify volume immediately")
-    func abortedTransitionRestoresSpotifyVolume() async {
+    @Test("Smooth fade: Spotify pause timeout presents non-blocking alert and restores volume")
+    func pauseTimeoutPresentsNonBlockingAlertAndRestoresVolume() async {
         let harness = self.createHarness()
         harness.arbiter.fadeStepDuration = 0.001
+        let previousBehavior = SettingsManager.shared.sourceSwitchBehavior
         defer {
+            SettingsManager.shared.sourceSwitchBehavior = previousBehavior
             SingletonPlayerWebView.shared.unsuppressPlayback()
         }
+        SettingsManager.shared.sourceSwitchBehavior = .resume
 
         // Set up Spotify playing
         _ = await harness.arbiter.requestTransition(to: .spotify)
@@ -488,7 +592,7 @@ struct Phase3ArbiterAndSourceManagerTests {
         await harness.spotifySource.refreshState()
         #expect(harness.spotifySource.volume == 0.65)
 
-        // Make pause fail/remain playing so transition aborts
+        // Make pause fail/remain playing
         harness.mockScript.pauseKeepsPlaying = true
         harness.mockScript.snapshotToReturn = SpotifyPlaybackSnapshot(
             playerState: .playing,
@@ -499,9 +603,9 @@ struct Phase3ArbiterAndSourceManagerTests {
         )
 
         let transitioned = await harness.arbiter.requestTransition(to: .music)
-        #expect(transitioned == false)
+        #expect(transitioned == true)
         #expect(harness.arbiter.transitionAlert != nil)
-        // Volume must be restored even though transition was aborted
+        // Volume must be restored even when pause timed out
         #expect(harness.mockScript.volumeSet == 0.65)
         #expect(harness.spotifySource.isFadingVolume == false)
     }

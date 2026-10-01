@@ -45,6 +45,7 @@ final class SettingsManager {
 
     /// Available behaviors when switching between music sources.
     enum SourceSwitchBehavior: String, CaseIterable, Identifiable {
+        case keepPlaying
         case resume
         case pauseOnly
 
@@ -54,8 +55,10 @@ final class SettingsManager {
 
         var displayName: String {
             switch self {
+            case .keepPlaying:
+                String(localized: "Keep playing", comment: "Option to keep current audio playing when switching tabs")
             case .resume:
-                String(localized: "Resume where I left off", comment: "Option to resume previously interrupted playback when switching sources")
+                String(localized: "Pause, resume when I switch back", comment: "Option to pause outgoing audio and resume incoming audio if previously playing")
             case .pauseOnly:
                 String(localized: "Pause only", comment: "Option to only pause outgoing playback without resuming incoming source")
             }
@@ -624,7 +627,7 @@ final class SettingsManager {
         {
             self.sourceSwitchBehavior = behavior
         } else {
-            self.sourceSwitchBehavior = .resume
+            self.sourceSwitchBehavior = .keepPlaying
         }
 
         if let rawValue = defaults.string(forKey: Keys.appSource),

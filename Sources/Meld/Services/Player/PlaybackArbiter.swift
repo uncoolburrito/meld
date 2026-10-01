@@ -26,9 +26,14 @@ final class PlaybackArbiter {
         self.audioSource
     }
 
+    /// Whether a source is actively playing while not being the currently selected tab.
+    func isPlayingInBackground(_ source: AppSource) -> Bool {
+        self.selectedTab != source && self.isSourcePlaying(source)
+    }
+
     /// Whether Spotify is playing audio externally while the user is viewing another tab.
     var spotifyPlayingExternallyCue: Bool {
-        self.audioSource == .spotify && self.selectedTab != .spotify && (self.spotifySource?.transportState == .playing)
+        self.isPlayingInBackground(.spotify)
     }
 
     /// True while an asynchronous source transition is executing.
@@ -56,6 +61,10 @@ final class PlaybackArbiter {
 
         youtubePlayerService.playbackWillStart = { [weak self] in
             self?.videoWillStartPlaying()
+        }
+
+        playerService.onPlaybackStarted = { [weak self] in
+            self?.handlePlaybackStarted(on: .music)
         }
 
         if let spotifySource {
@@ -108,28 +117,74 @@ final class PlaybackArbiter {
         SettingsManager.shared.appSource = tab
     }
 
-    // MARK: - Path A: External Playback Detection
+    // MARK: - Playback Handoff (Audible Ownership)
 
-    /// Called when Spotify begins playing externally without user interaction in Meld.
+    /// Unified handoff called whenever any audio source begins producing playback.
     ///
-    /// Hands over audio ownership, suppresses WebKit dual sessions, releases Now Playing,
-    /// and gates AI features without disrupting the user's current navigation tab.
-    func handleExternalSpotifyPlaybackDetected() {
-        guard self.audioSource != .spotify else { return }
-        self.logger.info("Arbiter (Path A): external Spotify playback detected; pausing internal audio")
+    /// Hands over audio ownership, coordinates pause of outgoing audio, updates Now Playing,
+    /// and updates AI/EQ gates without modifying the user's selected tab.
+    func handlePlaybackStarted(on source: AppSource) {
+        guard self.audioSource != source else { return }
+        self.logger.info("Arbiter: playback started on \(source.rawValue); handing over audio ownership")
 
-        self.audioSource = .spotify
-        self.syncFoundationModelsAudioSource(.spotify)
+        let outgoingSource = self.audioSource
+        self.audioSource = source
+        self.syncFoundationModelsAudioSource(source)
 
-        // Pause internal players
-        Task {
-            await self.playerService.pause()
+        switch source {
+        case .spotify:
+            NowPlayingManager.shared.handleAudioSourceChanged(to: .spotify)
+            Task {
+                await self.playerService.pause()
+            }
+            SingletonPlayerWebView.shared.suppressPlayback()
+            self.youtubePlayerService.pause()
+
+        case .music:
+            SingletonPlayerWebView.shared.unsuppressPlayback()
+            NowPlayingManager.shared.handleAudioSourceChanged(to: .music)
+            if outgoingSource == .spotify, let spotify = self.spotifySource {
+                Task {
+                    do {
+                        try await spotify.pause()
+                    } catch {
+                        self.logger.warning("Arbiter: error requesting Spotify pause on handoff: \(error.localizedDescription)")
+                    }
+                    var paused = await spotify.confirmPaused()
+                    if !paused {
+                        try? await Task.sleep(nanoseconds: 200_000_000)
+                        paused = await spotify.confirmPaused()
+                        if !paused {
+                            try? await spotify.pause()
+                            try? await Task.sleep(nanoseconds: 300_000_000)
+                            paused = await spotify.confirmPaused()
+                        }
+                    }
+                    if !paused {
+                        self.logger.warning("Arbiter: Spotify pause timed out; presenting non-blocking alert")
+                        self.transitionAlert = String(localized: "Could not pause Spotify. Please pause Spotify manually to switch sources.")
+                    }
+                }
+            }
+            self.youtubePlayerService.pause()
+
+        case .video:
+            NowPlayingManager.shared.handleAudioSourceChanged(to: .video)
+            Task {
+                await self.playerService.pause()
+            }
+            SingletonPlayerWebView.shared.suppressPlayback()
+            if outgoingSource == .spotify, let spotify = self.spotifySource {
+                Task {
+                    try? await spotify.pause()
+                }
+            }
         }
-        SingletonPlayerWebView.shared.suppressPlayback()
-        self.youtubePlayerService.pause()
+    }
 
-        // Release system Now Playing ownership so Spotify native app handles media keys
-        NowPlayingManager.shared.handleAudioSourceChanged(to: .spotify)
+    /// Backwards compatibility for Path A external Spotify playback detection.
+    func handleExternalSpotifyPlaybackDetected() {
+        self.handlePlaybackStarted(on: .spotify)
     }
 
     // MARK: - Path B: Toggle-Driven Transition (Asymmetric Timeout)
@@ -138,21 +193,22 @@ final class PlaybackArbiter {
     var fadeStepDuration: TimeInterval = 0.050
 
     /// Requests a transition to the target source.
-    ///
-    /// Implements asymmetric timeout:
-    /// - Outgoing YTM/Video: pauses cooperatively, then force-pauses via WebKit suppression if needed.
-    /// - Outgoing Spotify: requests pause via AppleScript; if Spotify fails to pause after retry and timeout,
-    ///   aborts transition and alerts the user rather than allowing dual-audio chaos.
     func requestTransition(to targetSource: AppSource) async -> Bool {
-        guard !self.isTransitioning else { return false }
-        self.isTransitioning = true
-        defer { self.isTransitioning = false }
-        self.transitionAlert = nil
-
         // If leaving a docked video, pause it in place
         if self.selectedTab == .video || self.audioSource == .video, targetSource != .video {
             self.youtubePlayerService.prepareForSourceSwitch()
         }
+
+        // Keep playing mode (default): instant view switch without pausing or fading audio
+        if SettingsManager.shared.sourceSwitchBehavior == .keepPlaying {
+            self.setSelectedTab(targetSource)
+            return true
+        }
+
+        guard !self.isTransitioning else { return false }
+        self.isTransitioning = true
+        defer { self.isTransitioning = false }
+        self.transitionAlert = nil
 
         if targetSource == self.audioSource {
             self.setSelectedTab(targetSource)
@@ -352,11 +408,10 @@ final class PlaybackArbiter {
                 }
             }
 
-            // Asymmetric rule: abort if Spotify failed to pause!
+            // Non-blocking alert rule: notify if Spotify failed to pause, without aborting user playback
             if !spotifyPaused {
-                self.logger.error("Arbiter (Path B): Spotify pause timed out; aborting transition to Music")
+                self.logger.warning("Arbiter (Path B): Spotify pause timed out; presenting non-blocking alert")
                 self.transitionAlert = String(localized: "Could not pause Spotify. Please pause Spotify manually to switch sources.")
-                return false
             }
         }
 

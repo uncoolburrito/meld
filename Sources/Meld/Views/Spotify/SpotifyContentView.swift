@@ -51,7 +51,7 @@ struct SpotifyContentView: View {
         ZStack(alignment: .bottom) {
             ScrollView {
                 VStack(spacing: 28) {
-                    if let track = self.sourceManager?.currentTrack {
+                    if let track = self.sourceManager?.spotifySource.currentTrack {
                         VStack(spacing: 20) {
                             if let artworkURL = track.artworkURL {
                                 AsyncImage(url: artworkURL) { image in

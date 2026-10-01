@@ -111,12 +111,12 @@ struct PlayerBar: View { // swiftlint:disable:this type_body_length
             }
         }
         .onChange(of: self.playerService.volume) { _, newValue in
-            if !self.isAdjustingVolume, !self.isSpotifyActive {
+            if !self.isAdjustingVolume, !self.isSpotifySelected {
                 self.volumeValue = newValue
             }
         }
-        .onChange(of: self.sourceManager?.playbackPosition) { _, newValue in
-            guard self.isSpotifyActive, let newValue else { return }
+        .onChange(of: self.sourceManager?.selectedPosition) { _, newValue in
+            guard self.isSpotifySelected, let newValue else { return }
             let duration = self.activeDuration
             if !self.isSeeking, duration > 0 {
                 self.seekValue = newValue / duration
@@ -127,17 +127,17 @@ struct PlayerBar: View { // swiftlint:disable:this type_body_length
                 self.updateFormattedTimes(progress: newValue, duration: duration)
             }
         }
-        .onChange(of: self.sourceManager?.volume) { _, newValue in
-            if self.isSpotifyActive, let newValue, !self.isAdjustingVolume {
+        .onChange(of: self.sourceManager?.selectedVolume) { _, newValue in
+            if self.isSpotifySelected, let newValue, !self.isAdjustingVolume {
                 self.volumeValue = newValue
             }
         }
         .onAppear {
-            if self.isSpotifyActive {
-                self.volumeValue = self.sourceManager?.volume ?? 1.0
-                let duration = self.sourceManager?.playbackDuration ?? 0
+            if self.isSpotifySelected {
+                self.volumeValue = self.sourceManager?.selectedVolume ?? 1.0
+                let duration = self.sourceManager?.selectedDuration ?? 0
                 if duration > 0 {
-                    self.seekValue = (self.sourceManager?.playbackPosition ?? 0) / duration
+                    self.seekValue = (self.sourceManager?.selectedPosition ?? 0) / duration
                 }
             } else {
                 self.volumeValue = self.playerService.volume
@@ -181,7 +181,7 @@ struct PlayerBar: View { // swiftlint:disable:this type_body_length
         .padding(.vertical, 10)
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
         .contextMenu {
-            if let track = self.playerService.currentTrack {
+            if !self.isSpotifySelected, let track = self.playerService.currentTrack {
                 self.currentSongContextMenu(for: track)
             }
         }
@@ -189,8 +189,8 @@ struct PlayerBar: View { // swiftlint:disable:this type_body_length
 
     @ViewBuilder
     private var thumbnailView: some View {
-        if self.isSpotifyActive {
-            if let track = self.sourceManager?.currentTrack {
+        if self.isSpotifySelected {
+            if let track = self.sourceManager?.selectedTrack {
                 PlayerBarArtworkView(
                     width: 32,
                     height: 32,
@@ -314,11 +314,11 @@ struct PlayerBar: View { // swiftlint:disable:this type_body_length
     }
 
     private var currentTitleIdentity: String {
-        if self.isSpotifyActive {
+        if self.isSpotifySelected {
             return [
                 "spotify",
-                self.sourceManager?.currentTrack?.sourceID ?? "none",
-                self.sourceManager?.currentTrack?.title ?? "none",
+                self.sourceManager?.selectedTrack?.sourceID ?? "none",
+                self.sourceManager?.selectedTrack?.title ?? "none",
             ].joined(separator: "|")
         }
         return [
@@ -328,7 +328,7 @@ struct PlayerBar: View { // swiftlint:disable:this type_body_length
     }
 
     private var canOpenCurrentArtist: Bool {
-        guard !self.isSpotifyActive else { return false }
+        guard !self.isSpotifySelected else { return false }
         return self.playerService.currentTrack != nil
             && self.navigationAction.openArtist != nil
             && (self.currentArtistTarget != nil || (self.currentArtistSearchName != nil && self.playerService.ytMusicClient != nil))
@@ -336,7 +336,7 @@ struct PlayerBar: View { // swiftlint:disable:this type_body_length
     }
 
     private var canOpenCurrentAlbum: Bool {
-        guard !self.isSpotifyActive else { return false }
+        guard !self.isSpotifySelected else { return false }
         return self.playerService.currentTrack != nil
             && self.navigationAction.openAlbum != nil
             && (self.currentAlbumTarget != nil || (self.currentArtistSearchName != nil && self.playerService.ytMusicClient != nil))
@@ -395,8 +395,8 @@ struct PlayerBar: View { // swiftlint:disable:this type_body_length
     }
 
     private var artistName: String {
-        if self.isSpotifyActive {
-            let artist = self.sourceManager?.currentTrack?.artist ?? ""
+        if self.isSpotifySelected {
+            let artist = self.sourceManager?.selectedTrack?.artist ?? ""
             return artist.isEmpty ? String(localized: "Unknown Artist") : artist
         }
         guard let track = self.playerService.currentTrack else {
@@ -434,7 +434,7 @@ struct PlayerBar: View { // swiftlint:disable:this type_body_length
                         .contentTransition(.symbolEffect(.replace))
                 }
                 .symbolEffect(.bounce, value: self.playerService.currentTrackLikeStatus == .like)
-                .disabled(self.isSpotifyActive || self.playerService.currentTrack == nil)
+                .disabled(self.isSpotifySelected || self.playerService.currentTrack == nil)
 
                 PlayerBarIconButton(
                     action: self.dislikeCurrentTrack,
@@ -450,7 +450,7 @@ struct PlayerBar: View { // swiftlint:disable:this type_body_length
                         .contentTransition(.symbolEffect(.replace))
                 }
                 .symbolEffect(.bounce, value: self.playerService.currentTrackLikeStatus == .dislike)
-                .disabled(self.isSpotifyActive || self.playerService.currentTrack == nil)
+                .disabled(self.isSpotifySelected || self.playerService.currentTrack == nil)
             }
         }
     }
@@ -544,7 +544,7 @@ struct PlayerBar: View { // swiftlint:disable:this type_body_length
                     .allowsHitTesting(false)
                     .accessibilityHidden(true)
             }
-            .disabled(self.isSpotifyActive || self.playerService.currentTrack == nil)
+            .disabled(self.isSpotifySelected || self.playerService.currentTrack == nil)
 
             PlayerBarIconButton(
                 action: self.cycleShuffle,
@@ -568,7 +568,7 @@ struct PlayerBar: View { // swiftlint:disable:this type_body_length
                     .opacity(self.playerService.isApplyingSmartShuffle ? 0.5 : 1)
                     .contentTransition(.symbolEffect(.replace))
             }
-            .disabled(self.isSpotifyActive || self.playerService.currentTrack == nil)
+            .disabled(self.isSpotifySelected || self.playerService.currentTrack == nil)
 
             HStack(spacing: 6) {
                 PlayerBarIconButton(
@@ -581,7 +581,7 @@ struct PlayerBar: View { // swiftlint:disable:this type_body_length
                         .frame(width: 8, height: 13)
                         .foregroundStyle(.primary)
                 }
-                .disabled(self.isSpotifyActive ? (self.sourceManager?.currentTrack == nil) : (self.playerService.currentEpisode != nil || self.playerService.currentTrack == nil))
+                .disabled(self.isSpotifySelected ? (self.sourceManager?.selectedTrack == nil) : (self.playerService.currentEpisode != nil || self.playerService.currentTrack == nil))
 
                 PlayerBarIconButton(
                     action: self.playPause,
@@ -595,7 +595,7 @@ struct PlayerBar: View { // swiftlint:disable:this type_body_length
                         .contentTransition(.symbolEffect(.replace))
                 }
                 .compatGlassID("playPause", in: self.playerNamespace)
-                .disabled(self.isSpotifyActive ? (self.sourceManager?.currentTrack == nil) : (self.playerService.currentTrack == nil))
+                .disabled(self.isSpotifySelected ? (self.sourceManager?.spotifySource.isInstalled != true) : (self.playerService.currentTrack == nil))
 
                 PlayerBarIconButton(
                     action: self.nextTrack,
@@ -607,7 +607,7 @@ struct PlayerBar: View { // swiftlint:disable:this type_body_length
                         .frame(width: 8, height: 13)
                         .foregroundStyle(.primary)
                 }
-                .disabled(self.isSpotifyActive ? (self.sourceManager?.currentTrack == nil) : (self.playerService.currentEpisode != nil || self.playerService.currentTrack == nil))
+                .disabled(self.isSpotifySelected ? (self.sourceManager?.selectedTrack == nil) : (self.playerService.currentEpisode != nil || self.playerService.currentTrack == nil))
             }
 
             PlayerBarIconButton(
@@ -623,7 +623,7 @@ struct PlayerBar: View { // swiftlint:disable:this type_body_length
                     .foregroundStyle(self.playerService.repeatMode == .off ? .primary : self.tint)
                     .contentTransition(.symbolEffect(.replace))
             }
-            .disabled(self.isSpotifyActive || self.playerService.currentTrack == nil)
+            .disabled(self.isSpotifySelected || self.playerService.currentTrack == nil)
 
             PlayerBarIconButton(
                 action: self.toggleVolumePopover,
@@ -683,8 +683,8 @@ struct PlayerBar: View { // swiftlint:disable:this type_body_length
                     onEditingChanged: { editing in
                         self.isAdjustingVolume = editing
                         if !editing {
-                            if self.isSpotifyActive {
-                                Task { try? await self.sourceManager?.setVolume(self.volumeValue) }
+                            if self.isSpotifySelected {
+                                Task { try? await self.sourceManager?.setSelectedVolume(self.volumeValue) }
                             } else {
                                 self.playerService.setVolumeImmediately(self.volumeValue)
                             }
@@ -695,8 +695,8 @@ struct PlayerBar: View { // swiftlint:disable:this type_body_length
                             if (oldValue > 0 && newValue == 0) || (oldValue < 1 && newValue == 1) {
                                 HapticService.sliderBoundary()
                             }
-                            if self.isSpotifyActive {
-                                Task { try? await self.sourceManager?.setVolume(newValue) }
+                            if self.isSpotifySelected {
+                                Task { try? await self.sourceManager?.setSelectedVolume(newValue) }
                             } else {
                                 self.playerService.setVolumeImmediately(newValue)
                             }
@@ -729,8 +729,8 @@ struct PlayerBar: View { // swiftlint:disable:this type_body_length
     }
 
     private var canSeek: Bool {
-        if self.isSpotifyActive {
-            return (self.sourceManager?.currentTrack != nil) && self.activeDuration > 0
+        if self.isSpotifySelected {
+            return (self.sourceManager?.selectedTrack != nil) && self.activeDuration > 0
         }
         return self.playerService.currentTrack != nil
             && self.playerService.duration > 0
@@ -739,7 +739,7 @@ struct PlayerBar: View { // swiftlint:disable:this type_body_length
     }
 
     private var isProgressLoading: Bool {
-        if self.isSpotifyActive {
+        if self.isSpotifySelected {
             return false
         }
         switch self.playerService.state {
@@ -751,7 +751,7 @@ struct PlayerBar: View { // swiftlint:disable:this type_body_length
     }
 
     private var canShowCurrentTrackVideo: Bool {
-        guard !self.isSpotifyActive else { return false }
+        guard !self.isSpotifySelected else { return false }
         guard let track = self.playerService.currentTrack else { return false }
         if UITestConfig.isUITestMode,
            UITestConfig.environmentValue(for: UITestConfig.mockHasVideoKey) == "true"
@@ -778,8 +778,8 @@ struct PlayerBar: View { // swiftlint:disable:this type_body_length
     }
 
     private var displayedPlaybackProgress: TimeInterval {
-        if self.isSpotifyActive {
-            return self.sourceManager?.playbackPosition ?? 0
+        if self.isSpotifySelected {
+            return self.sourceManager?.selectedPosition ?? 0
         }
         return self.displayProgress(observedProgress: self.playerService.progress)
     }
@@ -789,8 +789,8 @@ struct PlayerBar: View { // swiftlint:disable:this type_body_length
     }
 
     private var currentSeekIdentity: String {
-        if self.isSpotifyActive {
-            return self.sourceManager?.currentTrack?.sourceID ?? "none"
+        if self.isSpotifySelected {
+            return self.sourceManager?.selectedTrack?.sourceID ?? "none"
         }
         return self.playerService.currentTrack?.videoId ?? "none"
     }
@@ -799,7 +799,7 @@ struct PlayerBar: View { // swiftlint:disable:this type_body_length
 
     private var playbackOptionsSection: some View {
         HStack(spacing: 6) {
-            if !self.isSpotifyActive {
+            if !self.isSpotifySelected {
                 self.lyricsButton
                 self.queueButton
                 self.pictureButton
@@ -1240,8 +1240,8 @@ struct PlayerBar: View { // swiftlint:disable:this type_body_length
     private func previousTrack() {
         HapticService.playback()
         Task {
-            if self.isSpotifyActive {
-                try? await self.sourceManager?.previous()
+            if self.isSpotifySelected {
+                try? await self.sourceManager?.previousSelected()
             } else {
                 await self.playerService.previous()
             }
@@ -1251,8 +1251,8 @@ struct PlayerBar: View { // swiftlint:disable:this type_body_length
     private func playPause() {
         HapticService.playback()
         Task {
-            if self.isSpotifyActive {
-                try? await self.sourceManager?.toggle()
+            if self.isSpotifySelected {
+                try? await self.sourceManager?.toggleSelected()
             } else {
                 await self.playerService.playPause()
             }
@@ -1262,8 +1262,8 @@ struct PlayerBar: View { // swiftlint:disable:this type_body_length
     private func nextTrack() {
         HapticService.playback()
         Task {
-            if self.isSpotifyActive {
-                try? await self.sourceManager?.next()
+            if self.isSpotifySelected {
+                try? await self.sourceManager?.nextSelected()
             } else {
                 await self.playerService.next()
             }
@@ -1309,11 +1309,11 @@ struct PlayerBar: View { // swiftlint:disable:this type_body_length
         guard duration > 0 else { return }
         let targetSeconds = self.seekValue * duration
 
-        if self.isSpotifyActive {
+        if self.isSpotifySelected {
             self.updateFormattedTimes(progress: targetSeconds, duration: duration)
             self.isSeeking = false
             Task {
-                try? await self.sourceManager?.seek(to: targetSeconds)
+                try? await self.sourceManager?.seekSelected(to: targetSeconds)
             }
             return
         }
@@ -1392,37 +1392,37 @@ struct PlayerBar: View { // swiftlint:disable:this type_body_length
         }
     }
 
-    private var isSpotifyActive: Bool {
-        self.sourceManager?.audioSource == .spotify
+    private var isSpotifySelected: Bool {
+        self.sourceManager?.selectedSourceType == .spotify
     }
 
     private var displayedVolume: Double {
         if self.isAdjustingVolume {
             return self.volumeValue
         }
-        if self.isSpotifyActive {
-            return self.sourceManager?.volume ?? 1.0
+        if self.isSpotifySelected {
+            return self.sourceManager?.selectedVolume ?? 1.0
         }
         return self.playerService.volume
     }
 
     private var isPlaying: Bool {
-        if self.isSpotifyActive {
-            return self.sourceManager?.isPlaying ?? false
+        if self.isSpotifySelected {
+            return self.sourceManager?.isSelectedPlaying ?? false
         }
         return self.playerService.isPlaying
     }
 
     private var displayedTrackTitle: String {
-        if self.isSpotifyActive {
-            return self.sourceManager?.currentTrack?.title ?? String(localized: "Not Playing")
+        if self.isSpotifySelected {
+            return self.sourceManager?.selectedTrack?.title ?? String(localized: "Not Playing")
         }
         return self.playerService.currentTrack?.title ?? String(localized: "Not Playing")
     }
 
     private var activeDuration: TimeInterval {
-        if self.isSpotifyActive {
-            return self.sourceManager?.playbackDuration ?? 0
+        if self.isSpotifySelected {
+            return self.sourceManager?.selectedDuration ?? 0
         }
         return self.playerService.duration
     }
