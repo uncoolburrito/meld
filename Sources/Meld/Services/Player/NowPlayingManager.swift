@@ -211,18 +211,15 @@ final class NowPlayingManager {
     }
 
     /// Maps a claim onto `MPNowPlayingInfoCenter`. Hands-off only clears info we still own.
-    private func applyNowPlayingClaim(_ claim: NowPlayingClaim) {
+    func applyNowPlayingClaim(_ claim: NowPlayingClaim) {
         let center = MPNowPlayingInfoCenter.default()
         switch claim {
         case .handsOff:
             guard self.isAssertingNativeClaim else { return }
-            guard Self.isNativeClaim(center.nowPlayingInfo) else {
-                self.isAssertingNativeClaim = false
-                return
-            }
-            // Preserve the fallback until WebKit atomically replaces the app-wide metadata.
-            // A non-destructive state update cannot clear a concurrently published WebKit card.
-            center.playbackState = .playing
+            self.isAssertingNativeClaim = false
+            guard Self.isNativeClaim(center.nowPlayingInfo) else { return }
+            center.playbackState = .stopped
+            center.nowPlayingInfo = nil
         case .release:
             guard self.isAssertingNativeClaim else { return }
             self.isAssertingNativeClaim = false

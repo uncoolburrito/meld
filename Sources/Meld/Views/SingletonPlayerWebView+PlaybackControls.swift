@@ -260,6 +260,15 @@ extension SingletonPlayerWebView {
     func suppressPlayback() {
         self.pause()
         self.suppressSurvivingDocumentMedia(self.webView)
+        let script = """
+            try {
+                if (navigator.mediaSession) {
+                    navigator.mediaSession.metadata = null;
+                    navigator.mediaSession.playbackState = 'none';
+                }
+            } catch (e) {}
+        """
+        self.webView?.evaluateJavaScript(script, completionHandler: nil)
     }
 
     /// Lifts media suppression when returning to internal web playback.
