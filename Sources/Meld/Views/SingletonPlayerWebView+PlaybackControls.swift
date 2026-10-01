@@ -438,6 +438,56 @@ extension SingletonPlayerWebView {
         }
     }
 
+    /// Smoothly ramps video element volume between two levels using requestAnimationFrame with a perceptual curve inside the page.
+    func rampVolume(from startVolume: Double, to endVolume: Double, duration: TimeInterval) async {
+        guard let webView else { return }
+        let clampedStart = max(0.0, min(1.0, startVolume))
+        let clampedEnd = max(0.0, min(1.0, endVolume))
+        guard clampedStart != clampedEnd else { return }
+        let durationMs = max(10, Int(duration * 1000))
+
+        let script = """
+            (function() {
+                const video = document.querySelector('video');
+                if (!video) return;
+                const startVol = \(clampedStart);
+                const endVol = \(clampedEnd);
+                const duration = \(durationMs);
+                const isFadeOut = startVol > endVol;
+                const startTime = performance.now();
+                window.__kasetIsSettingVolume = true;
+
+                if (window.__kasetFadeAnimId) {
+                    cancelAnimationFrame(window.__kasetFadeAnimId);
+                }
+
+                function step(now) {
+                    const elapsed = now - startTime;
+                    const progress = Math.min(1.0, Math.max(0.0, elapsed / duration));
+                    let currentVol;
+                    if (isFadeOut) {
+                        const t = 1.0 - progress;
+                        currentVol = endVol + (startVol - endVol) * (t * t);
+                    } else {
+                        currentVol = startVol + (endVol - startVol) * (progress * progress);
+                    }
+                    video.volume = Math.max(0.0, Math.min(1.0, currentVol));
+
+                    if (progress < 1.0) {
+                        window.__kasetFadeAnimId = requestAnimationFrame(step);
+                    } else {
+                        video.volume = endVol;
+                        window.__kasetIsSettingVolume = false;
+                        window.__kasetFadeAnimId = null;
+                    }
+                }
+                window.__kasetFadeAnimId = requestAnimationFrame(step);
+            })();
+        """
+        _ = try? await webView.evaluateJavaScript(script)
+        try? await Task.sleep(nanoseconds: UInt64(duration * 1_000_000_000))
+    }
+
     /// Show the native AirPlay picker for the WebView's video element.
     func showAirPlayPicker(at screenPoint: CGPoint? = nil) {
         guard let webView else {

@@ -36,6 +36,7 @@ final class SettingsManager {
         static let popOutVideoOnNavigateAway = "settings.popOutVideoOnNavigateAway"
         static let spotifyVolumeGainOffset = "settings.spotifyVolumeGainOffset"
         static let sourceSwitchBehavior = "settings.sourceSwitchBehavior"
+        static let spotifyPreFadeVolume = "settings.spotifyPreFadeVolume"
         #if DEBUG
             static let useLegacyMacOS15UI = "settings.debug.useLegacyMacOS15UI"
         #endif

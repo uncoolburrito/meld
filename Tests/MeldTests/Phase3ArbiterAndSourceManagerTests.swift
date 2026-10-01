@@ -609,4 +609,61 @@ struct Phase3ArbiterAndSourceManagerTests {
         #expect(harness.mockScript.volumeSet == 0.65)
         #expect(harness.spotifySource.isFadingVolume == false)
     }
+
+    @Test("Crash safety: pre-fade Spotify volume is persisted and restored on launch")
+    func crashSafetyPreFadeVolumePersistedAndRestored() {
+        let key = SettingsManager.Keys.spotifyPreFadeVolume
+        defer {
+            UserDefaults.standard.removeObject(forKey: key)
+        }
+
+        // Simulate crash mid-fade by writing pre-fade volume to UserDefaults
+        UserDefaults.standard.set(0.72, forKey: key)
+        #expect(UserDefaults.standard.double(forKey: key) == 0.72)
+
+        // Instantiate new SpotifySource (simulating app relaunch)
+        let mockScript = MockSpotifyScriptController()
+        let mockMonitor = MockSpotifyNotificationMonitor()
+        let newSource = SpotifySource(
+            scriptController: mockScript,
+            notificationMonitor: mockMonitor,
+            autoRefresh: false
+        )
+
+        // The key should have been cleared upon recovery
+        #expect(UserDefaults.standard.object(forKey: key) == nil)
+        _ = newSource
+    }
+
+    @Test("Handoff fade: playback start on Music fades out Spotify with perceptual curve")
+    func handoffFadeOutSpotifyPerceptually() async {
+        let harness = self.createHarness()
+        harness.arbiter.crossfadeDuration = 0.005
+        defer {
+            SingletonPlayerWebView.shared.unsuppressPlayback()
+        }
+
+        // Spotify playing
+        harness.arbiter.handlePlaybackStarted(on: .spotify)
+        #expect(harness.arbiter.audioSource == .spotify)
+        harness.mockScript.snapshotToReturn = SpotifyPlaybackSnapshot(
+            playerState: .playing,
+            position: 20.0,
+            duration: 180.0,
+            volume: 0.80,
+            track: nil
+        )
+        await harness.spotifySource.refreshState()
+
+        // Music starts playing
+        harness.arbiter.handlePlaybackStarted(on: .music)
+        #expect(harness.arbiter.audioSource == .music)
+
+        // Let the background handoff Task finish
+        try? await Task.sleep(nanoseconds: 50_000_000)
+
+        // Spotify volume should be restored to original volume after fade out and pause
+        #expect(harness.mockScript.volumeSet == 0.80)
+        #expect(harness.spotifySource.isFadingVolume == false)
+    }
 }

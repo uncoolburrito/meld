@@ -135,9 +135,17 @@ final class PlaybackArbiter {
         case .spotify:
             NowPlayingManager.shared.handleAudioSourceChanged(to: .spotify)
             Task {
-                await self.playerService.pause()
+                if outgoingSource == .music {
+                    let originalVolume = self.playerService.volume
+                    await SingletonPlayerWebView.shared.rampVolume(from: originalVolume, to: 0.0, duration: self.crossfadeDuration)
+                    await self.playerService.pause()
+                    SingletonPlayerWebView.shared.suppressPlayback()
+                    SingletonPlayerWebView.shared.setVolume(originalVolume)
+                } else {
+                    await self.playerService.pause()
+                    SingletonPlayerWebView.shared.suppressPlayback()
+                }
             }
-            SingletonPlayerWebView.shared.suppressPlayback()
             self.youtubePlayerService.pause()
 
         case .music:
@@ -145,6 +153,8 @@ final class PlaybackArbiter {
             NowPlayingManager.shared.handleAudioSourceChanged(to: .music)
             if outgoingSource == .spotify, let spotify = self.spotifySource {
                 Task {
+                    let originalVolume = spotify.beginVolumeFade()
+                    await self.fadeOutSpotifyPerceptually(spotify, from: originalVolume, duration: self.crossfadeDuration)
                     do {
                         try await spotify.pause()
                     } catch {
@@ -160,6 +170,7 @@ final class PlaybackArbiter {
                             paused = await spotify.confirmPaused()
                         }
                     }
+                    await spotify.endVolumeFade(restoring: originalVolume)
                     if !paused {
                         self.logger.warning("Arbiter: Spotify pause timed out; presenting non-blocking alert")
                         self.transitionAlert = String(localized: "Could not pause Spotify. Please pause Spotify manually to switch sources.")
@@ -189,8 +200,14 @@ final class PlaybackArbiter {
 
     // MARK: - Path B: Toggle-Driven Transition (Asymmetric Timeout)
 
-    /// Duration of each step in the crossfade animation (5 steps total ≈ 250ms).
-    var fadeStepDuration: TimeInterval = 0.050
+    /// Duration of each step in the crossfade animation (10 steps total ≈ 200ms).
+    var fadeStepDuration: TimeInterval = 0.020
+
+    /// Total duration for volume crossfade animations.
+    var crossfadeDuration: TimeInterval {
+        get { self.fadeStepDuration * 10.0 }
+        set { self.fadeStepDuration = newValue / 10.0 }
+    }
 
     /// Requests a transition to the target source.
     func requestTransition(to targetSource: AppSource) async -> Bool {
@@ -291,27 +308,85 @@ final class PlaybackArbiter {
 
     private func fadeOutSource(_ source: AppSource, originalVolume: Double) async {
         guard originalVolume > 0 else { return }
-        let steps = 5
-        let stepSeconds = self.fadeStepDuration
-        for step in (0 ..< steps).reversed() {
-            let volume = (Double(step) / Double(steps)) * originalVolume
-            await self.applyTransientVolume(volume, for: source)
-            try? await Task.sleep(nanoseconds: UInt64(stepSeconds * 1_000_000_000))
+        switch source {
+        case .music:
+            await SingletonPlayerWebView.shared.rampVolume(from: originalVolume, to: 0.0, duration: self.crossfadeDuration)
+            SingletonPlayerWebView.shared.setVolume(0.0)
+        case .spotify:
+            if let spotify = self.spotifySource {
+                await self.fadeOutSpotifyPerceptually(spotify, from: originalVolume, duration: self.crossfadeDuration)
+            }
+        case .video:
+            let steps = 10
+            let stepSeconds = self.fadeStepDuration
+            for step in (0 ..< steps).reversed() {
+                let t = Double(step) / Double(steps)
+                let volume = (t * t) * originalVolume
+                await self.applyTransientVolume(volume, for: source)
+                if stepSeconds > 0 {
+                    try? await Task.sleep(nanoseconds: UInt64(stepSeconds * 1_000_000_000))
+                }
+            }
+            await self.applyTransientVolume(0.0, for: source)
         }
-        await self.applyTransientVolume(0.0, for: source)
     }
 
     private func fadeInSource(_ source: AppSource, targetVolume: Double) async {
         guard targetVolume > 0 else { return }
-        let steps = 5
-        let stepSeconds = self.fadeStepDuration
-        await self.applyTransientVolume(0.0, for: source)
-        for step in 1 ... steps {
-            try? await Task.sleep(nanoseconds: UInt64(stepSeconds * 1_000_000_000))
-            let volume = (Double(step) / Double(steps)) * targetVolume
-            await self.applyTransientVolume(volume, for: source)
+        switch source {
+        case .music:
+            SingletonPlayerWebView.shared.setVolume(0.0)
+            await SingletonPlayerWebView.shared.rampVolume(from: 0.0, to: targetVolume, duration: self.crossfadeDuration)
+            SingletonPlayerWebView.shared.setVolume(targetVolume)
+        case .spotify:
+            if let spotify = self.spotifySource {
+                await self.fadeInSpotifyPerceptually(spotify, to: targetVolume, duration: self.crossfadeDuration)
+            }
+        case .video:
+            let steps = 10
+            let stepSeconds = self.fadeStepDuration
+            await self.applyTransientVolume(0.0, for: source)
+            for step in 1 ... steps {
+                if stepSeconds > 0 {
+                    try? await Task.sleep(nanoseconds: UInt64(stepSeconds * 1_000_000_000))
+                }
+                let progress = Double(step) / Double(steps)
+                let volume = (progress * progress) * targetVolume
+                await self.applyTransientVolume(volume, for: source)
+            }
+            await self.applyTransientVolume(targetVolume, for: source)
         }
-        await self.applyTransientVolume(targetVolume, for: source)
+    }
+
+    private func fadeOutSpotifyPerceptually(_ spotify: SpotifySource, from originalVolume: Double, duration: TimeInterval) async {
+        guard originalVolume > 0 else { return }
+        let steps = 10
+        let stepSeconds = duration / Double(steps)
+        for step in (0 ..< steps).reversed() {
+            let t = Double(step) / Double(steps)
+            let volume = originalVolume * (t * t)
+            await spotify.stepFadeVolume(volume)
+            if stepSeconds > 0 {
+                try? await Task.sleep(nanoseconds: UInt64(stepSeconds * 1_000_000_000))
+            }
+        }
+        await spotify.stepFadeVolume(0.0)
+    }
+
+    private func fadeInSpotifyPerceptually(_ spotify: SpotifySource, to targetVolume: Double, duration: TimeInterval) async {
+        guard targetVolume > 0 else { return }
+        let steps = 10
+        let stepSeconds = duration / Double(steps)
+        await spotify.stepFadeVolume(0.0)
+        for step in 1 ... steps {
+            if stepSeconds > 0 {
+                try? await Task.sleep(nanoseconds: UInt64(stepSeconds * 1_000_000_000))
+            }
+            let progress = Double(step) / Double(steps)
+            let volume = targetVolume * (progress * progress)
+            await spotify.stepFadeVolume(volume)
+        }
+        await spotify.stepFadeVolume(targetVolume)
     }
 
     private func applyTransientVolume(_ volume: Double, for source: AppSource) async {

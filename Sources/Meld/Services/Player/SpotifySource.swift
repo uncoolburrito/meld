@@ -38,6 +38,7 @@ final class SpotifySource: MusicSourceProtocol {
 
         self.setupNotificationObservation()
         self.setupTerminationObservation()
+        self.restoreCrashVolumeIfPresent()
 
         if autoRefresh {
             Task { [weak self] in
@@ -183,11 +184,13 @@ final class SpotifySource: MusicSourceProtocol {
 
     // MARK: - Crossfade Support
 
-    /// Prepares Spotify for a volume crossfade by capturing its current volume.
+    /// Prepares Spotify for a volume crossfade by capturing its current volume and persisting it for crash safety.
     @discardableResult
     func beginVolumeFade() -> Double {
         let original = self.volume
         self.capturedFadeVolume = original
+        UserDefaults.standard.set(original, forKey: SettingsManager.Keys.spotifyPreFadeVolume)
+        UserDefaults.standard.synchronize()
         return original
     }
 
@@ -202,6 +205,8 @@ final class SpotifySource: MusicSourceProtocol {
     func endVolumeFade(restoring volume: Double? = nil) async {
         let volumeToRestore = volume ?? self.capturedFadeVolume ?? self.volume
         self.capturedFadeVolume = nil
+        UserDefaults.standard.removeObject(forKey: SettingsManager.Keys.spotifyPreFadeVolume)
+        UserDefaults.standard.synchronize()
         guard self.isInstalled, self.isRunning else { return }
         try? await self.scriptController.setVolume(volumeToRestore)
     }
@@ -210,7 +215,26 @@ final class SpotifySource: MusicSourceProtocol {
     func emergencyRestoreVolume() {
         guard let volumeToRestore = self.capturedFadeVolume else { return }
         self.capturedFadeVolume = nil
+        UserDefaults.standard.removeObject(forKey: SettingsManager.Keys.spotifyPreFadeVolume)
+        UserDefaults.standard.synchronize()
         let clamped = max(0, min(100, Int(volumeToRestore * 100)))
+        let script = "tell application id \"com.spotify.client\" to set sound volume to \(clamped)"
+        var error: NSDictionary?
+        NSAppleScript(source: script)?.executeAndReturnError(&error)
+    }
+
+    /// Restores Spotify volume on launch if a previous session terminated mid-fade.
+    func restoreCrashVolumeIfPresent() {
+        guard UserDefaults.standard.object(forKey: SettingsManager.Keys.spotifyPreFadeVolume) != nil else {
+            return
+        }
+        let savedVolume = UserDefaults.standard.double(forKey: SettingsManager.Keys.spotifyPreFadeVolume)
+        UserDefaults.standard.removeObject(forKey: SettingsManager.Keys.spotifyPreFadeVolume)
+        UserDefaults.standard.synchronize()
+
+        guard self.isInstalled, self.isRunning else { return }
+        DiagnosticsLogger.player.info("Restoring pre-fade Spotify volume from crash recovery: \(savedVolume)")
+        let clamped = max(0, min(100, Int(savedVolume * 100)))
         let script = "tell application id \"com.spotify.client\" to set sound volume to \(clamped)"
         var error: NSDictionary?
         NSAppleScript(source: script)?.executeAndReturnError(&error)
