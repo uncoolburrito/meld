@@ -241,6 +241,9 @@ final class SpotifySource: MusicSourceProtocol {
         }
 
         if let newTrack = snapshot.track {
+            if self.currentTrack?.sourceID != newTrack.sourceID {
+                NowPlayingManager.shared.playbackArbiter?.clearInterruptedMark(for: .spotify)
+            }
             // Retain existing artwork URL if the new notification omitted it for the same track
             if let existing = self.currentTrack,
                existing.sourceID == newTrack.sourceID,

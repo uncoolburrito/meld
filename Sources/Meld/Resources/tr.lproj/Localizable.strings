@@ -572,3 +572,7 @@
 "Ask Gemini response ready" = "Gemini'ye Sor yanıtı hazır";
 "New Ask Gemini chat ready" = "Yeni Gemini sohbeti hazır";
 "Spotify" = "Spotify";
+"When switching sources" = "Kaynaklar arasında geçiş yaparken";
+"Resume where I left off" = "Kaldığım yerden devam et";
+"Pause only" = "Yalnızca duraklat";
+"Choose whether to resume playback or stay paused when switching between music sources" = "Müzik kaynakları arasında geçiş yaparken oynatmanın devam etmesini veya duraklatılmış kalmasını seçin";

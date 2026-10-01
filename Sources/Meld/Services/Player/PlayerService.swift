@@ -131,6 +131,7 @@ final class PlayerService: NSObject, PlayerServiceProtocol {
     var currentTrack: Song? {
         didSet {
             self.driveNowPlayingTracklistProvider()
+            NowPlayingManager.shared.playbackArbiter?.clearInterruptedMark(for: .music)
         }
     }
 

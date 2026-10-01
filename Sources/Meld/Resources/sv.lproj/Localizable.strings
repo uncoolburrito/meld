@@ -572,3 +572,7 @@
 "Ask Gemini response ready" = "Svaret från Fråga Gemini är klart";
 "New Ask Gemini chat ready" = "Ny Fråga Gemini-chatt är klar";
 "Spotify" = "Spotify";
+"When switching sources" = "Vid byte av källor";
+"Resume where I left off" = "Återuppta där jag slutade";
+"Pause only" = "Pausa endast";
+"Choose whether to resume playback or stay paused when switching between music sources" = "Välj om uppspelningen ska återupptas eller förbli pausad vid byte mellan musikkällor";

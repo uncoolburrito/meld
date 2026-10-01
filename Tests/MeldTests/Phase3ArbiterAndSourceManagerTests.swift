@@ -274,5 +274,170 @@ extension SingletonPlayerWebViewTestSuite {
             AudioRouteObserver.shared.handleDefaultOutputDeviceChange()
             #expect(commandCenter.playCommand.isEnabled == true)
         }
+
+        // MARK: - Source Switch Behavior & Auto-Resume Tests
+
+        @Test("Resume mode: toggling from playing source marks it and swaps playback")
+        func resumeModeTogglingSwapsPlayback() async {
+            let harness = self.createHarness()
+            let previousBehavior = SettingsManager.shared.sourceSwitchBehavior
+            defer {
+                SettingsManager.shared.sourceSwitchBehavior = previousBehavior
+                SingletonPlayerWebView.shared.unsuppressPlayback()
+            }
+            SettingsManager.shared.sourceSwitchBehavior = .resume
+
+            // Start on Music with YTM playing
+            harness.arbiter.setSelectedTab(.music)
+            harness.playerService.state = .playing
+            #expect(harness.arbiter.isSourcePlaying(.music) == true)
+
+            // 1. Toggle to Spotify: YTM was playing, so it should be marked interrupted
+            _ = await harness.arbiter.requestTransition(to: .spotify)
+            #expect(harness.arbiter.audioSource == .spotify)
+            #expect(harness.arbiter.isInterruptedByToggle(.music) == true)
+            #expect(harness.arbiter.isInterruptedByToggle(.spotify) == false)
+
+            // Make Spotify simulate playing
+            harness.mockScript.snapshotToReturn = SpotifyPlaybackSnapshot(
+                playerState: .playing,
+                position: 30.0,
+                duration: 200.0,
+                volume: 0.8,
+                track: nil
+            )
+            await harness.spotifySource.refreshState()
+            #expect(harness.arbiter.isSourcePlaying(.spotify) == true)
+
+            // 2. Toggle back to Music: Spotify was playing, so Spotify should be marked interrupted,
+            // and Music was marked interrupted, so Music's mark should be consumed/cleared
+            _ = await harness.arbiter.requestTransition(to: .music)
+            #expect(harness.arbiter.audioSource == .music)
+            #expect(harness.arbiter.isInterruptedByToggle(.spotify) == true)
+            #expect(harness.arbiter.isInterruptedByToggle(.music) == false)
+
+            // 3. Toggle back to Spotify again: Music was marked as paused in transition,
+            // Spotify's mark is consumed and cleared
+            _ = await harness.arbiter.requestTransition(to: .spotify)
+            #expect(harness.arbiter.audioSource == .spotify)
+            #expect(harness.arbiter.isInterruptedByToggle(.spotify) == false)
+        }
+
+        @Test("Pause-only mode: toggling never marks and never auto-resumes")
+        func pauseOnlyModeNeverMarksOrAutoResumes() async {
+            let harness = self.createHarness()
+            let previousBehavior = SettingsManager.shared.sourceSwitchBehavior
+            defer {
+                SettingsManager.shared.sourceSwitchBehavior = previousBehavior
+                SingletonPlayerWebView.shared.unsuppressPlayback()
+            }
+            SettingsManager.shared.sourceSwitchBehavior = .pauseOnly
+
+            // Start on Music with YTM playing
+            harness.arbiter.setSelectedTab(.music)
+            harness.playerService.state = .playing
+
+            // Toggle to Spotify
+            _ = await harness.arbiter.requestTransition(to: .spotify)
+            #expect(harness.arbiter.audioSource == .spotify)
+            #expect(harness.arbiter.isInterruptedByToggle(.music) == false)
+
+            // Toggle back to Music
+            _ = await harness.arbiter.requestTransition(to: .music)
+            #expect(harness.arbiter.audioSource == .music)
+            #expect(harness.arbiter.isInterruptedByToggle(.music) == false)
+            #expect(harness.arbiter.isInterruptedByToggle(.spotify) == false)
+        }
+
+        @Test("Toggling to an already-paused source stays silent")
+        func alreadyPausedSourceStaysSilent() async {
+            let harness = self.createHarness()
+            let previousBehavior = SettingsManager.shared.sourceSwitchBehavior
+            defer {
+                SettingsManager.shared.sourceSwitchBehavior = previousBehavior
+                SingletonPlayerWebView.shared.unsuppressPlayback()
+            }
+            SettingsManager.shared.sourceSwitchBehavior = .resume
+
+            // Start with YTM paused (not playing)
+            harness.arbiter.setSelectedTab(.music)
+            harness.playerService.state = .paused
+            #expect(harness.arbiter.isSourcePlaying(.music) == false)
+
+            // Toggle to Spotify: YTM was not playing, so no mark
+            _ = await harness.arbiter.requestTransition(to: .spotify)
+            #expect(harness.arbiter.audioSource == .spotify)
+            #expect(harness.arbiter.isInterruptedByToggle(.music) == false)
+
+            // Toggle back to Music: YTM was not marked, so it stays silent
+            _ = await harness.arbiter.requestTransition(to: .music)
+            #expect(harness.arbiter.audioSource == .music)
+            #expect(harness.arbiter.isInterruptedByToggle(.music) == false)
+        }
+
+        @Test("Manual transport commands clear interrupted marks")
+        func manualTransportClearsInterruptedMarks() async {
+            let harness = self.createHarness()
+            let previousBehavior = SettingsManager.shared.sourceSwitchBehavior
+            defer {
+                SettingsManager.shared.sourceSwitchBehavior = previousBehavior
+                SingletonPlayerWebView.shared.unsuppressPlayback()
+            }
+            SettingsManager.shared.sourceSwitchBehavior = .resume
+
+            harness.playerService.state = .playing
+            _ = await harness.arbiter.requestTransition(to: .spotify)
+            #expect(harness.arbiter.isInterruptedByToggle(.music) == true)
+
+            // Manually clearing / manual pause on Music clears mark
+            harness.arbiter.clearInterruptedMark(for: .music)
+            #expect(harness.arbiter.isInterruptedByToggle(.music) == false)
+
+            // Transitioning back to Music does not resume it since mark was cleared
+            _ = await harness.arbiter.requestTransition(to: .music)
+            #expect(harness.arbiter.isInterruptedByToggle(.music) == false)
+        }
+
+        @Test("Changing SourceSwitchBehavior setting clears all marks")
+        func changingSettingClearsAllMarks() async {
+            let harness = self.createHarness()
+            let previousBehavior = SettingsManager.shared.sourceSwitchBehavior
+            let previousArbiter = NowPlayingManager.shared.playbackArbiter
+            defer {
+                SettingsManager.shared.sourceSwitchBehavior = previousBehavior
+                NowPlayingManager.shared.configureArbiter(previousArbiter)
+                SingletonPlayerWebView.shared.unsuppressPlayback()
+            }
+            NowPlayingManager.shared.configureArbiter(harness.arbiter)
+            SettingsManager.shared.sourceSwitchBehavior = .resume
+
+            harness.playerService.state = .playing
+            _ = await harness.arbiter.requestTransition(to: .spotify)
+            #expect(harness.arbiter.isInterruptedByToggle(.music) == true)
+
+            // Switching setting mid-session must clear all marks
+            SettingsManager.shared.sourceSwitchBehavior = .pauseOnly
+            #expect(harness.arbiter.isInterruptedByToggle(.music) == false)
+        }
+
+        @Test("Path A never marks anything")
+        func pathANeverSetsMarks() {
+            let harness = self.createHarness()
+            let previousBehavior = SettingsManager.shared.sourceSwitchBehavior
+            defer {
+                SettingsManager.shared.sourceSwitchBehavior = previousBehavior
+                SingletonPlayerWebView.shared.unsuppressPlayback()
+            }
+            SettingsManager.shared.sourceSwitchBehavior = .resume
+
+            harness.arbiter.setSelectedTab(.music)
+            harness.playerService.state = .playing
+
+            // Trigger Path A
+            harness.arbiter.handleExternalSpotifyPlaybackDetected()
+            #expect(harness.arbiter.audioSource == .spotify)
+            #expect(harness.arbiter.isInterruptedByToggle(.music) == false)
+            #expect(harness.arbiter.isInterruptedByToggle(.spotify) == false)
+        }
     }
 }

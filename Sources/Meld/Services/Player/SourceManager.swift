@@ -97,26 +97,32 @@ final class SourceManager {
     // MARK: - Transport Commands
 
     func play() async throws {
+        self.playbackArbiter.clearInterruptedMark(for: self.audioSource)
         try await self.activeSource.play()
     }
 
     func pause() async throws {
+        self.playbackArbiter.clearInterruptedMark(for: self.audioSource)
         try await self.activeSource.pause()
     }
 
     func toggle() async throws {
+        self.playbackArbiter.clearInterruptedMark(for: self.audioSource)
         try await self.activeSource.toggle()
     }
 
     func next() async throws {
+        self.playbackArbiter.clearInterruptedMark(for: self.audioSource)
         try await self.activeSource.next()
     }
 
     func previous() async throws {
+        self.playbackArbiter.clearInterruptedMark(for: self.audioSource)
         try await self.activeSource.previous()
     }
 
     func seek(to position: TimeInterval) async throws {
+        self.playbackArbiter.clearInterruptedMark(for: self.audioSource)
         try await self.activeSource.seek(to: position)
     }
 

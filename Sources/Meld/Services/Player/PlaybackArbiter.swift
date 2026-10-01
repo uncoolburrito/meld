@@ -37,6 +37,9 @@ final class PlaybackArbiter {
     /// User-facing message if a source transition was aborted.
     var transitionAlert: String?
 
+    /// Tracks sources that were actively playing when interrupted by a user toggle (in-memory only).
+    private var interruptedByToggleSources: Set<AppSource> = []
+
     private let playerService: PlayerService
     private let youtubePlayerService: YouTubePlayerService
     private weak var spotifySource: SpotifySource?
@@ -71,6 +74,33 @@ final class PlaybackArbiter {
     /// Clears any presented transition error alert.
     func clearTransitionAlert() {
         self.transitionAlert = nil
+    }
+
+    /// Clears all interrupted-by-toggle marks (e.g. on settings change).
+    func clearInterruptedMarks() {
+        self.interruptedByToggleSources.removeAll()
+    }
+
+    /// Clears the interrupted-by-toggle mark for a specific source (e.g. on manual play/pause/track change).
+    func clearInterruptedMark(for source: AppSource) {
+        self.interruptedByToggleSources.remove(source)
+    }
+
+    /// Whether a source was playing when last interrupted by a toggle switch.
+    func isInterruptedByToggle(_ source: AppSource) -> Bool {
+        self.interruptedByToggleSources.contains(source)
+    }
+
+    /// Tests whether a source is currently actively producing audio.
+    func isSourcePlaying(_ source: AppSource) -> Bool {
+        switch source {
+        case .music:
+            self.playerService.isPlaying
+        case .spotify:
+            self.spotifySource?.transportState == .playing
+        case .video:
+            self.youtubePlayerService.isPlaying
+        }
     }
 
     /// Updates the selected tab without altering playback state.
@@ -126,13 +156,50 @@ final class PlaybackArbiter {
             return true
         }
 
-        switch targetSource {
+        let outgoingSource = self.audioSource
+        let outgoingWasPlaying = self.isSourcePlaying(outgoingSource)
+        let behavior = SettingsManager.shared.sourceSwitchBehavior
+
+        let success: Bool = switch targetSource {
         case .spotify:
-            return await self.transitionToSpotify()
+            await self.transitionToSpotify()
         case .music:
-            return await self.transitionToMusic()
+            await self.transitionToMusic()
         case .video:
-            return await self.transitionToVideo()
+            await self.transitionToVideo()
+        }
+
+        guard success else { return false }
+
+        // Resume mode: auto-resume if target was previously interrupted by a toggle
+        if behavior == .resume {
+            if outgoingWasPlaying {
+                self.interruptedByToggleSources.insert(outgoingSource)
+                self.logger.info("Arbiter: marked \(outgoingSource.rawValue) as interrupted by toggle")
+            }
+            if self.interruptedByToggleSources.remove(targetSource) != nil {
+                self.logger.info("Arbiter: resuming \(targetSource.rawValue) interrupted by earlier toggle")
+                await self.resumeSource(targetSource)
+            }
+        }
+
+        return true
+    }
+
+    private func resumeSource(_ source: AppSource) async {
+        switch source {
+        case .music:
+            await self.playerService.resume()
+        case .spotify:
+            if let spotify = self.spotifySource {
+                do {
+                    try await spotify.play()
+                } catch {
+                    self.logger.warning("Arbiter: error resuming Spotify: \(error.localizedDescription)")
+                }
+            }
+        case .video:
+            self.youtubePlayerService.resume()
         }
     }
 

@@ -572,3 +572,7 @@
 "Ask Gemini response ready" = "Ответ «Спросить Gemini» готов";
 "New Ask Gemini chat ready" = "Новый чат «Спросить Gemini» готов";
 "Spotify" = "Spotify";
+"When switching sources" = "При переключении источников";
+"Resume where I left off" = "Продолжить с места остановки";
+"Pause only" = "Только пауза";
+"Choose whether to resume playback or stay paused when switching between music sources" = "Выберите, возобновлять ли воспроизведение или оставлять паузу при переключении между источниками музыки";

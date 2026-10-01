@@ -570,3 +570,7 @@
 "songs" = "首歌曲";
 "tracks" = "首曲目";
 "Spotify" = "Spotify";
+"When switching sources" = "切換音訊來源時";
+"Resume where I left off" = "從上次中斷處繼續";
+"Pause only" = "僅暫停";
+"Choose whether to resume playback or stay paused when switching between music sources" = "選擇在音樂來源之間切換時是繼續播放還是保持暫停";

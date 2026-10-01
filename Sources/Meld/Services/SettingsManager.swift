@@ -35,9 +35,31 @@ final class SettingsManager {
         static let ambientBackdropStyle = "settings.ambientBackdropStyle"
         static let popOutVideoOnNavigateAway = "settings.popOutVideoOnNavigateAway"
         static let spotifyVolumeGainOffset = "settings.spotifyVolumeGainOffset"
+        static let sourceSwitchBehavior = "settings.sourceSwitchBehavior"
         #if DEBUG
             static let useLegacyMacOS15UI = "settings.debug.useLegacyMacOS15UI"
         #endif
+    }
+
+    // MARK: - Source Switch Behavior Options
+
+    /// Available behaviors when switching between music sources.
+    enum SourceSwitchBehavior: String, CaseIterable, Identifiable {
+        case resume
+        case pauseOnly
+
+        var id: String {
+            self.rawValue
+        }
+
+        var displayName: String {
+            switch self {
+            case .resume:
+                String(localized: "Resume where I left off", comment: "Option to resume previously interrupted playback when switching sources")
+            case .pauseOnly:
+                String(localized: "Pause only", comment: "Option to only pause outgoing playback without resuming incoming source")
+            }
+        }
     }
 
     // MARK: - Launch Page Options
@@ -289,6 +311,15 @@ final class SettingsManager {
                 self.defaults.removeObject(forKey: "playerShuffleMode")
                 self.defaults.removeObject(forKey: "playerRepeatMode")
             }
+        }
+    }
+
+    /// Behavior when toggling between audio sources (resume interrupted source or pause only).
+    var sourceSwitchBehavior: SourceSwitchBehavior {
+        didSet {
+            self.defaults.set(self.sourceSwitchBehavior.rawValue, forKey: Keys.sourceSwitchBehavior)
+            // Changing the setting clears all marks so switching modes mid-session cannot trigger a stale resume
+            NowPlayingManager.shared.playbackArbiter?.clearInterruptedMarks()
         }
     }
 
@@ -586,6 +617,14 @@ final class SettingsManager {
             self.contentLanguage = language
         } else {
             self.contentLanguage = .system
+        }
+
+        if let rawValue = defaults.string(forKey: Keys.sourceSwitchBehavior),
+           let behavior = SourceSwitchBehavior(rawValue: rawValue)
+        {
+            self.sourceSwitchBehavior = behavior
+        } else {
+            self.sourceSwitchBehavior = .resume
         }
 
         if let rawValue = defaults.string(forKey: Keys.appSource),

@@ -572,3 +572,7 @@
 "Ask Gemini response ready" = "Respons Tanya Gemini siap";
 "New Ask Gemini chat ready" = "Chat Tanya Gemini baru siap";
 "Spotify" = "Spotify";
+"When switching sources" = "Saat beralih sumber";
+"Resume where I left off" = "Lanjutkan dari bagian terakhir";
+"Pause only" = "Hanya jeda";
+"Choose whether to resume playback or stay paused when switching between music sources" = "Pilih apakah ingin melanjutkan pemutaran atau tetap menjeda saat beralih antar sumber musik";

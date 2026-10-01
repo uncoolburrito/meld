@@ -23,11 +23,24 @@ struct MusicSettingsView: View {
 
                 Toggle(String(localized: "Keep Mini Player on Top"), isOn: self.$settings.keepMiniPlayerOnTop)
                     .help(String(localized: "Keep the mini player visible above other windows"))
+            } header: {
+                Text(String(localized: "Now Playing"))
+            }
+
+            // MARK: - Playback Section
+
+            Section {
+                Picker(String(localized: "When switching sources"), selection: self.$settings.sourceSwitchBehavior) {
+                    ForEach(SettingsManager.SourceSwitchBehavior.allCases) { behavior in
+                        Text(behavior.displayName).tag(behavior)
+                    }
+                }
+                .help(String(localized: "Choose whether to resume playback or stay paused when switching between music sources"))
 
                 Toggle("Remember Shuffle & Repeat", isOn: self.$settings.rememberPlaybackSettings)
                     .help(String(localized: "Save shuffle and repeat settings across app restarts"))
             } header: {
-                Text(String(localized: "Now Playing"))
+                Text(String(localized: "Playback"))
             }
 
             // MARK: - Smart Shuffle Section
