@@ -60,7 +60,7 @@ This document tracks all modifications made to upstream [Kaset](https://github.c
 - `Sources/Meld/Views/PlayerBar.swift`: Routed all accent colours through `@Environment(\.appTint)`, wired transport controls, seek bar, and track metadata to `SourceManager` for Spotify playback, and disabled YTM-only actions when Spotify is active.
 - `Sources/Meld/Views/Spotify/SpotifySidebar.swift` & `SpotifyContentView.swift`: Implemented sidebar navigation and detail content for the Spotify experience (including Now Playing surface, debug panel integration, and missing application guidance). Diagnostics sidebar row is restricted to DEBUG builds only.
 - `Tests/MeldTests/Phase3ArbiterAndSourceManagerTests.swift`: Unit test suite covering Path A, Path B, AI gating, command delegation, volume gain offset, and audio route changes.
-- `Tests/MeldTests/SingletonPlayerWebViewTestSuite.swift`: Added serialized parent test suite nesting all suites touching `SingletonPlayerWebView.shared` to eliminate inter-suite test races while retaining `tearDown()` in `MusicQueueEntryIdentityTests`.
+- **Test Isolation**: Relies on `--no-parallel` for test runs (`swift test --no-parallel --skip KasetUITests`), exactly matching upstream CI (`.github/workflows/tests.yml`), eliminating inter-suite singleton races without modifying or nesting upstream test suites.
 
 ### CI & Workflows
 - `.github/workflows/release.yml.disabled`: Renamed from `release.yml` and disabled. The upstream release pipeline publishes to `sozercan`'s Homebrew tap and Sparkle appcast with upstream signing identities, neither of which are ours. It will need a full rewrite before any public release, rather than a string rename.
