@@ -1,3 +1,5 @@
+// swiftlint:disable file_length
+
 import AppKit
 import SwiftUI
 
@@ -46,7 +48,10 @@ struct MeldApp: App {
     @State private var webKitManager = WebKitManager.shared
     @State private var playerService = PlayerService()
     @State private var youtubePlayerService: YouTubePlayerService
+    @State private var spotifySource: SpotifySource
+    @State private var youtubeMusicSource: YouTubeMusicSource
     @State private var playbackArbiter: PlaybackArbiter
+    @State private var sourceManager: SourceManager
     @State private var sharedClient: any YTMusicClientProtocol
     @State private var sharedYouTubeClient: any YouTubeClientProtocol
     @State private var notificationService: NotificationService?
@@ -91,6 +96,7 @@ struct MeldApp: App {
 
     @State private var didCompleteStartupPlaybackCleanup = false
 
+    // swiftlint:disable:next function_body_length
     init() {
         Bundle.enableAppLocalizationOverride()
 
@@ -172,13 +178,27 @@ struct MeldApp: App {
         // YouTube video playback service + the one-audio-source arbiter
         let youtubePlayer = YouTubePlayerService(webKitManager: webkit)
         youtubePlayer.youtubeClient = youtubeClient
-        let arbiter = PlaybackArbiter(playerService: player, youtubePlayerService: youtubePlayer)
+        let spotify = SpotifySource()
+        let arbiter = PlaybackArbiter(
+            playerService: player,
+            youtubePlayerService: youtubePlayer,
+            spotifySource: spotify
+        )
+        let youtubeMusic = YouTubeMusicSource(playerService: player)
+        let sourceMgr = SourceManager(
+            youtubeMusicSource: youtubeMusic,
+            spotifySource: spotify,
+            playbackArbiter: arbiter
+        )
 
         _authService = State(initialValue: auth)
         _webKitManager = State(initialValue: webkit)
         _playerService = State(initialValue: player)
         _youtubePlayerService = State(initialValue: youtubePlayer)
+        _spotifySource = State(initialValue: spotify)
+        _youtubeMusicSource = State(initialValue: youtubeMusic)
         _playbackArbiter = State(initialValue: arbiter)
+        _sourceManager = State(initialValue: sourceMgr)
         _sharedClient = State(initialValue: client)
         _sharedYouTubeClient = State(initialValue: youtubeClient)
         _syncedLyricsService = State(initialValue: SyncedLyricsService(providers: [
@@ -249,6 +269,9 @@ struct MeldApp: App {
                 .environment(self.syncedLyricsService)
                 .environment(self.equalizerService)
                 .environment(self.podcastsAvailabilityService)
+                .environment(self.sourceManager)
+                .environment(self.spotifySource)
+                .environment(\.appTint, PackageResourceLookup.brandAccent)
                 .environment(\.searchFocusTrigger, self.$searchFocusTrigger)
                 .environment(\.sidebarNavigationReselectGenerations, self.$sidebarNavigationReselectGenerations)
                 .environment(\.navigationSelection, self.$navigationSelection)
@@ -377,6 +400,8 @@ struct MeldApp: App {
                 .environment(self.updaterService)
                 .environment(self.scrobblingCoordinator)
                 .environment(self.equalizerService)
+                .environment(self.sourceManager)
+                .environment(\.appTint, PackageResourceLookup.brandAccent)
         }
         .commands {
             // Check for Updates command in app menu

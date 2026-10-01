@@ -104,4 +104,25 @@ struct NowPlayingClaimTests {
         #expect(NowPlayingManager.isNativeClaim(webKitInfo) == false)
         #expect(NowPlayingManager.isNativeClaim(nil) == false)
     }
+
+    @Test("Hands-off actively clears existing native claim")
+    @MainActor
+    func handsOffActivelyClearsNativeClaim() {
+        let manager = NowPlayingManager.shared
+        let center = MPNowPlayingInfoCenter.default()
+        defer {
+            center.nowPlayingInfo = nil
+            center.playbackState = .stopped
+        }
+
+        // Establish a native claim
+        manager.applyNowPlayingClaim(.claim(title: "Track", artist: "Artist", playbackState: .paused))
+        #expect(NowPlayingManager.isNativeClaim(center.nowPlayingInfo))
+        #expect(center.playbackState == .paused)
+
+        // Applying hands-off must clear native claim to avoid duplicate cards in Control Center
+        manager.applyNowPlayingClaim(.handsOff)
+        #expect(center.nowPlayingInfo == nil)
+        #expect(center.playbackState == .stopped)
+    }
 }

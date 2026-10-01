@@ -16,6 +16,7 @@ final class MockSpotifyScriptController: SpotifyScriptControlling, @unchecked Se
     var previousCalled = false
     var seekPosition: TimeInterval?
     var volumeSet: Double?
+    var pauseKeepsPlaying = false
 
     var snapshotToReturn = SpotifyPlaybackSnapshot(
         playerState: .playing,
@@ -42,12 +43,28 @@ final class MockSpotifyScriptController: SpotifyScriptControlling, @unchecked Se
         guard self.isInstalled else { throw SpotifySourceError.applicationNotFound }
         guard self.isRunning else { throw SpotifySourceError.applicationNotRunning }
         self.playCalled = true
+        self.snapshotToReturn = SpotifyPlaybackSnapshot(
+            playerState: .playing,
+            position: self.snapshotToReturn.position,
+            duration: self.snapshotToReturn.duration,
+            volume: self.snapshotToReturn.volume,
+            track: self.snapshotToReturn.track
+        )
     }
 
     func pause() async throws {
         guard self.isInstalled else { throw SpotifySourceError.applicationNotFound }
         guard self.isRunning else { throw SpotifySourceError.applicationNotRunning }
         self.pauseCalled = true
+        if !self.pauseKeepsPlaying {
+            self.snapshotToReturn = SpotifyPlaybackSnapshot(
+                playerState: .paused,
+                position: self.snapshotToReturn.position,
+                duration: self.snapshotToReturn.duration,
+                volume: self.snapshotToReturn.volume,
+                track: self.snapshotToReturn.track
+            )
+        }
     }
 
     func togglePlayPause() async throws {
@@ -201,12 +218,15 @@ struct SpotifyIntegrationTests {
         #expect(SpotifyPlayerState(rawString: "playing") == .playing)
         #expect(SpotifyPlayerState(rawString: "Playing") == .playing)
         #expect(SpotifyPlayerState(rawString: "kPSP") == .playing)
+        #expect(SpotifyPlayerState(rawString: " kPSP ") == .playing)
         #expect(SpotifyPlayerState(rawString: "paused") == .paused)
         #expect(SpotifyPlayerState(rawString: "Paused") == .paused)
         #expect(SpotifyPlayerState(rawString: "kPSp") == .paused)
+        #expect(SpotifyPlayerState(rawString: " kPSp ") == .paused)
         #expect(SpotifyPlayerState(rawString: "stopped") == .stopped)
         #expect(SpotifyPlayerState(rawString: "Stopped") == .stopped)
         #expect(SpotifyPlayerState(rawString: "kPSS") == .stopped)
+        #expect(SpotifyPlayerState(rawString: " kPSS ") == .stopped)
         #expect(SpotifyPlayerState(rawString: "something_unexpected") == .unknown)
 
         #expect(SpotifyPlayerState.playing.transportState == .playing)

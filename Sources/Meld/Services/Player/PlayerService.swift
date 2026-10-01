@@ -48,6 +48,7 @@ final class PlayerService: NSObject, PlayerServiceProtocol {
     @ObservationIgnored var queuePersistenceDefaults: UserDefaults = .standard
 
     @ObservationIgnored var onMusicPlaybackNavigationRequested: ((String, Bool) -> Void)?
+    @ObservationIgnored var onPlaybackStarted: (@MainActor () -> Void)?
 
     /// Latest media occurrence observed or initiated for Music playback.
     @ObservationIgnored private(set) var currentMusicPlaybackOccurrence: MusicPlaybackOccurrence?
@@ -117,7 +118,13 @@ final class PlayerService: NSObject, PlayerServiceProtocol {
     // MARK: - Observable State
 
     /// Current playback state.
-    var state: PlaybackState = .idle
+    var state: PlaybackState = .idle {
+        didSet {
+            if self.state == .playing, oldValue != .playing {
+                self.onPlaybackStarted?()
+            }
+        }
+    }
 
     /// Native play/pause intent survives transient ad buffering/pauses where
     /// observable transport state is not authoritative for recovery.
@@ -131,6 +138,7 @@ final class PlayerService: NSObject, PlayerServiceProtocol {
     var currentTrack: Song? {
         didSet {
             self.driveNowPlayingTracklistProvider()
+            NowPlayingManager.shared.playbackArbiter?.clearInterruptedMark(for: .music)
         }
     }
 

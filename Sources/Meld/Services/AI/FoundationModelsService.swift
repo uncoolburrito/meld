@@ -88,11 +88,40 @@ final class FoundationModelsService {
         }
     }
 
+    /// Current audio source. Under Spotify Terms of Service (Section 10),
+    /// AI processing is prohibited on third-party platform metadata, so
+    /// all Apple Intelligence features fail closed when audioSource == .spotify.
+    var currentAudioSource: AppSource = .music {
+        didSet {
+            guard oldValue != self.currentAudioSource else { return }
+            NotificationCenter.default.post(name: .intelligenceAvailabilityChanged, object: nil)
+        }
+    }
+
     // MARK: - Computed Properties
 
+    #if DEBUG
+        /// Injected availability state for deterministic unit testing across environments.
+        var injectedAvailability: SystemLanguageModel.Availability?
+    #endif
+
+    /// Evaluates whether the active audio source passes the Terms v10 AI gate.
+    /// Allowed for `.music` and `.video`; fails closed for `.spotify`.
+    var isTermsV10GateOpen: Bool {
+        self.currentAudioSource != .spotify
+    }
+
     /// Whether AI features are currently available and enabled.
+    /// Fails closed when user disabled, when Apple Intelligence is unavailable,
+    /// or when the active audio source is `.spotify` (Terms v10 AI gate).
     var isAvailable: Bool {
         guard !self.isDisabledByUser else { return false }
+        guard self.currentAudioSource != .spotify else { return false }
+        #if DEBUG
+            if let injected = self.injectedAvailability {
+                return injected == .available
+            }
+        #endif
         return self.availability == .available
     }
 
@@ -243,7 +272,7 @@ final class FoundationModelsService {
 
         for try await snapshot in stream {
             partial = snapshot.content
-            await onPartial(snapshot.content)
+            onPartial(snapshot.content)
         }
 
         guard let final = partial,

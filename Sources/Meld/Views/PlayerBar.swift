@@ -6,10 +6,11 @@ import SwiftUI
 
 /// Player bar shown at the bottom of the content area, styled like Apple Music with Liquid Glass.
 struct PlayerBar: View { // swiftlint:disable:this type_body_length
-    private static let brandAccent = PackageResourceLookup.brandAccent
     private static let fullSongInfoWidth: CGFloat = 234
     private static let compactSongInfoWidth: CGFloat = 116
 
+    @Environment(\.appTint) private var tint
+    @Environment(SourceManager.self) private var sourceManager: SourceManager?
     @Environment(AuthService.self) private var authService
     @Environment(PlayerService.self) private var playerService
     @Environment(FavoritesManager.self) private var favoritesManager
@@ -110,14 +111,39 @@ struct PlayerBar: View { // swiftlint:disable:this type_body_length
             }
         }
         .onChange(of: self.playerService.volume) { _, newValue in
-            if !self.isAdjustingVolume {
+            if !self.isAdjustingVolume, !self.isSpotifySelected {
+                self.volumeValue = newValue
+            }
+        }
+        .onChange(of: self.sourceManager?.selectedPosition) { _, newValue in
+            guard self.isSpotifySelected, let newValue else { return }
+            let duration = self.activeDuration
+            if !self.isSeeking, duration > 0 {
+                self.seekValue = newValue / duration
+            }
+            let currentSecond = Int(newValue)
+            if currentSecond != self.lastProgressSecond {
+                self.lastProgressSecond = currentSecond
+                self.updateFormattedTimes(progress: newValue, duration: duration)
+            }
+        }
+        .onChange(of: self.sourceManager?.selectedVolume) { _, newValue in
+            if self.isSpotifySelected, let newValue, !self.isAdjustingVolume {
                 self.volumeValue = newValue
             }
         }
         .onAppear {
-            self.volumeValue = self.playerService.volume
-            if self.playerService.duration > 0 {
-                self.seekValue = self.playerService.progress / self.playerService.duration
+            if self.isSpotifySelected {
+                self.volumeValue = self.sourceManager?.selectedVolume ?? 1.0
+                let duration = self.sourceManager?.selectedDuration ?? 0
+                if duration > 0 {
+                    self.seekValue = (self.sourceManager?.selectedPosition ?? 0) / duration
+                }
+            } else {
+                self.volumeValue = self.playerService.volume
+                if self.playerService.duration > 0 {
+                    self.seekValue = self.playerService.progress / self.playerService.duration
+                }
             }
         }
     }
@@ -155,7 +181,7 @@ struct PlayerBar: View { // swiftlint:disable:this type_body_length
         .padding(.vertical, 10)
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
         .contextMenu {
-            if let track = self.playerService.currentTrack {
+            if !self.isSpotifySelected, let track = self.playerService.currentTrack {
                 self.currentSongContextMenu(for: track)
             }
         }
@@ -163,7 +189,38 @@ struct PlayerBar: View { // swiftlint:disable:this type_body_length
 
     @ViewBuilder
     private var thumbnailView: some View {
-        if let track = self.playerService.currentTrack {
+        if self.isSpotifySelected {
+            if let track = self.sourceManager?.selectedTrack {
+                PlayerBarArtworkView(
+                    width: 32,
+                    height: 32,
+                    cornerRadius: 6,
+                    showsHoverOverlay: false
+                ) {
+                    if let artworkURL = track.artworkURL {
+                        CachedAsyncImage(url: artworkURL, targetSize: CGSize(width: 32, height: 32)) { image in
+                            image
+                                .resizable()
+                                .scaledToFill()
+                        } placeholder: {
+                            RoundedRectangle(cornerRadius: 6, style: .continuous)
+                                .fill(.quaternary)
+                        }
+                    } else {
+                        RoundedRectangle(cornerRadius: 6, style: .continuous)
+                            .fill(.quaternary)
+                            .overlay {
+                                Image(systemName: "waveform")
+                                    .font(.system(size: 16))
+                                    .foregroundStyle(.secondary)
+                            }
+                    }
+                }
+                .accessibilityIdentifier(AccessibilityID.PlayerBar.thumbnail)
+            } else {
+                self.defaultThumbnailView
+            }
+        } else if let track = self.playerService.currentTrack {
             if self.canOpenCurrentAlbum {
                 Button {
                     self.openCurrentAlbum()
@@ -178,21 +235,25 @@ struct PlayerBar: View { // swiftlint:disable:this type_body_length
                     .accessibilityIdentifier(AccessibilityID.PlayerBar.thumbnail)
             }
         } else {
-            PlayerBarArtworkView(
-                width: 32,
-                height: 32,
-                cornerRadius: 6,
-                showsHoverOverlay: false
-            ) {
-                RoundedRectangle(cornerRadius: 6, style: .continuous)
-                    .fill(.quaternary)
-                    .overlay {
-                        CassetteIcon(size: 18)
-                            .foregroundStyle(.secondary)
-                    }
-            }
-            .accessibilityIdentifier(AccessibilityID.PlayerBar.thumbnail)
+            self.defaultThumbnailView
         }
+    }
+
+    private var defaultThumbnailView: some View {
+        PlayerBarArtworkView(
+            width: 32,
+            height: 32,
+            cornerRadius: 6,
+            showsHoverOverlay: false
+        ) {
+            RoundedRectangle(cornerRadius: 6, style: .continuous)
+                .fill(.quaternary)
+                .overlay {
+                    CassetteIcon(size: 18)
+                        .foregroundStyle(.secondary)
+                }
+        }
+        .accessibilityIdentifier(AccessibilityID.PlayerBar.thumbnail)
     }
 
     private func trackArtwork(for track: Song) -> some View {
@@ -232,7 +293,7 @@ struct PlayerBar: View { // swiftlint:disable:this type_body_length
     private var songDetailsView: some View {
         VStack(alignment: .leading, spacing: 4) {
             PlayerBarMarqueeText(
-                text: self.playerService.currentTrack?.title ?? String(localized: "Not Playing"),
+                text: self.displayedTrackTitle,
                 font: .system(size: 13),
                 color: .primary,
                 height: 13,
@@ -253,21 +314,30 @@ struct PlayerBar: View { // swiftlint:disable:this type_body_length
     }
 
     private var currentTitleIdentity: String {
-        [
+        if self.isSpotifySelected {
+            return [
+                "spotify",
+                self.sourceManager?.selectedTrack?.sourceID ?? "none",
+                self.sourceManager?.selectedTrack?.title ?? "none",
+            ].joined(separator: "|")
+        }
+        return [
             self.playerService.currentTrack?.videoId ?? "none",
             self.playerService.currentTrack?.title ?? "none",
         ].joined(separator: "|")
     }
 
     private var canOpenCurrentArtist: Bool {
-        self.playerService.currentTrack != nil
+        guard !self.isSpotifySelected else { return false }
+        return self.playerService.currentTrack != nil
             && self.navigationAction.openArtist != nil
             && (self.currentArtistTarget != nil || (self.currentArtistSearchName != nil && self.playerService.ytMusicClient != nil))
             && !self.isCurrentArtistTarget
     }
 
     private var canOpenCurrentAlbum: Bool {
-        self.playerService.currentTrack != nil
+        guard !self.isSpotifySelected else { return false }
+        return self.playerService.currentTrack != nil
             && self.navigationAction.openAlbum != nil
             && (self.currentAlbumTarget != nil || (self.currentArtistSearchName != nil && self.playerService.ytMusicClient != nil))
             && !self.isCurrentAlbumTarget
@@ -325,6 +395,10 @@ struct PlayerBar: View { // swiftlint:disable:this type_body_length
     }
 
     private var artistName: String {
+        if self.isSpotifySelected {
+            let artist = self.sourceManager?.selectedTrack?.artist ?? ""
+            return artist.isEmpty ? String(localized: "Unknown Artist") : artist
+        }
         guard let track = self.playerService.currentTrack else {
             return String(localized: "Meld")
         }
@@ -356,11 +430,11 @@ struct PlayerBar: View { // swiftlint:disable:this type_body_length
                     Image(systemName: self.playerService.currentTrackLikeStatus == .like ? "hand.thumbsup.fill" : "hand.thumbsup")
                         .font(.system(size: 16, weight: .regular))
                         .frame(width: 10, height: 16)
-                        .foregroundStyle(self.playerService.currentTrackLikeStatus == .like ? Self.brandAccent : .primary)
+                        .foregroundStyle(self.playerService.currentTrackLikeStatus == .like ? self.tint : .primary)
                         .contentTransition(.symbolEffect(.replace))
                 }
                 .symbolEffect(.bounce, value: self.playerService.currentTrackLikeStatus == .like)
-                .disabled(self.playerService.currentTrack == nil)
+                .disabled(self.isSpotifySelected || self.playerService.currentTrack == nil)
 
                 PlayerBarIconButton(
                     action: self.dislikeCurrentTrack,
@@ -372,11 +446,11 @@ struct PlayerBar: View { // swiftlint:disable:this type_body_length
                     Image(systemName: self.playerService.currentTrackLikeStatus == .dislike ? "hand.thumbsdown.fill" : "hand.thumbsdown")
                         .font(.system(size: 16, weight: .regular))
                         .frame(width: 10, height: 16)
-                        .foregroundStyle(self.playerService.currentTrackLikeStatus == .dislike ? Self.brandAccent : .primary)
+                        .foregroundStyle(self.playerService.currentTrackLikeStatus == .dislike ? self.tint : .primary)
                         .contentTransition(.symbolEffect(.replace))
                 }
                 .symbolEffect(.bounce, value: self.playerService.currentTrackLikeStatus == .dislike)
-                .disabled(self.playerService.currentTrack == nil)
+                .disabled(self.isSpotifySelected || self.playerService.currentTrack == nil)
             }
         }
     }
@@ -394,13 +468,9 @@ struct PlayerBar: View { // swiftlint:disable:this type_body_length
             } else {
                 PlayerBarProgressLane(
                     fraction: self.displayFraction,
-                    accent: Self.brandAccent,
-                    elapsedText: self.isSeeking
-                        ? self.formatTime(self.seekValue * self.playerService.duration)
-                        : self.formattedProgress,
-                    remainingText: self.isSeeking
-                        ? "-\(self.formatTime(max(0, self.playerService.duration - self.seekValue * self.playerService.duration)))"
-                        : self.formattedRemaining,
+                    accent: self.tint,
+                    elapsedText: self.progressElapsedText,
+                    remainingText: self.progressRemainingText,
                     segments: self.progressSegments,
                     isLive: self.playerService.isCurrentItemLive,
                     canSeek: self.canSeek,
@@ -466,7 +536,7 @@ struct PlayerBar: View { // swiftlint:disable:this type_body_length
                 Image(systemName: "airplayaudio")
                     .font(.system(size: 16, weight: .regular))
                     .frame(width: 10, height: 16)
-                    .foregroundStyle(self.playerService.isAirPlayConnected ? Self.brandAccent : .primary)
+                    .foregroundStyle(self.playerService.isAirPlayConnected ? self.tint : .primary)
                     .contentTransition(.symbolEffect(.replace))
             }
             .background {
@@ -474,7 +544,7 @@ struct PlayerBar: View { // swiftlint:disable:this type_body_length
                     .allowsHitTesting(false)
                     .accessibilityHidden(true)
             }
-            .disabled(self.playerService.currentTrack == nil)
+            .disabled(self.isSpotifySelected || self.playerService.currentTrack == nil)
 
             PlayerBarIconButton(
                 action: self.cycleShuffle,
@@ -491,14 +561,14 @@ struct PlayerBar: View { // swiftlint:disable:this type_body_length
                         if self.playerService.shuffleMode == .smart {
                             Image(systemName: "sparkles")
                                 .font(.system(size: 8, weight: .bold))
-                                .foregroundStyle(Self.brandAccent)
+                                .foregroundStyle(self.tint)
                                 .offset(x: 5, y: -5)
                         }
                     }
                     .opacity(self.playerService.isApplyingSmartShuffle ? 0.5 : 1)
                     .contentTransition(.symbolEffect(.replace))
             }
-            .disabled(self.playerService.currentTrack == nil)
+            .disabled(self.isSpotifySelected || self.playerService.currentTrack == nil)
 
             HStack(spacing: 6) {
                 PlayerBarIconButton(
@@ -511,20 +581,21 @@ struct PlayerBar: View { // swiftlint:disable:this type_body_length
                         .frame(width: 8, height: 13)
                         .foregroundStyle(.primary)
                 }
-                .disabled(self.playerService.currentEpisode != nil)
+                .disabled(self.isSpotifySelected ? (self.sourceManager?.selectedTrack == nil) : (self.playerService.currentEpisode != nil || self.playerService.currentTrack == nil))
 
                 PlayerBarIconButton(
                     action: self.playPause,
                     accessibilityID: AccessibilityID.PlayerBar.playPauseButton,
-                    accessibilityLabel: self.playerService.isPlaying ? String(localized: "Pause") : String(localized: "Play")
+                    accessibilityLabel: self.isPlaying ? String(localized: "Pause") : String(localized: "Play")
                 ) {
-                    Image(systemName: self.playerService.isPlaying ? "pause.fill" : "play.fill")
+                    Image(systemName: self.isPlaying ? "pause.fill" : "play.fill")
                         .font(.system(size: 20, weight: .regular))
                         .frame(width: 12, height: 20)
                         .foregroundStyle(.primary)
                         .contentTransition(.symbolEffect(.replace))
                 }
                 .compatGlassID("playPause", in: self.playerNamespace)
+                .disabled(self.isSpotifySelected ? (self.sourceManager?.spotifySource.isInstalled != true) : (self.playerService.currentTrack == nil))
 
                 PlayerBarIconButton(
                     action: self.nextTrack,
@@ -536,7 +607,7 @@ struct PlayerBar: View { // swiftlint:disable:this type_body_length
                         .frame(width: 8, height: 13)
                         .foregroundStyle(.primary)
                 }
-                .disabled(self.playerService.currentEpisode != nil)
+                .disabled(self.isSpotifySelected ? (self.sourceManager?.selectedTrack == nil) : (self.playerService.currentEpisode != nil || self.playerService.currentTrack == nil))
             }
 
             PlayerBarIconButton(
@@ -549,10 +620,10 @@ struct PlayerBar: View { // swiftlint:disable:this type_body_length
                 Image(systemName: self.repeatIconName)
                     .font(.system(size: 16, weight: .regular))
                     .frame(width: 12, height: 16)
-                    .foregroundStyle(self.playerService.repeatMode == .off ? .primary : Self.brandAccent)
+                    .foregroundStyle(self.playerService.repeatMode == .off ? .primary : self.tint)
                     .contentTransition(.symbolEffect(.replace))
             }
-            .disabled(self.playerService.currentTrack == nil)
+            .disabled(self.isSpotifySelected || self.playerService.currentTrack == nil)
 
             PlayerBarIconButton(
                 action: self.toggleVolumePopover,
@@ -606,13 +677,17 @@ struct PlayerBar: View { // swiftlint:disable:this type_body_length
 
                 PlayerBarVerticalSlider(
                     value: self.$volumeValue,
-                    accent: Self.brandAccent,
+                    accent: self.tint,
                     accessibilityIdentifier: AccessibilityID.PlayerBar.volumeSlider,
                     accessibilityLabel: String(localized: "Volume"),
                     onEditingChanged: { editing in
                         self.isAdjustingVolume = editing
                         if !editing {
-                            self.playerService.setVolumeImmediately(self.volumeValue)
+                            if self.isSpotifySelected {
+                                Task { try? await self.sourceManager?.setSelectedVolume(self.volumeValue) }
+                            } else {
+                                self.playerService.setVolumeImmediately(self.volumeValue)
+                            }
                         }
                     },
                     onValueChanged: { oldValue, newValue in
@@ -620,7 +695,11 @@ struct PlayerBar: View { // swiftlint:disable:this type_body_length
                             if (oldValue > 0 && newValue == 0) || (oldValue < 1 && newValue == 1) {
                                 HapticService.sliderBoundary()
                             }
-                            self.playerService.setVolumeImmediately(newValue)
+                            if self.isSpotifySelected {
+                                Task { try? await self.sourceManager?.setSelectedVolume(newValue) }
+                            } else {
+                                self.playerService.setVolumeImmediately(newValue)
+                            }
                         }
                     }
                 )
@@ -650,22 +729,29 @@ struct PlayerBar: View { // swiftlint:disable:this type_body_length
     }
 
     private var canSeek: Bool {
-        self.playerService.currentTrack != nil
+        if self.isSpotifySelected {
+            return (self.sourceManager?.selectedTrack != nil) && self.activeDuration > 0
+        }
+        return self.playerService.currentTrack != nil
             && self.playerService.duration > 0
             && !self.playerService.isCurrentItemLive
             && !self.playerService.isShowingAd
     }
 
     private var isProgressLoading: Bool {
+        if self.isSpotifySelected {
+            return false
+        }
         switch self.playerService.state {
         case .loading, .buffering:
-            self.playerService.currentTrack != nil
+            return self.playerService.currentTrack != nil
         case .idle, .playing, .paused, .ended, .error:
-            false
+            return false
         }
     }
 
     private var canShowCurrentTrackVideo: Bool {
+        guard !self.isSpotifySelected else { return false }
         guard let track = self.playerService.currentTrack else { return false }
         if UITestConfig.isUITestMode,
            UITestConfig.environmentValue(for: UITestConfig.mockHasVideoKey) == "true"
@@ -682,8 +768,9 @@ struct PlayerBar: View { // swiftlint:disable:this type_body_length
         if self.isSeeking {
             return min(max(0, self.seekValue), 1)
         }
-        guard self.playerService.duration > 0 else { return 0 }
-        return min(max(0, self.displayedPlaybackProgress / self.playerService.duration), 1)
+        let duration = self.activeDuration
+        guard duration > 0 else { return 0 }
+        return min(max(0, self.displayedPlaybackProgress / duration), 1)
     }
 
     private var currentProgressSegment: PlayerBarProgressSegment? {
@@ -691,7 +778,10 @@ struct PlayerBar: View { // swiftlint:disable:this type_body_length
     }
 
     private var displayedPlaybackProgress: TimeInterval {
-        self.displayProgress(observedProgress: self.playerService.progress)
+        if self.isSpotifySelected {
+            return self.sourceManager?.selectedPosition ?? 0
+        }
+        return self.displayProgress(observedProgress: self.playerService.progress)
     }
 
     private func displayProgress(observedProgress: TimeInterval) -> TimeInterval {
@@ -699,16 +789,21 @@ struct PlayerBar: View { // swiftlint:disable:this type_body_length
     }
 
     private var currentSeekIdentity: String {
-        self.playerService.currentTrack?.videoId ?? "none"
+        if self.isSpotifySelected {
+            return self.sourceManager?.selectedTrack?.sourceID ?? "none"
+        }
+        return self.playerService.currentTrack?.videoId ?? "none"
     }
 
     // MARK: - Playback Options
 
     private var playbackOptionsSection: some View {
         HStack(spacing: 6) {
-            self.lyricsButton
-            self.queueButton
-            self.pictureButton
+            if !self.isSpotifySelected {
+                self.lyricsButton
+                self.queueButton
+                self.pictureButton
+            }
             self.miniPlayerButton
         }
         .padding(.trailing, 12)
@@ -733,7 +828,7 @@ struct PlayerBar: View { // swiftlint:disable:this type_body_length
                 Image(systemName: self.playerService.showLyrics ? "quote.bubble.fill" : "quote.bubble")
                     .font(.system(size: 16, weight: .regular))
                     .frame(width: 10, height: 16)
-                    .foregroundStyle(self.playerService.showLyrics ? Self.brandAccent : .primary)
+                    .foregroundStyle(self.playerService.showLyrics ? self.tint : .primary)
                     .contentTransition(.symbolEffect(.replace))
             }
         )
@@ -758,7 +853,7 @@ struct PlayerBar: View { // swiftlint:disable:this type_body_length
                 Image(systemName: "list.bullet")
                     .font(.system(size: 16, weight: .regular))
                     .frame(width: 10, height: 16)
-                    .foregroundStyle(self.playerService.showQueue ? Self.brandAccent : .primary)
+                    .foregroundStyle(self.playerService.showQueue ? self.tint : .primary)
             }
         )
         .compatGlassID("queue", in: self.playerNamespace)
@@ -777,7 +872,7 @@ struct PlayerBar: View { // swiftlint:disable:this type_body_length
                 Image(systemName: self.pictureButtonIcon)
                     .font(.system(size: 15, weight: .regular))
                     .frame(width: 13, height: 14)
-                    .foregroundStyle(self.playerService.showVideo ? Self.brandAccent : .primary)
+                    .foregroundStyle(self.playerService.showVideo ? self.tint : .primary)
                     .contentTransition(.symbolEffect(.replace))
             }
         )
@@ -802,7 +897,7 @@ struct PlayerBar: View { // swiftlint:disable:this type_body_length
                 Image(systemName: self.playerService.isMiniPlayerVisible ? "macwindow" : "rectangle.inset.bottomright.filled")
                     .font(.system(size: 15, weight: .regular))
                     .frame(width: 15, height: 15)
-                    .foregroundStyle(self.playerService.isMiniPlayerVisible ? Self.brandAccent : .primary)
+                    .foregroundStyle(self.playerService.isMiniPlayerVisible ? self.tint : .primary)
                     .contentTransition(.symbolEffect(.replace))
             }
         )
@@ -1145,28 +1240,40 @@ struct PlayerBar: View { // swiftlint:disable:this type_body_length
     private func previousTrack() {
         HapticService.playback()
         Task {
-            await self.playerService.previous()
+            if self.isSpotifySelected {
+                try? await self.sourceManager?.previousSelected()
+            } else {
+                await self.playerService.previous()
+            }
         }
     }
 
     private func playPause() {
         HapticService.playback()
         Task {
-            await self.playerService.playPause()
+            if self.isSpotifySelected {
+                try? await self.sourceManager?.toggleSelected()
+            } else {
+                await self.playerService.playPause()
+            }
         }
     }
 
     private func nextTrack() {
         HapticService.playback()
         Task {
-            await self.playerService.next()
+            if self.isSpotifySelected {
+                try? await self.sourceManager?.nextSelected()
+            } else {
+                await self.playerService.next()
+            }
         }
     }
 
     private var shuffleTint: Color {
         switch self.playerService.shuffleMode {
         case .off: .primary
-        case .on, .smart: Self.brandAccent
+        case .on, .smart: self.tint
         }
     }
 
@@ -1198,13 +1305,25 @@ struct PlayerBar: View { // swiftlint:disable:this type_body_length
     /// Performs the actual seek operation after slider interaction ends.
     private func performSeek() {
         guard self.isSeeking, self.canSeek else { return }
-        let seekTime = self.seekValue * self.playerService.duration
-        let holdID = self.seekHold.begin(target: seekTime)
-        self.updateFormattedTimes(progress: seekTime, duration: self.playerService.duration)
+        let duration = self.activeDuration
+        guard duration > 0 else { return }
+        let targetSeconds = self.seekValue * duration
+
+        if self.isSpotifySelected {
+            self.updateFormattedTimes(progress: targetSeconds, duration: duration)
+            self.isSeeking = false
+            Task {
+                try? await self.sourceManager?.seekSelected(to: targetSeconds)
+            }
+            return
+        }
+
+        let holdID = self.seekHold.begin(target: targetSeconds)
+        self.updateFormattedTimes(progress: targetSeconds, duration: self.playerService.duration)
         self.isSeeking = false
 
         Task {
-            await self.playerService.seek(to: seekTime)
+            await self.playerService.seek(to: targetSeconds)
         }
         Task { @MainActor in
             try? await Task.sleep(for: PlayerBarSeekHold.timeout)
@@ -1273,8 +1392,55 @@ struct PlayerBar: View { // swiftlint:disable:this type_body_length
         }
     }
 
+    private var isSpotifySelected: Bool {
+        self.sourceManager?.selectedSourceType == .spotify
+    }
+
     private var displayedVolume: Double {
-        self.isAdjustingVolume ? self.volumeValue : self.playerService.volume
+        if self.isAdjustingVolume {
+            return self.volumeValue
+        }
+        if self.isSpotifySelected {
+            return self.sourceManager?.selectedVolume ?? 1.0
+        }
+        return self.playerService.volume
+    }
+
+    private var isPlaying: Bool {
+        if self.isSpotifySelected {
+            return self.sourceManager?.isSelectedPlaying ?? false
+        }
+        return self.playerService.isPlaying
+    }
+
+    private var displayedTrackTitle: String {
+        if self.isSpotifySelected {
+            return self.sourceManager?.selectedTrack?.title ?? String(localized: "Not Playing")
+        }
+        return self.playerService.currentTrack?.title ?? String(localized: "Not Playing")
+    }
+
+    private var activeDuration: TimeInterval {
+        if self.isSpotifySelected {
+            return self.sourceManager?.selectedDuration ?? 0
+        }
+        return self.playerService.duration
+    }
+
+    private var progressElapsedText: String {
+        let duration = self.activeDuration
+        if self.isSeeking {
+            return self.formatTime(self.seekValue * duration)
+        }
+        return self.formattedProgress
+    }
+
+    private var progressRemainingText: String {
+        let duration = self.activeDuration
+        if self.isSeeking {
+            return "-\(self.formatTime(max(0, duration - self.seekValue * duration)))"
+        }
+        return self.formattedRemaining
     }
 
     private var repeatIconName: String {

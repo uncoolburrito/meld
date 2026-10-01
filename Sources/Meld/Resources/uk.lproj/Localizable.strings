@@ -572,3 +572,9 @@
 "Ask Gemini response ready" = "Відповідь «Запитати Gemini» готова";
 "New Ask Gemini chat ready" = "Новий чат «Запитати Gemini» готовий";
 "Spotify" = "Spotify";
+"When switching sources" = "Під час перемикання джерел";
+"Pause only" = "Лише пауза";
+"Keep playing" = "Продовжувати відтворення";
+"Pause, resume when I switch back" = "Призупинити, відновити після повернення";
+"Spotify is playing in the background" = "Spotify відтворюється у фоновому режимі";
+"YouTube Music is playing in the background" = "YouTube Music відтворюється у фоновому режимі";

@@ -1,3 +1,4 @@
+import AppKit
 import Foundation
 import Observation
 
@@ -24,6 +25,9 @@ final class SpotifySource: MusicSourceProtocol {
     @ObservationIgnored
     private let notificationMonitor: any SpotifyNotificationMonitoring
 
+    /// Callback invoked when Spotify starts or resumes playing (for Arbiter Path A detection).
+    var onPlaybackStarted: (@MainActor () -> Void)?
+
     init(
         scriptController: any SpotifyScriptControlling = SpotifyScriptController.shared,
         notificationMonitor: any SpotifyNotificationMonitoring = SpotifyNotificationMonitor(),
@@ -33,12 +37,22 @@ final class SpotifySource: MusicSourceProtocol {
         self.notificationMonitor = notificationMonitor
 
         self.setupNotificationObservation()
+        self.setupTerminationObservation()
+        self.restoreCrashVolumeIfPresent()
 
         if autoRefresh {
             Task { [weak self] in
                 await self?.refreshState()
             }
         }
+    }
+
+    @ObservationIgnored
+    private var capturedFadeVolume: Double?
+
+    /// True while Spotify volume is actively being faded during a source transition.
+    var isFadingVolume: Bool {
+        self.capturedFadeVolume != nil
     }
 
     var isInstalled: Bool {
@@ -75,7 +89,21 @@ final class SpotifySource: MusicSourceProtocol {
 
         self.notificationMonitor.markCommandDispatched(expectedState: .paused)
         try await self.scriptController.pause()
-        self.transportState = .paused
+        if let snapshot = try? await self.scriptController.fetchPlaybackSnapshot() {
+            self.apply(snapshot: snapshot)
+        }
+    }
+
+    /// Confirms with Spotify whether playback is currently paused or stopped by querying a fresh snapshot.
+    func confirmPaused() async -> Bool {
+        guard self.isInstalled, self.isRunning else { return true }
+        do {
+            let snapshot = try await self.scriptController.fetchPlaybackSnapshot()
+            self.apply(snapshot: snapshot)
+            return snapshot.playerState != .playing
+        } catch {
+            return false
+        }
     }
 
     func toggle() async throws {
@@ -154,6 +182,76 @@ final class SpotifySource: MusicSourceProtocol {
         self.volume = clamped
     }
 
+    // MARK: - Crossfade Support
+
+    /// Prepares Spotify for a volume crossfade by capturing its current volume and persisting it for crash safety.
+    @discardableResult
+    func beginVolumeFade() -> Double {
+        let original = self.volume
+        self.capturedFadeVolume = original
+        UserDefaults.standard.set(original, forKey: SettingsManager.Keys.spotifyPreFadeVolume)
+        UserDefaults.standard.synchronize()
+        return original
+    }
+
+    /// Sets Spotify sound volume during a crossfade step without tripping the echo guard or mutating self.volume.
+    func stepFadeVolume(_ volume: Double) async {
+        guard self.isInstalled, self.isRunning else { return }
+        let clamped = max(0.0, min(1.0, volume))
+        try? await self.scriptController.setVolume(clamped)
+    }
+
+    /// Restores Spotify sound volume after a fade sequence or on transition abort/error.
+    func endVolumeFade(restoring volume: Double? = nil) async {
+        let volumeToRestore = volume ?? self.capturedFadeVolume ?? self.volume
+        self.capturedFadeVolume = nil
+        UserDefaults.standard.removeObject(forKey: SettingsManager.Keys.spotifyPreFadeVolume)
+        UserDefaults.standard.synchronize()
+        guard self.isInstalled, self.isRunning else { return }
+        try? await self.scriptController.setVolume(volumeToRestore)
+    }
+
+    /// Synchronous restore executed on NSApplication.willTerminateNotification.
+    func emergencyRestoreVolume() {
+        guard let volumeToRestore = self.capturedFadeVolume else { return }
+        self.capturedFadeVolume = nil
+        UserDefaults.standard.removeObject(forKey: SettingsManager.Keys.spotifyPreFadeVolume)
+        UserDefaults.standard.synchronize()
+        let clamped = max(0, min(100, Int(volumeToRestore * 100)))
+        let script = "tell application id \"com.spotify.client\" to set sound volume to \(clamped)"
+        var error: NSDictionary?
+        NSAppleScript(source: script)?.executeAndReturnError(&error)
+    }
+
+    /// Restores Spotify volume on launch if a previous session terminated mid-fade.
+    func restoreCrashVolumeIfPresent() {
+        guard UserDefaults.standard.object(forKey: SettingsManager.Keys.spotifyPreFadeVolume) != nil else {
+            return
+        }
+        let savedVolume = UserDefaults.standard.double(forKey: SettingsManager.Keys.spotifyPreFadeVolume)
+        UserDefaults.standard.removeObject(forKey: SettingsManager.Keys.spotifyPreFadeVolume)
+        UserDefaults.standard.synchronize()
+
+        guard self.isInstalled, self.isRunning else { return }
+        DiagnosticsLogger.player.info("Restoring pre-fade Spotify volume from crash recovery: \(savedVolume)")
+        let clamped = max(0, min(100, Int(savedVolume * 100)))
+        let script = "tell application id \"com.spotify.client\" to set sound volume to \(clamped)"
+        var error: NSDictionary?
+        NSAppleScript(source: script)?.executeAndReturnError(&error)
+    }
+
+    private func setupTerminationObservation() {
+        NotificationCenter.default.addObserver(
+            forName: NSApplication.willTerminateNotification,
+            object: nil,
+            queue: .main
+        ) { [weak self] _ in
+            MainActor.assumeIsolated {
+                self?.emergencyRestoreVolume()
+            }
+        }
+    }
+
     func launchHidden() async throws {
         guard self.isInstalled else {
             throw SpotifySourceError.applicationNotFound
@@ -217,9 +315,18 @@ final class SpotifySource: MusicSourceProtocol {
         self.transportState = snapshot.playerState.transportState
         self.playbackPosition = snapshot.position
         self.playbackDuration = snapshot.duration
-        self.volume = snapshot.volume
+        if !self.isFadingVolume {
+            self.volume = snapshot.volume
+        }
+
+        if snapshot.playerState == .playing {
+            self.onPlaybackStarted?()
+        }
 
         if let newTrack = snapshot.track {
+            if self.currentTrack?.sourceID != newTrack.sourceID {
+                NowPlayingManager.shared.playbackArbiter?.clearInterruptedMark(for: .spotify)
+            }
             // Retain existing artwork URL if the new notification omitted it for the same track
             if let existing = self.currentTrack,
                existing.sourceID == newTrack.sourceID,

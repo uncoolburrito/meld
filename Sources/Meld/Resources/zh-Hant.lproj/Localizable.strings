@@ -570,3 +570,9 @@
 "songs" = "首歌曲";
 "tracks" = "首曲目";
 "Spotify" = "Spotify";
+"When switching sources" = "切換音訊來源時";
+"Pause only" = "僅暫停";
+"Keep playing" = "繼續播放";
+"Pause, resume when I switch back" = "暫停，切回時繼續";
+"Spotify is playing in the background" = "Spotify 正在背景播放";
+"YouTube Music is playing in the background" = "YouTube Music 正在背景播放";
